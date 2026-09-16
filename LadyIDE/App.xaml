@@ -1,8 +1,7 @@
-﻿<Application x:Class="LadyIDE.App"
+﻿<Application x:Class="LadyIDE.WPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:LadyIDE"
-             StartupUri="MainWindow.xaml">
+             xmlns:local="clr-namespace:LadyIDE.WPF">
     <Application.Resources>
          
     </Application.Resources>

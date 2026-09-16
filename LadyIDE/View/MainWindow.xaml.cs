@@ -8,8 +8,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using LadyIDE;
 
-namespace LadyIDE
+namespace LadyIDE.WPF.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

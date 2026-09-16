@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="LadyIDE.csproj" />
+  <Project Path="../Model/LadyIDE.Model.csproj" Id="c57d874f-726d-47d6-bb93-1a355131b3ca" />
+  <Project Path="../Persistence/LadyIDE.Persistence.csproj" Id="317ff4b6-f3dd-4ada-963a-4cb5582e1381" />
+  <Project Path="LadyIDE.WPF.csproj" />
 </Solution>
