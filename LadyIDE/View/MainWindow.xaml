@@ -7,6 +7,45 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <DockPanel>
 
+            <Menu DockPanel.Dock="Top">
+
+                <MenuItem Header="_File">
+                    <MenuItem Header="Load" Command="{Binding LoadFileCommand}"/>
+                    <MenuItem Header="Save" Command="{Binding SaveFileCommand}"/>
+                </MenuItem>
+
+            </Menu>
+
+            <TabControl>
+
+                <TabItem Header="Code">
+                    <Grid Margin="10">
+                        <TextBox Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}"
+                             AcceptsReturn="True"
+                             AcceptsTab="True"
+                             TextWrapping="NoWrap"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             FontFamily="Consolas"
+                             FontSize="14"/>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="Visual">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto">
+
+                        <Canvas Background="White"
+                            Width="2000"
+                            Height="2000"/>
+
+                    </ScrollViewer>
+                </TabItem>
+
+            </TabControl>
+
+        </DockPanel>
     </Grid>
 </Window>

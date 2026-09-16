@@ -8,6 +8,6 @@ namespace LadyIDE.Persistence
     {
         Task<string> LoadAsync(String path);
 
-        Task SaveAsync(String path);
+        Task SaveAsync(String path, String code);
     }
 }

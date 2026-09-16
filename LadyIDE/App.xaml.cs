@@ -45,6 +45,8 @@ namespace LadyIDE.WPF
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 openFileDialog.Title = "Load file";
+                openFileDialog.Filter = "LADY files (*.lady)|*.lady";
+                openFileDialog.DefaultExt = ".lady";
                 if (openFileDialog.ShowDialog() == true)
                 {
                     await _model.LoadFileAsync(openFileDialog.FileName);
@@ -63,16 +65,12 @@ namespace LadyIDE.WPF
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Title = "Save file";
+                saveFileDialog.Filter = "LADY files (*.lady)|*.lady";
+                saveFileDialog.DefaultExt = ".lady";
+                saveFileDialog.AddExtension = true;
                 if (saveFileDialog.ShowDialog() == true)
                 {
-                    try
-                    {
-                        await _model.SaveFileAsync(saveFileDialog.FileName);
-                    }
-                    catch (FileDataException exception)
-                    {
-                        MessageBox.Show(exception.Message, "LadyIDE", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                    await _model.SaveFileAsync(saveFileDialog.FileName);
                 }
             }
             catch (FileDataException exception)

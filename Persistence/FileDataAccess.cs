@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Xml.Linq;
+﻿using System.IO;
 
 namespace LadyIDE.Persistence
 {
@@ -14,9 +10,7 @@ namespace LadyIDE.Persistence
             {
                 using (StreamReader reader = new StreamReader(path))
                 {
-                    String line = await reader.ReadLineAsync() ?? String.Empty;
-                    
-                    return line;
+                    return await reader.ReadToEndAsync();
                 }
             }
             catch
@@ -25,13 +19,13 @@ namespace LadyIDE.Persistence
             }
         }
 
-        public async Task SaveAsync(string path)
+        public async Task SaveAsync(string path, string code)
         {
             try
             {
                 using (StreamWriter writer = new StreamWriter(path))
                 {
-                    await writer.WriteLineAsync("Saved!");
+                    await writer.WriteAsync(code);
                 }
             }
             catch
