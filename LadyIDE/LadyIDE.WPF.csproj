@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Model\LadyIDE.Model.csproj" />
+    <ProjectReference Include="..\Persistence\LadyIDE.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
