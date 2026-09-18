@@ -1,3 +1,6 @@
+<<<<<<< README.md
+# Thesis
+=======
 # Németh Ádám Lehel BSc szakdolgozat
 
 
