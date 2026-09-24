@@ -9,307 +9,6 @@
         Background="{DynamicResource AppBackground}"
         WindowStartupLocation="CenterScreen">
 
-    <Window.Resources>
-
-        <!-- ===================================================== -->
-        <!-- LEFT PALETTE BUTTON                                   -->
-        <!-- ===================================================== -->
-
-        <Style x:Key="PaletteButton"
-               TargetType="Button">
-
-            <Setter Property="Foreground"
-                    Value="{DynamicResource TextPrimary}"/>
-
-            <Setter Property="Background"
-                    Value="{DynamicResource PaletteButtonBackground}"/>
-
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource PaletteButtonBorder}"/>
-
-            <Setter Property="BorderThickness"
-                    Value="1"/>
-
-            <Setter Property="HorizontalContentAlignment"
-                    Value="Left"/>
-
-            <Setter Property="Padding"
-                    Value="10,9"/>
-
-            <Setter Property="Margin"
-                    Value="0,3"/>
-
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-
-            <Setter Property="FontSize"
-                    Value="13"/>
-
-            <Style.Triggers>
-
-                <Trigger Property="IsMouseOver"
-                         Value="True">
-
-                    <Setter Property="Background"
-                            Value="{DynamicResource PaletteButtonHoverBackground}"/>
-
-                </Trigger>
-
-            </Style.Triggers>
-
-        </Style>
-
-
-        <!-- ===================================================== -->
-        <!-- PROPERTY TEXTBOX                                      -->
-        <!-- ===================================================== -->
-
-        <Style x:Key="PropertyTextBox"
-               TargetType="TextBox">
-
-            <Setter Property="Foreground"
-                    Value="{DynamicResource InputForeground}"/>
-
-            <Setter Property="Background"
-                    Value="{DynamicResource InputBackground}"/>
-
-            <Setter Property="BorderBrush"
-                    Value="{DynamicResource InputBorder}"/>
-
-            <Setter Property="BorderThickness"
-                    Value="1"/>
-
-            <Setter Property="Padding"
-                    Value="7"/>
-
-            <Setter Property="FontSize"
-                    Value="13"/>
-
-        </Style>
-
-
-        <!-- ===================================================== -->
-        <!-- SECTION HEADER                                         -->
-        <!-- ===================================================== -->
-
-        <Style x:Key="SectionHeader"
-               TargetType="TextBlock">
-
-            <Setter Property="Foreground"
-                    Value="{DynamicResource PropertiesSectionHeader}"/>
-
-            <Setter Property="FontSize"
-                    Value="12"/>
-
-            <Setter Property="FontWeight"
-                    Value="SemiBold"/>
-
-            <Setter Property="Margin"
-                    Value="0,14,0,6"/>
-
-        </Style>
-
-
-        <!-- ===================================================== -->
-        <!-- TOP MENU ITEMS                                        -->
-        <!-- ===================================================== -->
-
-        <Style x:Key="TopMenu"
-               TargetType="Menu">
-
-            <Setter Property="Background"
-                    Value="Transparent"/>
-
-            <Setter Property="Foreground"
-                    Value="{DynamicResource TextPrimary}"/>
-
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-
-        </Style>
-
-
-        <Style x:Key="TopMenuItem"
-               TargetType="MenuItem">
-
-            <Setter Property="Foreground"
-                    Value="{DynamicResource TextPrimary}"/>
-
-            <Setter Property="Background"
-                    Value="Transparent"/>
-
-            <Setter Property="Padding"
-                    Value="12,7"/>
-
-            <Setter Property="Margin"
-                    Value="2,0"/>
-
-            <Setter Property="FontSize"
-                    Value="13"/>
-
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-
-            <Style.Triggers>
-
-                <Trigger Property="IsMouseOver"
-                         Value="True">
-
-                    <Setter Property="Background"
-                            Value="{DynamicResource MenuHoverBackground}"/>
-
-                </Trigger>
-
-            </Style.Triggers>
-
-        </Style>
-
-
-        <Style x:Key="SubMenuItem"
-               TargetType="MenuItem">
-
-            <Setter Property="Foreground"
-                    Value="{DynamicResource TextPrimary}"/>
-
-            <Setter Property="Background"
-                    Value="{DynamicResource PanelBackground}"/>
-
-            <Setter Property="Padding"
-                    Value="12,6"/>
-
-            <Setter Property="Template">
-
-                <Setter.Value>
-
-                    <ControlTemplate TargetType="MenuItem">
-
-                        <Border Background="{TemplateBinding Background}"
-                                Padding="{TemplateBinding Padding}">
-
-                            <ContentPresenter
-                                ContentSource="Header"
-                                VerticalAlignment="Center"/>
-
-                        </Border>
-
-                    </ControlTemplate>
-
-                </Setter.Value>
-
-            </Setter>
-
-            <Style.Triggers>
-
-                <Trigger Property="IsMouseOver"
-                         Value="True">
-
-                    <Setter Property="Background"
-                            Value="{DynamicResource MenuHoverBackground}"/>
-
-                </Trigger>
-
-            </Style.Triggers>
-
-        </Style>
-
-        <!-- ===================================================== -->
-        <!-- TAB ITEMS                                             -->
-        <!-- ===================================================== -->
-
-        <Style x:Key="CodeTabControl"
-                TargetType="TabControl">
-
-            <Setter Property="Background"
-            Value="{DynamicResource CodeBackground}"/>
-
-            <Setter Property="BorderBrush"
-            Value="{DynamicResource PanelBorder}"/>
-
-            <Setter Property="BorderThickness"
-            Value="0"/>
-
-        </Style>
-
-
-        <Style x:Key="CodeTabItem"
-       TargetType="TabItem">
-
-            <Setter Property="Foreground"
-            Value="{DynamicResource TextSecondary}"/>
-
-            <Setter Property="Background"
-            Value="{DynamicResource TabBackground}"/>
-
-            <Setter Property="BorderThickness"
-            Value="0"/>
-
-            <Setter Property="Padding"
-            Value="20,0"/>
-
-            <Setter Property="Height"
-            Value="37"/>
-
-            <Setter Property="Template">
-
-                <Setter.Value>
-
-                    <ControlTemplate TargetType="TabItem">
-
-                        <Border x:Name="TabBorder"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="Transparent"
-                        BorderThickness="0,0,0,2"
-                        Padding="{TemplateBinding Padding}">
-
-                            <ContentPresenter
-                        ContentSource="Header"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"/>
-
-                        </Border>
-
-                        <ControlTemplate.Triggers>
-
-                            <!-- Aktív tab -->
-                            <Trigger Property="IsSelected"
-                             Value="True">
-
-                                <Setter TargetName="TabBorder"
-                                Property="Background"
-                                Value="{DynamicResource TabSelectedBackground}"/>
-
-                                <Setter TargetName="TabBorder"
-                                Property="BorderBrush"
-                                Value="{DynamicResource TabBorder}"/>
-
-                                <Setter Property="Foreground"
-                                Value="{DynamicResource TextPrimary}"/>
-
-                            </Trigger>
-
-
-                            <!-- Egér fölött -->
-                            <Trigger Property="IsMouseOver"
-                             Value="True">
-
-                                <Setter TargetName="TabBorder"
-                                Property="Background"
-                                Value="{DynamicResource MenuHoverBackground}"/>
-
-                            </Trigger>
-
-                        </ControlTemplate.Triggers>
-
-                    </ControlTemplate>
-
-                </Setter.Value>
-
-            </Setter>
-
-        </Style>
-
-    </Window.Resources>
-
     <!-- ========================================================= -->
     <!-- MAIN LAYOUT                                               -->
     <!-- ========================================================= -->
@@ -443,30 +142,7 @@
                         CornerRadius="5">
 
                     <Button Content="▶ Compile"
-                            Background="Transparent"
-                            Foreground="{DynamicResource TextPrimary}"
-                            HorizontalAlignment="Center"
-                            BorderThickness="0"
-                            Cursor="Hand">
-
-                        <Button.Template>
-
-                            <ControlTemplate TargetType="Button">
-
-                                <Border Background="{TemplateBinding Background}"
-                                        Padding="{TemplateBinding Padding}">
-
-                                    <ContentPresenter
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"/>
-
-                                </Border>
-
-                            </ControlTemplate>
-
-                        </Button.Template>
-
-                    </Button>
+                            Style="{StaticResource CompileButtonStyle}"/>
 
                 </Border>
 
@@ -522,12 +198,12 @@
                                    VerticalAlignment="Center"
                                    Margin="15,0"/>
 
-                        <TextBlock Text="×"
-                                   Foreground="{DynamicResource TextSecondary}"
-                                   FontSize="18"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,14,0"/>
+                        <Button Content="x"
+                                Style="{StaticResource CompileButtonStyle}"
+                                 HorizontalAlignment="Right"
+                                 VerticalAlignment="Center"
+                                 Margin="0,0,14,0"
+                                 Command="{Binding ShowLadyElementsButtonClicked}"/>
 
                     </Grid>
 
@@ -735,7 +411,7 @@
 
 
             <!-- ================================================= -->
-            <!-- CENTER                                             -->
+            <!-- CENTER                                            -->
             <!-- ================================================= -->
 
             <Grid Grid.Column="1">
@@ -779,41 +455,36 @@
                     <TabControl Style="{StaticResource CodeTabControl}">
                         <TabItem Header="Code"
                                  Style="{StaticResource CodeTabItem}">
+
                             <TabItem.Content>
-                                <TextBox Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}" 
-                                         Background="{DynamicResource CodeBackground}" 
-                                         Foreground="{DynamicResource CodeForeground}" 
-                                         BorderThickness="0" 
-                                         FontFamily="Consolas" 
-                                         FontSize="13" 
-                                         Padding="12" 
-                                         AcceptsReturn="True" 
-                                         AcceptsTab="True" 
-                                         TextWrapping="NoWrap" 
-                                         VerticalScrollBarVisibility="Auto" 
-                                         HorizontalScrollBarVisibility="Auto" 
-                                         IsReadOnly="False"/>
+
+                                <Grid>
+
+                                    <TextBox
+                                        Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}"
+                                        Style="{StaticResource CodeTextBox}"/>
+
+                                </Grid>
+
                             </TabItem.Content>
+
                         </TabItem>
 
                         <TabItem Header="Console"
                                  Style="{StaticResource CodeTabItem}">
 
                             <TabItem.Content>
-                                <TextBox Text="" 
-                                         Background="{DynamicResource CodeBackground}" 
-                                         Foreground="{DynamicResource TextSecondary}" 
-                                         BorderThickness="0" 
-                                         FontFamily="Consolas" 
-                                         FontSize="13" 
-                                         Padding="12" 
-                                         AcceptsReturn="True" 
-                                         TextWrapping="Wrap" 
-                                         VerticalScrollBarVisibility="Auto" 
-                                         HorizontalScrollBarVisibility="Auto" 
-                                         IsReadOnly="True" 
-                                         IsTabStop="False"/>
+
+                                <Grid>
+
+                                    <TextBox
+                                        Text="{Binding ConsoleOutput}"
+                                        Style="{StaticResource ConsoleTextBox}"/>
+
+                                </Grid>
+
                             </TabItem.Content>
+
                         </TabItem>
                     </TabControl>
                 </Border>

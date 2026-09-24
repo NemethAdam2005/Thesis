@@ -9,6 +9,14 @@
 
                 <ResourceDictionary Source="Themes/DarkTheme.xaml"/>
 
+                <ResourceDictionary Source="Styles/CanvasElementsStyles.xaml"/>
+                <ResourceDictionary Source="Styles/MenuBarStyles.xaml"/>
+                <ResourceDictionary Source="Styles/PaletteStyles.xaml"/>
+                <ResourceDictionary Source="Styles/PropertiesSectionStyles.xaml"/>
+                <ResourceDictionary Source="Styles/TabStyles.xaml"/>
+                <ResourceDictionary Source="Styles/ScrollBarStyles.xaml"/>
+                <ResourceDictionary Source="Styles/TextBoxStyles.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>

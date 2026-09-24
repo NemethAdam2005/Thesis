@@ -147,7 +147,22 @@
     <SolidColorBrush x:Key="PropertiesSectionHeader"
                      Color="#AEBAC8"/>
 
+    <!-- ========================= -->
+    <!-- Scroll Bar                -->
+    <!-- ========================= -->
+    
+    <SolidColorBrush x:Key="ScrollBarThumb"
+                 Color="#526477"/>
 
+    <SolidColorBrush x:Key="ScrollBarThumbHover"
+                 Color="#71869A"/>
+
+    <SolidColorBrush x:Key="CodeScrollBarButtonBackground"
+                 Color="#252525"/>
+
+    <SolidColorBrush x:Key="CodeScrollBarHoverBackground"
+                 Color="#303030"/>
+    
     <!-- ========================= -->
     <!-- Diagram colors            -->
     <!-- These stay independent    -->
