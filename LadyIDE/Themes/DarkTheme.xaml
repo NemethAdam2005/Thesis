@@ -1,0 +1,207 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ========================= -->
+    <!-- Main application colors   -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="AppBackground"
+                     Color="#111A24"/>
+
+    <SolidColorBrush x:Key="PanelBackground"
+                     Color="#172331"/>
+
+    <SolidColorBrush x:Key="PanelBackgroundSecondary"
+                     Color="#1D2A38"/>
+
+    <SolidColorBrush x:Key="PanelBorder"
+                     Color="#2D3B4B"/>
+
+
+    <!-- ========================= -->
+    <!-- Text                      -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="TextPrimary"
+                     Color="#EAF2FA"/>
+
+    <SolidColorBrush x:Key="TextSecondary"
+                     Color="#8D9AAA"/>
+
+    <SolidColorBrush x:Key="TextDisabled"
+                     Color="#596777"/>
+
+
+    <!-- ========================= -->
+    <!-- Input controls             -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="InputBackground"
+                     Color="#243243"/>
+
+    <SolidColorBrush x:Key="InputBorder"
+                     Color="#394B5D"/>
+
+    <SolidColorBrush x:Key="InputForeground"
+                     Color="#EAF2FA"/>
+
+
+    <!-- ========================= -->
+    <!-- Menu                      -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="MenuBackground"
+                     Color="#111A24"/>
+
+    <SolidColorBrush x:Key="MenuHoverBackground"
+                     Color="#263646"/>
+
+    <SolidColorBrush x:Key="MenuBorder"
+                     Color="#2D3B4B"/>
+
+
+    <!-- ========================= -->
+    <!-- Palette                   -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="PaletteBackground"
+                     Color="#172331"/>
+
+    <SolidColorBrush x:Key="PaletteButtonBackground"
+                     Color="#172331"/>
+
+    <SolidColorBrush x:Key="PaletteButtonHoverBackground"
+                     Color="#2B3C4F"/>
+
+    <SolidColorBrush x:Key="PaletteButtonBorder"
+                     Color="#2D3B4B"/>
+
+
+    <!-- ========================= -->
+    <!-- Code editor                -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="CodeBackground"
+                     Color="#101820"/>
+
+    <SolidColorBrush x:Key="CodeForeground"
+                     Color="#EAF2FA"/>
+
+    <SolidColorBrush x:Key="CodeBorder"
+                     Color="#2D3B4B"/>
+
+	<SolidColorBrush x:Key="TabBackground"
+                     Color="#172331"/>
+
+	<SolidColorBrush x:Key="TabSelectedBackground"
+					 Color="#263F57"/>
+
+	<SolidColorBrush x:Key="TabBorder"
+					 Color="#1688E8"/>
+
+
+    <!-- ========================= -->
+    <!-- Canvas                    -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="CanvasBackground"
+                     Color="#F7F9FC"/>
+
+    <SolidColorBrush x:Key="CanvasGridDot"
+                     Color="#DCE3EB"/>
+
+
+    <!-- ========================= -->
+    <!-- Status bar                -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="StatusBarBackground"
+                     Color="#0D151D"/>
+
+    <SolidColorBrush x:Key="StatusBarForeground"
+                     Color="#8D9AAA"/>
+
+
+    <!-- ========================= -->
+    <!-- Accent                    -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="Accent"
+                     Color="#1688E8"/>
+
+    <SolidColorBrush x:Key="AccentHover"
+                     Color="#2B9AF0"/>
+
+    <SolidColorBrush x:Key="AccentForeground"
+                     Color="#FFFFFF"/>
+
+
+    <!-- ========================= -->
+    <!-- Properties panel          -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="PropertiesBackground"
+                     Color="#172331"/>
+
+    <SolidColorBrush x:Key="PropertiesSectionHeader"
+                     Color="#AEBAC8"/>
+
+
+    <!-- ========================= -->
+    <!-- Diagram colors            -->
+    <!-- These stay independent    -->
+    <!-- from the application      -->
+    <!-- theme for now.             -->
+    <!-- ========================= -->
+
+    <SolidColorBrush x:Key="SystemBorder"
+                     Color="#1688E8"/>
+
+    <SolidColorBrush x:Key="SystemHeader"
+                     Color="#D7EBFF"/>
+
+    <SolidColorBrush x:Key="SystemBackground"
+                     Color="#EFF7FF"/>
+
+
+    <SolidColorBrush x:Key="SubsystemBorder"
+                     Color="#00A7A7"/>
+
+    <SolidColorBrush x:Key="SubsystemHeader"
+                     Color="#D8F4F2"/>
+
+    <SolidColorBrush x:Key="SubsystemBackground"
+                     Color="#F1FCFB"/>
+
+
+    <SolidColorBrush x:Key="ComponentBorder"
+                     Color="#7448D8"/>
+
+    <SolidColorBrush x:Key="ComponentHeader"
+                     Color="#E7DAFF"/>
+
+    <SolidColorBrush x:Key="ComponentBackground"
+                     Color="#F7F2FF"/>
+
+
+    <SolidColorBrush x:Key="InterfaceBorder"
+                     Color="#E69A00"/>
+
+    <SolidColorBrush x:Key="InterfaceHeader"
+                     Color="#FFF0C9"/>
+
+    <SolidColorBrush x:Key="InterfaceBackground"
+                     Color="#FFFBEE"/>
+
+
+    <SolidColorBrush x:Key="EntityBorder"
+                     Color="#D94DAF"/>
+
+    <SolidColorBrush x:Key="EntityHeader"
+                     Color="#FFDDF2"/>
+
+    <SolidColorBrush x:Key="EntityBackground"
+                     Color="#FFF2FA"/>
+
+</ResourceDictionary>

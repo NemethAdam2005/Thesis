@@ -1,7 +1,9 @@
-﻿using System;
+﻿using LadyIDE.Model;
+using LadyIDE.WPF.Services;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using LadyIDE.Model;
+using System.Windows;
 
 namespace LadyIDE.WPF.ViewModel
 {
@@ -25,6 +27,75 @@ namespace LadyIDE.WPF.ViewModel
             }
         }
 
+        private bool _isLightMode = false;
+
+        public bool IsLightMode
+        {
+            get => _isLightMode;
+
+            set
+            {
+                if (_isLightMode == value)
+                    return;
+
+                _isLightMode = value;
+
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ColorThemeText));
+            }
+        }
+
+        public string ColorThemeText =>
+            IsLightMode ? "Dark mode" : "Light mode";
+
+
+        private bool _isLadyElementsVisible = true;
+
+        public bool IsLadyElementsVisible
+        {
+            get => _isLadyElementsVisible;
+
+            set
+            {
+                if (_isLadyElementsVisible == value)
+                    return;
+
+                _isLadyElementsVisible = value;
+
+                LadyElementsColumnWidth = value
+                    ? new GridLength(205)
+                    : new GridLength(0);
+
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ShowLadyElementsText));
+            }
+        }
+
+        public string ShowLadyElementsText =>
+            IsLadyElementsVisible
+                ? "Hide Lady elements"
+                : "Show Lady elements";
+
+
+        private GridLength _ladyElementsColumnWidth =
+            new GridLength(205);
+
+        public GridLength LadyElementsColumnWidth
+        {
+            get => _ladyElementsColumnWidth;
+
+            private set
+            {
+                if (_ladyElementsColumnWidth == value)
+                    return;
+
+                _ladyElementsColumnWidth = value;
+
+                OnPropertyChanged();
+            }
+        }
+
+
         public MainViewModel(ApplicationModel model)
         {
             _model = model;
@@ -32,11 +103,15 @@ namespace LadyIDE.WPF.ViewModel
 
             LoadFileCommand = new DelegateCommand(param => OnLoadFile());
             SaveFileCommand = new DelegateCommand(param => OnSaveFile());
+            ColorThemeButtonClicked = new DelegateCommand(param => OnColorThemeButtonClicked());
+            ShowLadyElementsButtonClicked = new DelegateCommand(param => OnShowLadyElementsButtonClicked());
         }
         
         //Commands
         public DelegateCommand LoadFileCommand { get; private set; }
         public DelegateCommand SaveFileCommand { get; private set; }
+        public DelegateCommand ColorThemeButtonClicked { get; private set; }
+        public DelegateCommand ShowLadyElementsButtonClicked { get; private set; }
 
         //Events
         public event EventHandler? LoadFile;
@@ -55,6 +130,18 @@ namespace LadyIDE.WPF.ViewModel
         private void OnSaveFile()
         {
             SaveFile?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void OnColorThemeButtonClicked()
+        {
+            IsLightMode = !IsLightMode;
+
+            ThemeManager.SetTheme(IsLightMode);
+        }
+
+        private void OnShowLadyElementsButtonClicked()
+        {
+            IsLadyElementsVisible = !IsLadyElementsVisible;
         }
     }   
 }
