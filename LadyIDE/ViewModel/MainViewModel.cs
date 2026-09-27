@@ -2,8 +2,10 @@
 using LadyIDE.WPF.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
+using LadyIDE.WPF.CanvasElements;
 
 namespace LadyIDE.WPF.ViewModel
 {
@@ -95,9 +97,12 @@ namespace LadyIDE.WPF.ViewModel
             }
         }
 
+        public ObservableCollection<CanvasItemBase> CanvasItems { get; }
 
         public MainViewModel(ApplicationModel model)
         {
+            CanvasItems = new ObservableCollection<CanvasItemBase>();
+            CanvasItems.Add(new CanvasItemBase());
             _model = model;
             _model.CodeChanged += new EventHandler<string>(Model_CodeChanged);
 

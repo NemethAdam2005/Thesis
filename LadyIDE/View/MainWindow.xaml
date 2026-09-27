@@ -1,6 +1,7 @@
 ﻿<Window x:Class="LadyIDE.WPF.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:richCanvas="clr-namespace:RichCanvas;assembly=RichCanvas"
         Title="LadyIDE"
         Width="1400"
         Height="850"
@@ -417,15 +418,9 @@
             <Grid Grid.Column="1">
 
                 <Grid.RowDefinitions>
-
-                    <!-- Canvas -->
-
                     <RowDefinition Height="*"/>
-
-                    <!-- Code -->
-
+                    <RowDefinition Height="10"/>
                     <RowDefinition Height="250"/>
-
                 </Grid.RowDefinitions>
 
 
@@ -434,21 +429,32 @@
                 <!-- ================================================= -->
 
                 <Border Grid.Row="0"
-                        Background="{DynamicResource CanvasBackground}"
-                        ClipToBounds="True">
+        Background="{DynamicResource CanvasBackground}"
+        ClipToBounds="True">
 
                     <Canvas>
-
                     </Canvas>
 
                 </Border>
 
+                <!-- ================================================= -->
+                <!-- RESIZE BAR                                        -->
+                <!-- ================================================= -->
+                
+                <GridSplitter
+                    Grid.Row="1"
+                    Height="10"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="{DynamicResource PanelBorder}"
+                    ResizeDirection="Rows"
+                    ResizeBehavior="PreviousAndNext"/>
 
                 <!-- ================================================= -->
                 <!-- CODE PANEL                                        -->
                 <!-- ================================================= -->
 
-                <Border Grid.Row="1" Background="{DynamicResource CodeBackground}" 
+                <Border Grid.Row="2" Background="{DynamicResource CodeBackground}" 
                         BorderBrush="{DynamicResource PanelBorder}" 
                         BorderThickness="0,1,0,0">
 
