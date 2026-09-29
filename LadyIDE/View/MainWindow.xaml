@@ -2,7 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:richCanvas="clr-namespace:RichCanvas;assembly=RichCanvas"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         Title="LadyIDE"
+        Icon="/Assets/LadyIDELogo.ico"
         Width="1400"
         Height="850"
         MinWidth="1100"
@@ -428,14 +430,24 @@
                 <!-- CANVAS                                             -->
                 <!-- ================================================= -->
 
-                <Border Grid.Row="0"
-        Background="{DynamicResource CanvasBackground}"
-        ClipToBounds="True">
+                <Grid>
+                    <!-- Bind your dynamic collection directly to the RichCanvas control -->
+                    <richCanvas:RichCanvas>
 
-                    <Canvas>
-                    </Canvas>
+                        <!-- Define the visual appearance of each canvas object -->
+                        <richCanvas:RichCanvas.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="RoyalBlue" CornerRadius="4" Width="100" Height="60">
+                                    <TextBlock Text="{Binding Name}" 
+                                   Foreground="White" 
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </richCanvas:RichCanvas.ItemTemplate>
 
-                </Border>
+                    </richCanvas:RichCanvas>
+                </Grid>
 
                 <!-- ================================================= -->
                 <!-- RESIZE BAR                                        -->
@@ -454,45 +466,63 @@
                 <!-- CODE PANEL                                        -->
                 <!-- ================================================= -->
 
-                <Border Grid.Row="2" Background="{DynamicResource CodeBackground}" 
-                        BorderBrush="{DynamicResource PanelBorder}" 
+                <Border Grid.Row="2"
+                        Background="{DynamicResource CodeBackground}"
+                        BorderBrush="{DynamicResource PanelBorder}"
                         BorderThickness="0,1,0,0">
 
                     <TabControl Style="{StaticResource CodeTabControl}">
+
+                        <!-- CODE -->
                         <TabItem Header="Code"
                                  Style="{StaticResource CodeTabItem}">
 
                             <TabItem.Content>
+                                <Grid Background="{DynamicResource CodeBackground}">
 
-                                <Grid>
+                                    <Grid.Resources>
 
-                                    <TextBox
-                                        Text="{Binding Code, UpdateSourceTrigger=PropertyChanged}"
-                                        Style="{StaticResource CodeTextBox}"/>
+                                        <Style TargetType="{x:Type ScrollBar}"
+                                               BasedOn="{StaticResource CodeScrollBar}"/>
+
+                                        <Style TargetType="{x:Type ScrollViewer}"
+                                               BasedOn="{StaticResource CodeScrollViewer}"/>
+
+                                    </Grid.Resources>
+
+                                    <avalonEdit:TextEditor
+                                                x:Name="CodeEditor"
+                                                Background="{DynamicResource CodeBackground}"
+                                                Foreground="{DynamicResource CodeForeground}"
+                                                FontFamily="Consolas"
+                                                FontSize="14"
+                                                ShowLineNumbers="True"
+                                                HorizontalScrollBarVisibility="Auto"
+                                                VerticalScrollBarVisibility="Auto"
+                                                Padding="12,8"/>        
 
                                 </Grid>
-
                             </TabItem.Content>
 
                         </TabItem>
 
+
+                        <!-- CONSOLE -->
                         <TabItem Header="Console"
                                  Style="{StaticResource CodeTabItem}">
 
                             <TabItem.Content>
+                                <Grid Background="{DynamicResource CodeBackground}">
 
-                                <Grid>
-
-                                    <TextBox
-                                        Text="{Binding ConsoleOutput}"
-                                        Style="{StaticResource ConsoleTextBox}"/>
+                                    <TextBox Style="{StaticResource ConsoleTextBox}"/>
 
                                 </Grid>
-
                             </TabItem.Content>
 
                         </TabItem>
+
                     </TabControl>
+
                 </Border>
 
             </Grid>
@@ -520,13 +550,7 @@
 
             <DockPanel>
 
-                <TextBlock Text="Ready"
-                           Foreground="{DynamicResource StatusBarForeground}"
-                           FontSize="11"
-                           VerticalAlignment="Center"
-                           Margin="12,0"/>
-
-                <TextBlock Text="Ln 1    Col 1    UTF-8"
+                <TextBlock Text="{Binding CaretPositionText}"
                            Foreground="{DynamicResource StatusBarForeground}"
                            FontSize="11"
                            VerticalAlignment="Center"

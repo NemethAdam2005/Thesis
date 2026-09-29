@@ -31,12 +31,30 @@ namespace LadyIDE.WPF
             _mainViewModel = new MainViewModel(_model);
             _mainViewModel.LoadFile += new EventHandler(ViewModel_LoadFile);
             _mainViewModel.SaveFile += new EventHandler(ViewModel_SaveFile);
+            _mainViewModel.CodeChanged += new EventHandler<string>(ViewModel_CodeChanged);
 
             _view = new MainWindow();
             _view.DataContext = _mainViewModel;
             _view.Height = 700;
-            _view.Width = 700;
+            _view.Width = 700;   
+            _view.CodeEditor.TextChanged += CodeEditor_TextChanged;
+            _view.CodeEditor.TextArea.Caret.PositionChanged += ViewModel_UpdateCaretPosition;
             _view.Show();
+        }
+
+        private void ViewModel_UpdateCaretPosition(object? sender, EventArgs e)
+        {
+            _mainViewModel.UpdateCaretPosition(_view.CodeEditor.TextArea.Caret.Line,_view.CodeEditor.TextArea.Caret.Column);
+        }
+
+        private void CodeEditor_TextChanged(object? sender,EventArgs e)
+        {
+            _model.Code = _view.CodeEditor.Text;
+        }
+
+        private void ViewModel_CodeChanged(object? sender, string e)
+        {
+            _view.CodeEditor.Text = e;
         }
 
         private async void ViewModel_LoadFile(object? sender, System.EventArgs e)

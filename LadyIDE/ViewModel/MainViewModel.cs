@@ -96,13 +96,35 @@ namespace LadyIDE.WPF.ViewModel
                 OnPropertyChanged();
             }
         }
+        private string _caretPositionText = "  Ln: 1, Col: 1";
+
+        public string CaretPositionText
+        {
+            get => _caretPositionText;
+            set
+            {
+                if (_caretPositionText == value)
+                    return;
+
+                _caretPositionText = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<CanvasItemBase> CanvasItems { get; }
 
         public MainViewModel(ApplicationModel model)
         {
             CanvasItems = new ObservableCollection<CanvasItemBase>();
-            CanvasItems.Add(new CanvasItemBase());
+            CanvasItemBase element = new CanvasItemBase
+            {
+                X = 50,
+                Y = 50,
+                Width = 100,
+                Height = 80,
+                Name = "LadyElement1"
+            };
+            CanvasItems.Add(element);
             _model = model;
             _model.CodeChanged += new EventHandler<string>(Model_CodeChanged);
 
@@ -121,10 +143,11 @@ namespace LadyIDE.WPF.ViewModel
         //Events
         public event EventHandler? LoadFile;
         public event EventHandler? SaveFile;
+        public event EventHandler<string>? CodeChanged;
 
         private void Model_CodeChanged(Object? sender, String e)
         {
-            Code = e;
+            CodeChanged?.Invoke(this, e);
         }
 
         private void OnLoadFile()
@@ -147,6 +170,11 @@ namespace LadyIDE.WPF.ViewModel
         private void OnShowLadyElementsButtonClicked()
         {
             IsLadyElementsVisible = !IsLadyElementsVisible;
+        }
+
+        public void UpdateCaretPosition(int line, int column)
+        {
+            CaretPositionText = $"  Ln: {line}, Col: {column}";
         }
     }   
 }
