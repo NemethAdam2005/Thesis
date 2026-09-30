@@ -170,23 +170,23 @@
     <!-- theme for now.             -->
     <!-- ========================= -->
 
-    <SolidColorBrush x:Key="SystemBorder"
+    <SolidColorBrush x:Key="ApplicationBorder"
                      Color="#1688E8"/>
 
-    <SolidColorBrush x:Key="SystemHeader"
+    <SolidColorBrush x:Key="ApplicationHeader"
                      Color="#D7EBFF"/>
 
-    <SolidColorBrush x:Key="SystemBackground"
+    <SolidColorBrush x:Key="ApplicationBackground"
                      Color="#EFF7FF"/>
 
 
-    <SolidColorBrush x:Key="SubsystemBorder"
+    <SolidColorBrush x:Key="CommandBorder"
                      Color="#00A7A7"/>
 
-    <SolidColorBrush x:Key="SubsystemHeader"
+    <SolidColorBrush x:Key="CommandHeader"
                      Color="#D8F4F2"/>
 
-    <SolidColorBrush x:Key="SubsystemBackground"
+    <SolidColorBrush x:Key="CommandBackground"
                      Color="#F1FCFB"/>
 
 

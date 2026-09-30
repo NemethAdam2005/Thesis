@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
-    <PackageReference Include="RichCanvas" Version="3.0.1" />
+    <PackageReference Include="RichCanvas" Version="2.4.2" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:richCanvas="clr-namespace:RichCanvas;assembly=RichCanvas"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:canvasElements="clr-namespace:LadyIDE.WPF.CanvasElements"
+        xmlns:behaviors="clr-namespace:LadyIDE.WPF.Behaviors"
         Title="LadyIDE"
         Icon="/Assets/LadyIDELogo.ico"
         Width="1400"
@@ -213,20 +215,21 @@
 
                     <!-- Elements -->
 
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Style="{StaticResource CodeScrollViewer}">
 
                         <StackPanel Margin="10,5">
 
+                            <!-- APPLICATION -->
 
-                            <!-- SYSTEM -->
-
-                            <Button Style="{StaticResource PaletteButton}">
+                            <Button Style="{StaticResource PaletteButton}"
+                                    Command="{Binding ApplicationButtonClicked}">
 
                                 <StackPanel Orientation="Horizontal">
 
                                     <Border Width="27"
                                             Height="27"
-                                            Background="{DynamicResource SystemBorder}"
+                                            Background="{DynamicResource ApplicationBorder}"
                                             CornerRadius="4"
                                             Margin="0,0,10,0">
 
@@ -237,7 +240,7 @@
 
                                     </Border>
 
-                                    <TextBlock Text="System"
+                                    <TextBlock Text="Application"
                                                VerticalAlignment="Center"/>
 
                                 </StackPanel>
@@ -245,26 +248,27 @@
                             </Button>
 
 
-                            <!-- SUBSYSTEM -->
+                            <!-- COMMAND -->
 
-                            <Button Style="{StaticResource PaletteButton}">
+                            <Button Style="{StaticResource PaletteButton}"
+                                    Command="{Binding CommandButtonClicked}">
 
                                 <StackPanel Orientation="Horizontal">
 
                                     <Border Width="27"
                                             Height="27"
-                                            Background="{DynamicResource SubsystemBorder}"
+                                            Background="{DynamicResource CommandBorder}"
                                             CornerRadius="4"
                                             Margin="0,0,10,0">
 
-                                        <TextBlock Text="▣"
+                                        <TextBlock Text="▤"
                                                    Foreground="White"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"/>
 
                                     </Border>
 
-                                    <TextBlock Text="Subsystem"
+                                    <TextBlock Text="Command"
                                                VerticalAlignment="Center"/>
 
                                 </StackPanel>
@@ -421,32 +425,224 @@
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="10"/>
+                    <RowDefinition Height="5"/>
                     <RowDefinition Height="250"/>
                 </Grid.RowDefinitions>
 
-
                 <!-- ================================================= -->
-                <!-- CANVAS                                             -->
+                <!-- CANVAS                                            -->
                 <!-- ================================================= -->
 
                 <Grid>
-                    <!-- Bind your dynamic collection directly to the RichCanvas control -->
-                    <richCanvas:RichCanvas>
+                    <Grid.Resources>
 
-                        <!-- Define the visual appearance of each canvas object -->
-                        <richCanvas:RichCanvas.ItemTemplate>
-                            <DataTemplate>
-                                <Border Background="RoyalBlue" CornerRadius="4" Width="100" Height="60">
-                                    <TextBlock Text="{Binding Name}" 
-                                   Foreground="White" 
-                                   HorizontalAlignment="Center" 
-                                   VerticalAlignment="Center"/>
+                        <Style TargetType="{x:Type ScrollViewer}"
+                               BasedOn="{StaticResource CodeScrollViewer}"/>
+
+                    </Grid.Resources>
+                    <richCanvas:RichItemsControl
+                                x:Name="LadyCanvas"
+                                ItemsSource="{Binding CanvasItems}"
+                                SelectedItems="{Binding SelectedItems}"
+                                Background="{StaticResource CanvasBackground}"
+                                behaviors:CommandBehavior.Command="{Binding SelectItemCommand}"
+                                behaviors:CommandBehavior.CommandParameter="{x:Null}">
+
+                        <richCanvas:RichItemsControl.Resources>
+
+                            <!-- APPLICATION -->
+                            <DataTemplate DataType="{x:Type canvasElements:ConsoleApplication}">
+
+                                <Border Background="{DynamicResource ApplicationBackground}"
+                                        CornerRadius="5"
+                                        behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand}">
+
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource ApplicationBorder}"/>
+                                            <Setter Property="BorderThickness"
+                                                    Value="2"/>
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsHighlighted}"
+                                                             Value="True">
+
+                                                    <Setter Property="BorderThickness" Value="5"/>
+
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="48"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+
+                                        <!-- Application fejléc -->
+                                        <Border Grid.Row="0"
+                                                Background="{DynamicResource ApplicationHeader}"
+                                                Padding="15,0"
+                                                behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+                                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                                behaviors:CommandBehavior.CommandParameter="{Binding}">             
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center">
+
+                                                <TextBlock Text="▣"
+                                                           Foreground="{DynamicResource ApplicationBorder}"
+                                                           FontSize="18"
+                                                           Margin="0,0,10,0"/>
+
+                                                <TextBlock Text="APPLICATION"
+                                                           Foreground="#1769A9"
+                                                           FontWeight="Bold"
+                                                           FontSize="12"
+                                                           VerticalAlignment="Center"/>
+
+                                                <TextBlock Text="{Binding Name}"
+                                                           Foreground="#23405B"
+                                                           FontSize="15"
+                                                           FontWeight="SemiBold"
+                                                           Margin="15,0,0,0"
+                                                           VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <!-- Application tartalma -->
+                                        <ItemsControl Grid.Row="1"
+                                                      ItemsSource="{Binding Children}">
+
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <Canvas/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+
+                                            <ItemsControl.ItemContainerStyle>
+                                                <Style TargetType="ContentPresenter">
+
+                                                    <Setter Property="Canvas.Left"
+                                                            Value="{Binding X}"/>
+
+                                                    <Setter Property="Canvas.Top"
+                                                            Value="{Binding Y}"/>
+
+                                                    <Setter Property="Width"
+                                                            Value="{Binding Width}"/>
+
+                                                    <Setter Property="Height"
+                                                        Value="{Binding Height}"/>
+
+                                                </Style>
+                                            </ItemsControl.ItemContainerStyle>
+
+                                        </ItemsControl>
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
-                        </richCanvas:RichCanvas.ItemTemplate>
+                            
+                            <!-- COMMAND -->
+                            <DataTemplate DataType="{x:Type canvasElements:Command}">
 
-                    </richCanvas:RichCanvas>
+                                <Border Background="{DynamicResource CommandBackground}"
+                                        CornerRadius="5"
+                                        behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                                        behaviors:CommandBehavior.CommandParameter="{Binding}">
+                                    
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+
+                                            <Setter Property="BorderBrush"
+                                                    Value="{DynamicResource CommandBorder}"/>
+
+                                            <Setter Property="BorderThickness"
+                                                    Value="2"/>
+
+                                            <Style.Triggers>
+
+                                                <DataTrigger Binding="{Binding IsHighlighted}"
+                                                             Value="True">
+
+                                                    <Setter Property="BorderThickness"
+                                                            Value="5"/>
+
+                                                </DataTrigger>
+
+                                            </Style.Triggers>
+
+                                        </Style>
+                                    </Border.Style>
+
+                                    <Grid>
+
+                                        <Grid.RowDefinitions>
+
+                                            <RowDefinition Height="43"/>
+                                            <RowDefinition Height="*"/>
+
+                                        </Grid.RowDefinitions>
+
+                                        <Border Background="{DynamicResource CommandHeader}"
+                                                Padding="12,0">
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        VerticalAlignment="Center">
+
+                                                <TextBlock Text="▤"
+                                                           Foreground="{DynamicResource CommandBorder}"
+                                                           Margin="0,0,8,0"/>
+
+                                                <TextBlock Text="COMMAND"
+                                                           Foreground="#087777"
+                                                           FontSize="11"
+                                                           FontWeight="Bold"/>
+
+                                                <TextBlock Text="{Binding Name}"
+                                                           Foreground="#234F50"
+                                                           FontWeight="SemiBold"
+                                                           Margin="12,0,0,0"/>
+
+                                            </StackPanel>
+
+                                        </Border>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </DataTemplate>
+
+                        </richCanvas:RichItemsControl.Resources>
+
+
+                        <!-- RICHCANVAS POZÍCIÓ / MÉRET -->
+
+                        <richCanvas:RichItemsControl.ItemContainerStyle>
+
+                            <Style TargetType="richCanvas:RichItemContainer">
+
+                                <Setter Property="Top"
+                                        Value="{Binding Y, Mode=TwoWay}"/>
+
+                                <Setter Property="Left"
+                                        Value="{Binding X, Mode=TwoWay}"/>
+
+                                <Setter Property="Width"
+                                        Value="{Binding Width, Mode=TwoWay}"/>
+
+                                <Setter Property="Height"
+                                        Value="{Binding Height, Mode=TwoWay}"/>
+
+                            </Style>
+
+                        </richCanvas:RichItemsControl.ItemContainerStyle>
+
+                    </richCanvas:RichItemsControl>
                 </Grid>
 
                 <!-- ================================================= -->
@@ -455,7 +651,7 @@
                 
                 <GridSplitter
                     Grid.Row="1"
-                    Height="10"
+                    Height="5"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
                     Background="{DynamicResource PanelBorder}"
