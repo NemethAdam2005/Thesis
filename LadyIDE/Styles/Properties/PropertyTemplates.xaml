@@ -1,0 +1,271 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:canvasElements="clr-namespace:LadyIDE.WPF.CanvasElements">
+
+    <!-- ========================================================= -->
+    <!-- APPLICATION PROPERTIES                                    -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:ConsoleApplication}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- ================================================= -->
+                <!-- PROPERTIES HEADER                                 -->
+                <!-- ================================================= -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+                    <Button
+                        Content="x"
+                        Style="{StaticResource CompileButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+
+                <!-- ================================================= -->
+                <!-- TYPE                                              -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                    Text="Application"
+                    Foreground="{DynamicResource TextSecondary}"
+                    FontSize="12"
+                    Margin="0,0,0,12"/>
+
+
+                <!-- ================================================= -->
+                <!-- NAME                                              -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+                <TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"
+                    Margin="0,0,0,15"/>
+
+
+                <!-- ================================================= -->
+                <!-- COMMANDS                                           -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                    Text="Commands"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,8"/>
+
+
+                <ItemsControl ItemsSource="{Binding Children}">
+
+                    <ItemsControl.ItemTemplate>
+
+                        <DataTemplate>
+
+                            <Grid Margin="0,0,0,6">
+
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="*"/>
+
+                                    <ColumnDefinition Width="32"/>
+
+                                </Grid.ColumnDefinitions>
+
+
+                                <!-- Command name -->
+
+                                <Border
+                                    Grid.Column="0"
+                                    Background="{DynamicResource InputBackground}"
+                                    BorderBrush="{DynamicResource InputBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8,6">
+
+                                    <TextBlock
+                                        Text="{Binding Name}"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        VerticalAlignment="Center"/>
+
+                                </Border>
+
+
+                                <!-- Delete command -->
+
+                                <Button
+                                    Grid.Column="1"
+                                    Width="28"
+                                    Height="28"
+                                    Margin="5,0,0,0"
+                                    Content="✕"
+                                    Foreground="{DynamicResource DeleteButtonForeground}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="13"
+                                    Command="{Binding DataContext.DeleteItemCommand,
+                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"/>
+
+                            </Grid>
+
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+
+
+                <!-- ================================================= -->
+                <!-- ADD COMMAND                                        -->
+                <!-- ================================================= -->
+
+                <Button
+                    Content="Add Command"
+                    Height="32"
+                    Margin="0,10,0,0"
+                    Background="{DynamicResource Accent}"
+                    Foreground="{DynamicResource AccentForeground}"
+                    BorderThickness="0"
+                    Command="{Binding DataContext.AddCommandToApplicationCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+
+                <!-- ================================================= -->
+                <!-- DELETE APPLICATION                                 -->
+                <!-- ================================================= -->
+
+                <Button
+                    Content="DELETE"
+                    Height="32"
+                    Margin="0,15,0,0"
+                    Background="{DynamicResource DeleteButtonBackground}"
+                    Foreground="{DynamicResource DeleteButtonForeground}"
+                    BorderThickness="0"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    ToolTip="Delete Application"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+
+    <!-- ========================================================= -->
+    <!-- COMMAND PROPERTIES                                        -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Command}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- ================================================= -->
+                <!-- PROPERTIES HEADER                                 -->
+                <!-- ================================================= -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource CompileButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+
+                <!-- ================================================= -->
+                <!-- TYPE                                              -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                    Text="Command"
+                    Foreground="{DynamicResource TextSecondary}"
+                    FontSize="12"
+                    Margin="0,0,0,12"/>
+
+
+                <!-- ================================================= -->
+                <!-- NAME                                              -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+                <TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+
+                <!-- ================================================= -->
+                <!-- DELETE COMMAND                                     -->
+                <!-- ================================================= -->
+
+                <Button
+                    Content="DELETE"
+                    Height="32"
+                    Margin="0,15,0,0"
+                    Background="{DynamicResource DeleteButtonBackground}"
+                    Foreground="{DynamicResource DeleteButtonForeground}"
+                    BorderThickness="0"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    ToolTip="Delete Command"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+</ResourceDictionary>

@@ -1,0 +1,72 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ========================================================= -->
+    <!-- APPLICATION BORDER STYLE                                  -->
+    <!-- ========================================================= -->
+
+    <Style x:Key="ApplicationCanvasItemStyle"
+           TargetType="Border">
+
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource ApplicationBorder}"/>
+
+        <Setter Property="BorderThickness"
+                Value="2"/>
+
+        <Setter Property="Background"
+                Value="{DynamicResource ApplicationBackground}"/>
+
+        <Setter Property="CornerRadius"
+                Value="5"/>
+
+        <Style.Triggers>
+
+            <DataTrigger Binding="{Binding IsHighlighted}"
+                         Value="True">
+
+                <Setter Property="BorderThickness"
+                        Value="5"/>
+
+            </DataTrigger>
+
+        </Style.Triggers>
+
+    </Style>
+
+
+    <!-- ========================================================= -->
+    <!-- COMMAND BORDER STYLE                                      -->
+    <!-- ========================================================= -->
+
+    <Style x:Key="CommandCanvasItemStyle"
+           TargetType="Border">
+
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource CommandBorder}"/>
+
+        <Setter Property="BorderThickness"
+                Value="2"/>
+
+        <Setter Property="Background"
+                Value="{DynamicResource CommandBackground}"/>
+
+        <Setter Property="CornerRadius"
+                Value="5"/>
+
+        <Style.Triggers>
+
+            <DataTrigger Binding="{Binding IsHighlighted}"
+                         Value="True">
+
+                <Setter Property="BorderThickness"
+                        Value="5"/>
+
+            </DataTrigger>
+
+        </Style.Triggers>
+
+    </Style>
+
+</ResourceDictionary>

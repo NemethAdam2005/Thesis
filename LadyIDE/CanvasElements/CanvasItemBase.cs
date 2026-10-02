@@ -88,6 +88,7 @@ namespace LadyIDE.WPF.CanvasElements
                     return;
 
                 _width = newWidth;
+                UpdateSizeFromChildren();
                 OnPropertyChanged();
             }
         }

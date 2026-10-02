@@ -3,7 +3,6 @@
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:behaviors="clr-namespace:LadyIDE.WPF.Behaviors"
-        xmlns:canvasElements="clr-namespace:LadyIDE.WPF.CanvasElements"
         xmlns:richCanvas="clr-namespace:RichCanvas;assembly=RichCanvas"
         Title="LadyIDE"
         Icon="/Assets/LadyIDELogo.ico"
@@ -15,6 +14,18 @@
         WindowStartupLocation="CenterScreen">
 
     <!-- ========================================================= -->
+    <!-- WINDOW RESOURCES                                          -->
+    <!-- ========================================================= -->
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Properties/PropertyTemplates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <!-- ========================================================= -->
     <!-- MAIN LAYOUT                                               -->
     <!-- ========================================================= -->
 
@@ -23,12 +34,15 @@
         <Grid.RowDefinitions>
 
             <!-- Top menu -->
+
             <RowDefinition Height="48"/>
 
             <!-- Main content -->
+
             <RowDefinition Height="*"/>
 
             <!-- Status bar -->
+
             <RowDefinition Height="25"/>
 
         </Grid.RowDefinitions>
@@ -45,7 +59,9 @@
 
             <DockPanel>
 
-                <!-- Logo -->
+                <!-- ================================================= -->
+                <!-- LOGO                                               -->
+                <!-- ================================================= -->
 
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center"
@@ -75,9 +91,15 @@
                 </StackPanel>
 
 
+                <!-- ================================================= -->
+                <!-- MENU                                               -->
+                <!-- ================================================= -->
+
                 <Menu Style="{StaticResource TopMenu}">
 
-                    <!-- File -->
+                    <!-- ================================================= -->
+                    <!-- FILE                                              -->
+                    <!-- ================================================= -->
 
                     <MenuItem Header="File"
                               Style="{StaticResource TopMenuItem}">
@@ -93,7 +115,9 @@
                     </MenuItem>
 
 
-                    <!-- View -->
+                    <!-- ================================================= -->
+                    <!-- VIEW                                              -->
+                    <!-- ================================================= -->
 
                     <MenuItem Header="View"
                               Style="{StaticResource TopMenuItem}">
@@ -109,30 +133,40 @@
                         <MenuItem Header="{Binding ColorThemeText}"
                                   Command="{Binding ColorThemeButtonClicked}"
                                   Style="{StaticResource SubMenuItem}"/>
-                        
+
                     </MenuItem>
 
 
-                    <!-- Help -->
+                    <!-- ================================================= -->
+                    <!-- HELP                                              -->
+                    <!-- ================================================= -->
 
                     <MenuItem Header="Help"
                               Style="{StaticResource TopMenuItem}">
                     </MenuItem>
 
 
+                    <!-- ================================================= -->
+                    <!-- SEPARATOR                                         -->
+                    <!-- ================================================= -->
+
                     <Separator Width="1"
                                Margin="12,10"
                                Background="{DynamicResource PanelBorder}"/>
 
 
-                    <!-- Undo -->
+                    <!-- ================================================= -->
+                    <!-- UNDO                                              -->
+                    <!-- ================================================= -->
 
                     <MenuItem Style="{StaticResource TopMenuItem}"
                               Header="↶"
                               FontSize="20"/>
 
 
-                    <!-- Redo -->
+                    <!-- ================================================= -->
+                    <!-- REDO                                              -->
+                    <!-- ================================================= -->
 
                     <MenuItem Style="{StaticResource TopMenuItem}"
                               Header="↷"
@@ -141,7 +175,9 @@
                 </Menu>
 
 
-                <!-- Compile -->
+                <!-- ================================================= -->
+                <!-- COMPILE BUTTON                                     -->
+                <!-- ================================================= -->
 
                 <Border DockPanel.Dock="Right"
                         Margin="0,7,14,7"
@@ -194,8 +230,9 @@
 
                 <DockPanel>
 
-
-                    <!-- Header -->
+                    <!-- ================================================= -->
+                    <!-- PALETTE HEADER                                    -->
+                    <!-- ================================================= -->
 
                     <Grid DockPanel.Dock="Top"
                           Height="54">
@@ -209,22 +246,26 @@
 
                         <Button Content="x"
                                 Style="{StaticResource CompileButtonStyle}"
-                                 HorizontalAlignment="Right"
-                                 VerticalAlignment="Center"
-                                 Margin="0,0,14,0"
-                                 Command="{Binding ShowLadyElementsButtonClicked}"/>
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Margin="0,0,14,0"
+                                Command="{Binding ShowLadyElementsButtonClicked}"/>
 
                     </Grid>
 
 
-                    <!-- Elements -->
+                    <!-- ================================================= -->
+                    <!-- ELEMENTS                                           -->
+                    <!-- ================================================= -->
 
                     <ScrollViewer VerticalScrollBarVisibility="Auto"
                                   Style="{StaticResource CodeScrollViewer}">
 
                         <StackPanel Margin="10,5">
 
-                            <!-- APPLICATION -->
+                            <!-- ================================================= -->
+                            <!-- APPLICATION                                      -->
+                            <!-- ================================================= -->
 
                             <Button Style="{StaticResource PaletteButton}"
                                     Command="{Binding ApplicationButtonClicked}">
@@ -239,6 +280,7 @@
 
                                         <TextBlock Text="▣"
                                                    Foreground="White"
+                                                   FontSize="15"
                                                    HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"/>
 
@@ -252,35 +294,9 @@
                             </Button>
 
 
-                            <!-- COMMAND -->
-
-                            <Button Style="{StaticResource PaletteButton}"
-                                    Command="{Binding CommandButtonClicked}">
-
-                                <StackPanel Orientation="Horizontal">
-
-                                    <Border Width="27"
-                                            Height="27"
-                                            Background="{DynamicResource CommandBorder}"
-                                            CornerRadius="4"
-                                            Margin="0,0,10,0">
-
-                                        <TextBlock Text="▤"
-                                                   Foreground="White"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
-
-                                    </Border>
-
-                                    <TextBlock Text="Command"
-                                               VerticalAlignment="Center"/>
-
-                                </StackPanel>
-
-                            </Button>
-
-
-                            <!-- COMPONENT -->
+                            <!-- ================================================= -->
+                            <!-- COMPONENT                                        -->
+                            <!-- ================================================= -->
 
                             <Button Style="{StaticResource PaletteButton}">
 
@@ -292,10 +308,11 @@
                                             CornerRadius="4"
                                             Margin="0,0,10,0">
 
-                                        <TextBlock Text="▣"
+                                        <TextBlock Text="◆"
                                                    Foreground="White"
+                                                   FontSize="15"
                                                    HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
+                                                   VerticalAlignment="Center"/>             
 
                                     </Border>
 
@@ -307,7 +324,9 @@
                             </Button>
 
 
-                            <!-- INTERFACE -->
+                            <!-- ================================================= -->
+                            <!-- RECORD                                           -->
+                            <!-- ================================================= -->
 
                             <Button Style="{StaticResource PaletteButton}">
 
@@ -315,19 +334,19 @@
 
                                     <Border Width="27"
                                             Height="27"
-                                            Background="{DynamicResource InterfaceBorder}"
+                                            Background="{DynamicResource RecordBorder}"
                                             CornerRadius="4"
                                             Margin="0,0,10,0">
 
-                                        <TextBlock Text="○"
-                                                   Foreground="White"
-                                                   FontSize="16"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
+                                        <TextBlock Text="●"
+                                                    Foreground="White"
+                                                    FontSize="14"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"/>             
 
                                     </Border>
 
-                                    <TextBlock Text="Interface"
+                                    <TextBlock Text="Record"
                                                VerticalAlignment="Center"/>
 
                                 </StackPanel>
@@ -335,7 +354,9 @@
                             </Button>
 
 
-                            <!-- PATTERN -->
+                            <!-- ================================================= -->
+                            <!-- ENTITY                                           -->
+                            <!-- ================================================= -->
 
                             <Button Style="{StaticResource PaletteButton}">
 
@@ -351,11 +372,11 @@
                                                    Foreground="White"
                                                    FontSize="16"
                                                    HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
+                                                   VerticalAlignment="Center"/>         
 
                                     </Border>
 
-                                    <TextBlock Text="Pattern"
+                                    <TextBlock Text="Entity"
                                                VerticalAlignment="Center"/>
 
                                 </StackPanel>
@@ -363,30 +384,9 @@
                             </Button>
 
 
-                            <Separator Margin="3,10"/>
-
-
-                            <!-- CONNECTION -->
-
-                            <Button Style="{StaticResource PaletteButton}">
-
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="→"
-                                               Foreground="{DynamicResource Accent}"
-                                               FontSize="23"
-                                               Width="37"
-                                               HorizontalAlignment="Center"/>
-
-                                    <TextBlock Text="Connection"
-                                               VerticalAlignment="Center"/>
-
-                                </StackPanel>
-
-                            </Button>
-
-
-                            <!-- NOTE -->
+                            <!-- ================================================= -->
+                            <!-- ENUM                                             -->
+                            <!-- ================================================= -->
 
                             <Button Style="{StaticResource PaletteButton}">
 
@@ -394,18 +394,110 @@
 
                                     <Border Width="27"
                                             Height="27"
-                                            Background="{DynamicResource TextSecondary}"
+                                            Background="{DynamicResource EnumBorder}"
                                             CornerRadius="4"
                                             Margin="0,0,10,0">
 
-                                        <TextBlock Text="□"
+                                        <TextBlock Text="≡"
                                                    Foreground="White"
+                                                   FontSize="17"
+                                                   FontWeight="Bold"
                                                    HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>
+                                                   VerticalAlignment="Center"/>         
 
                                     </Border>
 
-                                    <TextBlock Text="Note"
+                                    <TextBlock Text="Enum"
+                                               VerticalAlignment="Center"/>
+
+                                </StackPanel>
+
+                            </Button>
+
+
+                            <!-- ================================================= -->
+                            <!-- COMPOSITE                                        -->
+                            <!-- ================================================= -->
+
+                            <Button Style="{StaticResource PaletteButton}">
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <Border Width="27"
+                                            Height="27"
+                                            Background="{DynamicResource CompositeBorder}"
+                                            CornerRadius="4"
+                                            Margin="0,0,10,0">
+
+                                        <TextBlock Text="▤"
+                                                   Foreground="White"
+                                                   FontSize="16"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>         
+
+                                    </Border>
+
+                                    <TextBlock Text="Composite"
+                                               VerticalAlignment="Center"/>
+
+                                </StackPanel>
+
+                            </Button>
+
+
+                            <!-- ================================================= -->
+                            <!-- MEDIATOR                                         -->
+                            <!-- ================================================= -->
+
+                            <Button Style="{StaticResource PaletteButton}">
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <Border Width="27"
+                                            Height="27"
+                                            Background="{DynamicResource MediatorBorder}"
+                                            CornerRadius="4"
+                                            Margin="0,0,10,0">
+
+                                        <TextBlock Text="✦"
+                                                   Foreground="White"
+                                                   FontSize="16"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>         
+
+                                    </Border>
+
+                                    <TextBlock Text="Mediator"
+                                               VerticalAlignment="Center"/>
+
+                                </StackPanel>
+
+                            </Button>
+
+
+                            <!-- ================================================= -->
+                            <!-- PROXY                                            -->
+                            <!-- ================================================= -->
+
+                            <Button Style="{StaticResource PaletteButton}">
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <Border Width="27"
+                                            Height="27"
+                                            Background="{DynamicResource ProxyBorder}"
+                                            CornerRadius="4"
+                                            Margin="0,0,10,0">
+
+                                        <TextBlock Text="⬡"
+                                                   Foreground="White"
+                                                   FontSize="16"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>     
+
+                                    </Border>
+
+                                    <TextBlock Text="Proxy"
                                                VerticalAlignment="Center"/>
 
                                 </StackPanel>
@@ -428,203 +520,52 @@
             <Grid Grid.Column="1">
 
                 <Grid.RowDefinitions>
+
                     <RowDefinition Height="*"/>
+
                     <RowDefinition Height="5"/>
+
                     <RowDefinition Height="250"/>
+
                 </Grid.RowDefinitions>
+
 
                 <!-- ================================================= -->
                 <!-- CANVAS                                            -->
                 <!-- ================================================= -->
 
                 <Grid>
+
                     <Grid.Resources>
 
                         <Style TargetType="{x:Type ScrollViewer}"
                                BasedOn="{StaticResource CodeScrollViewer}"/>
 
                     </Grid.Resources>
+
                     <richCanvas:RichItemsControl
-                                x:Name="LadyCanvas"
-                                ItemsSource="{Binding CanvasItems}"
-                                SelectedItems="{Binding SelectedItems}"
-                                Background="{StaticResource CanvasBackground}"
-                                behaviors:CommandBehavior.Command="{Binding SelectItemCommand}"
-                                behaviors:CommandBehavior.CommandParameter="{x:Null}">
+                        x:Name="LadyCanvas"
+                        ItemsSource="{Binding CanvasItems}"
+                        SelectedItems="{Binding SelectedItems}"
+                        Background="{DynamicResource CanvasBackground}"
+                        behaviors:CommandBehavior.Command="{Binding SelectItemCommand}"
+                        behaviors:CommandBehavior.CommandParameter="{x:Null}">
 
                         <richCanvas:RichItemsControl.Resources>
 
-                            <!-- APPLICATION -->
-                            <DataTemplate DataType="{x:Type canvasElements:ConsoleApplication}">
+                            <ResourceDictionary>
+                                <ResourceDictionary.MergedDictionaries>
 
-                                <Border Background="{DynamicResource ApplicationBackground}"
-                                        CornerRadius="5"
-                                        behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand}">
+                                    <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Canvas/CanvasItemTemplates.xaml"/>
 
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-                                            <Setter Property="BorderBrush"
-                                                    Value="{DynamicResource ApplicationBorder}"/>
-                                            <Setter Property="BorderThickness"
-                                                    Value="2"/>
-
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsHighlighted}"
-                                                             Value="True">
-
-                                                    <Setter Property="BorderThickness" Value="5"/>
-
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Border.Style>
-
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="48"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-
-                                        <!-- Application fejléc -->
-                                        <Border Grid.Row="0"
-                                                Background="{DynamicResource ApplicationHeader}"
-                                                Padding="15,0"
-                                                behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
-                                                RelativeSource={RelativeSource AncestorType=Window}}"
-                                                behaviors:CommandBehavior.CommandParameter="{Binding}">             
-
-                                            <StackPanel Orientation="Horizontal"
-                                                        VerticalAlignment="Center">
-
-                                                <TextBlock Text="▣"
-                                                           Foreground="{DynamicResource ApplicationBorder}"
-                                                           FontSize="18"
-                                                           Margin="0,0,10,0"/>
-
-                                                <TextBlock Text="APPLICATION"
-                                                           Foreground="#1769A9"
-                                                           FontWeight="Bold"
-                                                           FontSize="12"
-                                                           VerticalAlignment="Center"/>
-
-                                                <TextBlock Text="{Binding Name}"
-                                                           Foreground="#23405B"
-                                                           FontSize="15"
-                                                           FontWeight="SemiBold"
-                                                           Margin="15,0,0,0"
-                                                           VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                        </Border>
-
-                                        <!-- Application tartalma -->
-                                        <ItemsControl Grid.Row="1"
-                                                      ItemsSource="{Binding Children}">
-
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <Canvas/>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-
-                                            <ItemsControl.ItemContainerStyle>
-                                                <Style TargetType="ContentPresenter">
-
-                                                    <Setter Property="Canvas.Left"
-                                                            Value="{Binding X}"/>
-
-                                                    <Setter Property="Canvas.Top"
-                                                            Value="{Binding Y}"/>
-
-                                                    <Setter Property="Width"
-                                                            Value="{Binding Width}"/>
-
-                                                    <Setter Property="Height"
-                                                        Value="{Binding Height}"/>
-
-                                                </Style>
-                                            </ItemsControl.ItemContainerStyle>
-
-                                        </ItemsControl>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                            
-                            <!-- COMMAND -->
-                            <DataTemplate DataType="{x:Type canvasElements:Command}">
-
-                                <Border Background="{DynamicResource CommandBackground}"
-                                        CornerRadius="5"
-                                        behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
-                                        RelativeSource={RelativeSource AncestorType=Window}}"
-                                        behaviors:CommandBehavior.CommandParameter="{Binding}">
-                                    
-                                    <Border.Style>
-                                        <Style TargetType="Border">
-
-                                            <Setter Property="BorderBrush"
-                                                    Value="{DynamicResource CommandBorder}"/>
-
-                                            <Setter Property="BorderThickness"
-                                                    Value="2"/>
-
-                                            <Style.Triggers>
-
-                                                <DataTrigger Binding="{Binding IsHighlighted}"
-                                                             Value="True">
-
-                                                    <Setter Property="BorderThickness"
-                                                            Value="5"/>
-
-                                                </DataTrigger>
-
-                                            </Style.Triggers>
-
-                                        </Style>
-                                    </Border.Style>
-
-                                    <Grid>
-
-                                        <Grid.RowDefinitions>
-
-                                            <RowDefinition Height="43"/>
-                                            <RowDefinition Height="*"/>
-
-                                        </Grid.RowDefinitions>
-
-                                        <Border Background="{DynamicResource CommandHeader}"
-                                                Padding="12,0">
-
-                                            <StackPanel Orientation="Horizontal"
-                                                        VerticalAlignment="Center">
-
-                                                <TextBlock Text="▤"
-                                                           Foreground="{DynamicResource CommandBorder}"
-                                                           Margin="0,0,8,0"/>
-
-                                                <TextBlock Text="COMMAND"
-                                                           Foreground="#087777"
-                                                           FontSize="11"
-                                                           FontWeight="Bold"/>
-
-                                                <TextBlock Text="{Binding Name}"
-                                                           Foreground="#234F50"
-                                                           FontWeight="SemiBold"
-                                                           Margin="12,0,0,0"/>
-
-                                            </StackPanel>
-
-                                        </Border>
-
-                                    </Grid>
-
-                                </Border>
-
-                            </DataTemplate>
+                                </ResourceDictionary.MergedDictionaries>
+                            </ResourceDictionary>
 
                         </richCanvas:RichItemsControl.Resources>
-
-
-                        <!-- RICHCANVAS POZÍCIÓ / MÉRET -->
+                        
+                        <!-- ================================================= -->
+                        <!-- RICHCANVAS ITEM POSITION / SIZE                  -->
+                        <!-- ================================================= -->
 
                         <richCanvas:RichItemsControl.ItemContainerStyle>
 
@@ -647,12 +588,14 @@
                         </richCanvas:RichItemsControl.ItemContainerStyle>
 
                     </richCanvas:RichItemsControl>
+
                 </Grid>
+
 
                 <!-- ================================================= -->
                 <!-- RESIZE BAR                                        -->
                 <!-- ================================================= -->
-                
+
                 <GridSplitter
                     Grid.Row="1"
                     Height="5"
@@ -661,6 +604,7 @@
                     Background="{DynamicResource PanelBorder}"
                     ResizeDirection="Rows"
                     ResizeBehavior="PreviousAndNext"/>
+
 
                 <!-- ================================================= -->
                 <!-- CODE PANEL                                        -->
@@ -673,11 +617,15 @@
 
                     <TabControl Style="{StaticResource CodeTabControl}">
 
-                        <!-- CODE -->
+                        <!-- ================================================= -->
+                        <!-- CODE                                              -->
+                        <!-- ================================================= -->
+
                         <TabItem Header="Code"
                                  Style="{StaticResource CodeTabItem}">
 
                             <TabItem.Content>
+
                                 <Grid Background="{DynamicResource CodeBackground}">
 
                                     <Grid.Resources>
@@ -690,33 +638,40 @@
 
                                     </Grid.Resources>
 
+
                                     <avalonEdit:TextEditor
-                                                x:Name="CodeEditor"
-                                                Background="{DynamicResource CodeBackground}"
-                                                Foreground="{DynamicResource CodeForeground}"
-                                                FontFamily="Consolas"
-                                                FontSize="14"
-                                                ShowLineNumbers="True"
-                                                HorizontalScrollBarVisibility="Auto"
-                                                VerticalScrollBarVisibility="Auto"
-                                                Padding="12,8"/>        
+                                        x:Name="CodeEditor"
+                                        Background="{DynamicResource CodeBackground}"
+                                        Foreground="{DynamicResource CodeForeground}"
+                                        FontFamily="Consolas"
+                                        FontSize="14"
+                                        ShowLineNumbers="True"
+                                        HorizontalScrollBarVisibility="Auto"
+                                        VerticalScrollBarVisibility="Auto"
+                                        Padding="12,8"/>
 
                                 </Grid>
+
                             </TabItem.Content>
 
                         </TabItem>
 
 
-                        <!-- CONSOLE -->
+                        <!-- ================================================= -->
+                        <!-- CONSOLE                                           -->
+                        <!-- ================================================= -->
+
                         <TabItem Header="Console"
                                  Style="{StaticResource CodeTabItem}">
 
                             <TabItem.Content>
+
                                 <Grid Background="{DynamicResource CodeBackground}">
 
                                     <TextBox Style="{StaticResource ConsoleTextBox}"/>
 
                                 </Grid>
+
                             </TabItem.Content>
 
                         </TabItem>
@@ -738,37 +693,42 @@
                     BorderThickness="1,0,0,0">
 
                 <Grid>
+
                     <Grid.Resources>
+
                         <Style TargetType="{x:Type ScrollViewer}"
                                BasedOn="{StaticResource CodeScrollViewer}"/>
+
                     </Grid.Resources>
 
 
-                    <!-- ===================================================== -->
-                    <!-- NINCS KIJELÖLT ELEM                                   -->
-                    <!-- ===================================================== -->
+                    <!-- ================================================= -->
+                    <!-- NO SELECTED ITEM                                  -->
+                    <!-- ================================================= -->
 
                     <StackPanel Margin="15">
 
                         <StackPanel.Style>
+
                             <Style TargetType="StackPanel">
 
                                 <Setter Property="Visibility"
-                            Value="Collapsed"/>
+                                        Value="Collapsed"/>
 
                                 <Style.Triggers>
 
                                     <DataTrigger Binding="{Binding SelectedItem}"
-                                     Value="{x:Null}">
+                                                 Value="{x:Null}">
 
                                         <Setter Property="Visibility"
-                                    Value="Visible"/>
+                                                Value="Visible"/>
 
                                     </DataTrigger>
 
                                 </Style.Triggers>
 
                             </Style>
+
                         </StackPanel.Style>
 
 
@@ -792,15 +752,15 @@
 
 
                         <TextBlock Text="No element selected"
-                       Foreground="{DynamicResource TextSecondary}"
-                       FontSize="12"/>
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   FontSize="12"/>
 
                     </StackPanel>
 
 
-                    <!-- ===================================================== -->
-                    <!-- KIJELÖLT ELEM                                         -->
-                    <!-- ===================================================== -->
+                    <!-- ================================================= -->
+                    <!-- SELECTED ITEM                                     -->
+                    <!-- ================================================= -->
 
                     <ContentControl Content="{Binding SelectedItem}">
 
@@ -809,15 +769,15 @@
                             <Style TargetType="ContentControl">
 
                                 <Setter Property="Visibility"
-                            Value="Visible"/>
+                                        Value="Visible"/>
 
                                 <Style.Triggers>
 
                                     <DataTrigger Binding="{Binding SelectedItem}"
-                                     Value="{x:Null}">
+                                                 Value="{x:Null}">
 
                                         <Setter Property="Visibility"
-                                    Value="Collapsed"/>
+                                                Value="Collapsed"/>
 
                                     </DataTrigger>
 
@@ -827,252 +787,6 @@
 
                         </ContentControl.Style>
 
-
-                        <ContentControl.Resources>
-
-
-                            <!-- ================================================= -->
-                            <!-- APPLICATION PROPERTIES                            -->
-                            <!-- ================================================= -->
-
-                            <DataTemplate DataType="{x:Type canvasElements:ConsoleApplication}">
-
-                                <ScrollViewer VerticalScrollBarVisibility="Auto">
-
-                                    <StackPanel Margin="15">
-
-
-                                        <!-- ============================== -->
-                                        <!-- Properties fejléc              -->
-                                        <!-- ============================== -->
-
-                                        <DockPanel Margin="0,0,0,18">
-
-                                            <TextBlock Text="Properties"
-                                                       Foreground="{DynamicResource TextPrimary}"
-                                                       FontSize="14"
-                                                       FontWeight="SemiBold"
-                                                       VerticalAlignment="Center"/>
-
-                                            <Button Content="x"
-                                                    Style="{StaticResource CompileButtonStyle}"
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Center"
-                                                    Margin="0,0,14,0"
-                                                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
-                                                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
-
-                                        </DockPanel>
-
-
-                                        <!-- ============================== -->
-                                        <!-- Típus                           -->
-                                        <!-- ============================== -->
-
-                                        <TextBlock Text="Application"
-                                       Foreground="{DynamicResource TextSecondary}"
-                                       FontSize="12"
-                                       Margin="0,0,0,12"/>
-
-
-                                        <!-- ============================== -->
-                                        <!-- Name                            -->
-                                        <!-- ============================== -->
-
-                                        <TextBlock Text="Name"
-                                       Foreground="{DynamicResource PropertiesSectionHeader}"
-                                       FontSize="12"
-                                       Margin="0,0,0,5"/>
-
-                                        <TextBox Text="{Binding Name,
-                                                   UpdateSourceTrigger=PropertyChanged}"
-                                     Background="{DynamicResource InputBackground}"
-                                     BorderBrush="{DynamicResource InputBorder}"
-                                     Foreground="{DynamicResource InputForeground}"
-                                     Padding="8,6"
-                                     Margin="0,0,0,15"/>
-
-
-                                        <!-- ============================== -->
-                                        <!-- Children                        -->
-                                        <!-- ============================== -->
-
-                                        <TextBlock Text="Commands"
-                                       Foreground="{DynamicResource PropertiesSectionHeader}"
-                                       FontSize="12"
-                                       Margin="0,0,0,8"/>
-
-
-                                        <ItemsControl ItemsSource="{Binding Children}">
-
-                                            <ItemsControl.ItemTemplate>
-
-                                                <DataTemplate>
-
-                                                    <Grid Margin="0,0,0,6">
-
-                                                        <Grid.ColumnDefinitions>
-
-                                                            <ColumnDefinition Width="*"/>
-
-                                                            <ColumnDefinition Width="32"/>
-
-                                                        </Grid.ColumnDefinitions>
-
-
-                                                        <!-- Command neve -->
-                                                        <Border Grid.Column="0"
-                                                    Background="{DynamicResource InputBackground}"
-                                                    BorderBrush="{DynamicResource InputBorder}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="4"
-                                                    Padding="8,6">
-
-                                                            <TextBlock Text="{Binding Name}"
-                                                           Foreground="{DynamicResource TextPrimary}"
-                                                           VerticalAlignment="Center"/>
-
-                                                        </Border>
-
-
-                                                        <!-- Command törlése -->
-                                                        <Button Grid.Column="1"
-                                                                Width="28"
-                                                                Height="28"
-                                                                Margin="5,0,0,0"
-                                                                Content="✕"
-                                                                Foreground="#E05252"
-                                                                Background="Transparent"
-                                                                BorderThickness="0"
-                                                                FontSize="13"
-                                                                Command="{Binding DataContext.DeleteItemCommand,
-                                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                CommandParameter="{Binding}"/>  
-
-                                                    </Grid>
-
-                                                </DataTemplate>
-
-                                            </ItemsControl.ItemTemplate>
-
-                                        </ItemsControl>
-
-
-                                        <!-- ============================== -->
-                                        <!-- Add Command                     -->
-                                        <!-- ============================== -->
-
-                                        <Button Content="Add Command"
-                                                Height="32"
-                                                Margin="0,10,0,0"
-                                                Background="{DynamicResource Accent}"
-                                                Foreground="{DynamicResource AccentForeground}"
-                                                BorderThickness="0"
-                                                Command="{Binding DataContext.AddCommandToApplicationCommand,
-                                                                    RelativeSource={RelativeSource AncestorType=Window}}"
-                                                CommandParameter="{Binding}"/>
-
-                                        <Button Content="DELETE"
-                                                Height="32"
-                                                Margin="0,15,0,0"
-                                                Background="#E05252"
-                                                Foreground="White"
-                                                BorderThickness="0"
-                                                FontSize="11"
-                                                FontWeight="Bold"
-                                                ToolTip="Delete Application"
-                                                Command="{Binding DataContext.DeleteItemCommand,
-                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
-                                                CommandParameter="{Binding}"/>              
-
-                                    </StackPanel>
-
-                                </ScrollViewer>
-
-                            </DataTemplate>
-
-
-                            <!-- ================================================= -->
-                            <!-- COMMAND PROPERTIES                                -->
-                            <!-- ================================================= -->
-
-                            <DataTemplate DataType="{x:Type canvasElements:Command}">
-
-                                <ScrollViewer VerticalScrollBarVisibility="Auto">
-
-                                    <StackPanel Margin="15">
-
-                                        <!-- ============================== -->
-                                        <!-- Properties fejléc              -->
-                                        <!-- ============================== -->
-
-                                        <DockPanel Margin="0,0,0,18">
-
-                                            <TextBlock Text="Properties"
-                                                        Foreground="{DynamicResource TextPrimary}"
-                                                        FontSize="14"
-                                                        FontWeight="SemiBold"
-                                                        VerticalAlignment="Center"/>
-
-                                            <Button Content="x"
-                                                     Style="{StaticResource CompileButtonStyle}"
-                                                     HorizontalAlignment="Right"
-                                                     VerticalAlignment="Center"
-                                                     Margin="0,0,14,0"
-                                                     Command="{Binding DataContext.ShowPropertiesButtonClicked,
-                                                                       RelativeSource={RelativeSource AncestorType=Window}}"/>
-
-                                        </DockPanel>
-
-
-                                        <!-- ============================== -->
-                                        <!-- Típus                           -->
-                                        <!-- ============================== -->
-
-                                        <TextBlock Text="Command"
-                                       Foreground="{DynamicResource TextSecondary}"
-                                       FontSize="12"
-                                       Margin="0,0,0,12"/>
-
-
-                                        <!-- ============================== -->
-                                        <!-- Name                            -->
-                                        <!-- ============================== -->
-
-                                        <TextBlock Text="Name"
-                                       Foreground="{DynamicResource PropertiesSectionHeader}"
-                                       FontSize="12"
-                                       Margin="0,0,0,5"/>
-
-                                        <TextBox Text="{Binding Name,
-                                                   UpdateSourceTrigger=PropertyChanged}"
-                                     Background="{DynamicResource InputBackground}"
-                                     BorderBrush="{DynamicResource InputBorder}"
-                                     Foreground="{DynamicResource InputForeground}"
-                                     Padding="8,6"/>
-
-                                        <Button Content="DELETE"
-                                                Height="32"
-                                                Margin="0,15,0,0"
-                                                Background="#E05252"
-                                                Foreground="White"
-                                                BorderThickness="0"
-                                                FontSize="11"
-                                                FontWeight="Bold"
-                                                ToolTip="Delete Application"
-                                                Command="{Binding DataContext.DeleteItemCommand,
-                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
-                                                CommandParameter="{Binding}"/>
-
-                                    </StackPanel>
-
-                                </ScrollViewer>
-
-                            </DataTemplate>
-
-
-                        </ContentControl.Resources>
-
                     </ContentControl>
 
                 </Grid>
@@ -1080,6 +794,7 @@
             </Border>
 
         </Grid>
+
 
         <!-- ===================================================== -->
         <!-- STATUS BAR                                            -->

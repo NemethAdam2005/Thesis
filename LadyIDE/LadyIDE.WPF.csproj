@@ -32,16 +32,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Styles\CanvasElementsStyles.xaml">
+    <Page Update="Styles\Canvas\CanvasItemStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Styles\MenuBarStyles.xaml">
+    <Page Update="Styles\Controls\MenuStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Styles\PaletteStyles.xaml">
+    <Page Update="Styles\Controls\PaletteStyles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Update="Styles\TabStyles.xaml">
+    <Page Update="Styles\Controls\TabStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Styles\Properties\PropertyTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

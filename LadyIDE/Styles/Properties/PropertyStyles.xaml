@@ -1,0 +1,54 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ===================================================== -->
+    <!-- PROPERTY TEXTBOX                                      -->
+    <!-- ===================================================== -->
+
+    <Style x:Key="PropertyTextBox"
+           TargetType="TextBox">
+
+        <Setter Property="Foreground"
+                Value="{DynamicResource InputForeground}"/>
+
+        <Setter Property="Background"
+                Value="{DynamicResource InputBackground}"/>
+
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource InputBorder}"/>
+
+        <Setter Property="BorderThickness"
+                Value="1"/>
+
+        <Setter Property="Padding"
+                Value="7"/>
+
+        <Setter Property="FontSize"
+                Value="13"/>
+
+    </Style>
+
+
+    <!-- ===================================================== -->
+    <!-- SECTION HEADER                                        -->
+    <!-- ===================================================== -->
+
+    <Style x:Key="SectionHeader"
+           TargetType="TextBlock">
+
+        <Setter Property="Foreground"
+                Value="{DynamicResource PropertiesSectionHeader}"/>
+
+        <Setter Property="FontSize"
+                Value="12"/>
+
+        <Setter Property="FontWeight"
+                Value="SemiBold"/>
+
+        <Setter Property="Margin"
+                Value="0,14,0,6"/>
+
+    </Style>
+
+</ResourceDictionary>
