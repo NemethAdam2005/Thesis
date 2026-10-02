@@ -1,26 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Reflection.Metadata;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace LadyIDE.WPF.CanvasElements
 {
     public class Command : CanvasItemBase
     {
-        private string _name = string.Empty;
-
-        public string Name
+        public Command() : base(200, 120, 120)
         {
-            get => _name;
-            set
-            {
-                if (_name == value)
-                    return;
-
-                _name = value;
-                OnPropertyChanged();
-            }
         }
 
         public List<Parameter> Input { get; } = new();

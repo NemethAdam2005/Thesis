@@ -97,6 +97,34 @@ namespace LadyIDE.WPF.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        private bool _isPropertiesVisible = true;
+
+        public bool IsPropertiesVisible
+        {
+            get => _isPropertiesVisible;
+            set
+            {
+                if (_isPropertiesVisible == value)
+                    return;
+
+                _isPropertiesVisible = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(PropertiesColumnWidth));
+                OnPropertyChanged(nameof(ShowPropertiesText));
+            }
+        }
+
+        public GridLength PropertiesColumnWidth =>
+            IsPropertiesVisible
+                ? new GridLength(245)
+                : new GridLength(0);
+
+        public string ShowPropertiesText =>
+            IsPropertiesVisible
+                ? "Hide Properties section"
+                : "Show Properties section";
+
         private string _caretPositionText = "  Ln: 1, Col: 1";
 
         public string CaretPositionText
@@ -141,10 +169,13 @@ namespace LadyIDE.WPF.ViewModel
             SaveFileCommand = new DelegateCommand(param => OnSaveFile());
             ColorThemeButtonClicked = new DelegateCommand(param => OnColorThemeButtonClicked());
             ShowLadyElementsButtonClicked = new DelegateCommand(param => OnShowLadyElementsButtonClicked());
+            ShowPropertiesButtonClicked = new DelegateCommand(param => OnShowPropertiesButtonClicked());
             ApplicationButtonClicked = new DelegateCommand(param => OnApplicationButtonClicked());
             CommandButtonClicked = new DelegateCommand(param => OnCommandButtonClicked());
             SelectItemCommand = new DelegateCommand(param => OnSelectItem(param as CanvasItemBase));
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
+            AddCommandToApplicationCommand = new DelegateCommand(param => OnAddCommandToApplication(param as ConsoleApplication));
+            DeleteItemCommand = new DelegateCommand(param => OnDeleteItem(param as CanvasItemBase));
         }
         
         //Commands
@@ -152,39 +183,21 @@ namespace LadyIDE.WPF.ViewModel
         public DelegateCommand SaveFileCommand { get; private set; }
         public DelegateCommand ColorThemeButtonClicked { get; private set; }
         public DelegateCommand ShowLadyElementsButtonClicked { get; private set; }
+        public DelegateCommand ShowPropertiesButtonClicked { get; private set; }
         public DelegateCommand ApplicationButtonClicked { get; private set; }
         public DelegateCommand CommandButtonClicked { get; private set; }
         public DelegateCommand SelectItemCommand { get; private set; }
+        public DelegateCommand AddCommandToApplicationCommand { get; private set; }
+        public DelegateCommand DeleteItemCommand { get; private set; }
 
         //Events
         public event EventHandler? LoadFile;
         public event EventHandler? SaveFile;
         public event EventHandler<string>? CodeChanged;
 
-        public void AddApplication(double x, double y)
+        public void AddApplication()
         {
-            const double appWidth = 300;
-            const double appHeight = 180;
             const double spacing = 20;
-
-            double newX = Math.Max(0, x);
-            double newY = Math.Max(0, y);
-
-            // Ütközés esetén új pozíció keresése.
-            while (CanvasItems.Any(item =>
-                newX < item.X + item.Width + spacing &&
-                newX + appWidth + spacing > item.X &&
-                newY < item.Y + item.Height + spacing &&
-                newY + appHeight + spacing > item.Y))
-            {
-                newX += appWidth + spacing;
-
-                if (newX + appWidth > 1200)
-                {
-                    newX = 20;
-                    newY += appHeight + spacing;
-                }
-            }
 
             int applicationNumber = CanvasItems
                 .OfType<ConsoleApplication>()
@@ -193,148 +206,130 @@ namespace LadyIDE.WPF.ViewModel
             ConsoleApplication application = new ConsoleApplication
             {
                 Name = $"Application{applicationNumber}",
-                X = newX,
-                Y = newY,
-                Width = appWidth,
-                Height = appHeight
+                X = 0,
+                Y = 0
             };
 
-            CanvasItems.Add(application);
+            double newX = application.X;
+            double newY = application.Y;
 
-            Command command1 = new Command
+            while (CanvasItems.Any(item =>
+                newX < item.X + item.Width + spacing &&
+                newX + application.Width + spacing > item.X &&
+                newY < item.Y + item.Height + spacing &&
+                newY + application.Height + spacing > item.Y))
             {
-                Name = "Command1",
-                Width = 180,
-                Height = 120
+                newX += application.Width + spacing;
+
+                if (newX + application.Width > 1200)
+                {
+                    newX = 20;
+                    newY += application.Height + spacing;
+                }
+            }
+
+            application.X = newX;
+            application.Y = newY;
+
+            CanvasItems.Add(application);
+        }
+
+        public void AddCommand()
+        {
+            const double spacing = 20;
+
+            int commandNumber = CanvasItems
+                .OfType<Command>()
+                .Count() + 1;
+
+            Command command = new Command
+            {
+                Name = $"Command{commandNumber}",
+                X = 0,
+                Y = 0
+            };
+
+            double newX = command.X;
+            double newY = command.Y;
+
+            while (CanvasItems.Any(item =>
+                newX < item.X + item.Width + spacing &&
+                newX + command.Width + spacing > item.X &&
+                newY < item.Y + item.Height + spacing &&
+                newY + command.Height + spacing > item.Y))
+            {
+                newX += command.Width + spacing;
+
+                if (newX + command.Width > 1200)
+                {
+                    newX = 20;
+                    newY += command.Height + spacing;
+                }
+            }
+
+            command.X = newX;
+            command.Y = newY;
+
+            CanvasItems.Add(command);
+        }
+
+        private void OnAddCommandToApplication(ConsoleApplication? application)
+        {
+            if (application == null)
+                return;
+
+            int commandNumber = application.Children
+                .OfType<Command>()
+                .Count() + 1;
+
+            Command command = new Command
+            {
+                Name = $"{application.Name}-Command{commandNumber}"
             };
 
             Point position = application.FindFreeChildPosition(
-                command1.Width,
-                command1.Height);
+                command.Width,
+                command.Height);
 
-            command1.X = position.X;
-            command1.Y = position.Y;
+            command.X = position.X;
+            command.Y = position.Y;
 
-            command1.Parent = application;
-            application.Children.Add(command1);
-
-            Command command2 = new Command
-            {
-                Name = "Command2",
-                Width = 180,
-                Height = 120
-            };
-
-            Point position2 = application.FindFreeChildPosition(
-                command2.Width,
-                command2.Height);
-
-            command2.X = position2.X;
-            command2.Y = position2.Y;
-
-            command2.Parent = application;
-            application.Children.Add(command2);
-
-            Command command3 = new Command
-            {
-                Name = "Command3",
-                Width = 180,
-                Height = 120
-            };
-
-            Point position3 = application.FindFreeChildPosition(
-                command3.Width,
-                command3.Height);
-
-            command3.X = position3.X;
-            command3.Y = position3.Y;
-
-            command3.Parent = application;
-            application.Children.Add(command3);
-            Command command4 = new Command
-            {
-                Name = "Command4",
-                Width = 180,
-                Height = 120
-            };
-
-            Point position4 = application.FindFreeChildPosition(
-                command4.Width,
-                command4.Height);
-
-            command4.X = position4.X;
-            command4.Y = position4.Y;
-
-            command4.Parent = application;
-            application.Children.Add(command4);
+            command.Parent = application;
+            application.Children.Add(command);
 
             application.UpdateSizeFromChildren();
         }
 
-        public void AddCommand(double x, double y)
+        private void OnDeleteItem(CanvasItemBase? item)
         {
-            //const double commandWidth = 200;
-            //const double commandHeight = 100;
-            //const double spacing = 20;
+            if (item == null)
+                return;
 
-            //double newX = Math.Max(0, x);
-            //double newY = Math.Max(0, y);
-
-            //// Ütközés esetén új pozíció keresése.
-            //while (CanvasItems.Any(item =>
-            //    newX < item.X + item.Width + spacing &&
-            //    newX + commandWidth + spacing > item.X &&
-            //    newY < item.Y + item.Height + spacing &&
-            //    newY + commandHeight + spacing > item.Y))
-            //{
-            //    newX += commandWidth + spacing;
-
-            //    if (newX + commandWidth > 1200)
-            //    {
-            //        newX = 20;
-            //        newY += commandHeight + spacing;
-            //    }
-            //}
-
-            //int commandNumber = CanvasItems
-            //    .OfType<Command>()
-            //    .Count() + 1;
-
-            //Command command = new Command
-            //{
-            //    Name = $"Command{commandNumber}",
-            //    X = newX,
-            //    Y = newY,
-            //    Width = commandWidth,
-            //    Height = commandHeight
-            //};
-
-            //CanvasItems.Add(command);
-
-            ConsoleApplication? app = CanvasItems.OfType<ConsoleApplication>().FirstOrDefault();
-            Command command2 = new Command
+            // Ha egy Applicationön belüli Commandot törlünk
+            if (item.Parent != null)
             {
-                Name = "Command2",
-                Width = 180,
-                Height = 120
-            };
+                CanvasItemBase parent = item.Parent;
 
-            if (app == null)
-            {
+                parent.Children.Remove(item);
+
+                item.Parent = null;
+                item.IsHighlighted = false;
+
+                // A szülő Application lesz újra kijelölve
+                SelectedItem = parent;
+
+                parent.IsHighlighted = true;
+
                 return;
             }
+            else if (CanvasItems.Contains(item))
+            {
+                CanvasItems.Remove(item);
+                SelectedItems.Remove(item);
 
-            Point position2 = app.FindFreeChildPosition(
-                command2.Width,
-                command2.Height);
-
-            command2.X = position2.X;
-            command2.Y = position2.Y;
-
-            command2.Parent = app;
-            app.Children.Add(command2);
-            app.UpdateSizeFromChildren();
-
+                // Nincs már kijelölt elem
+                SelectedItem = null;
+            }
         }
 
         private void Model_CodeChanged(Object? sender, String e)
@@ -344,37 +339,55 @@ namespace LadyIDE.WPF.ViewModel
 
         private void OnSelectItem(CanvasItemBase? item)
         {
-            // Minden korábbi highlight törlése
-            foreach (CanvasItemBase rootItem in CanvasItems)
+            if (item == null)
             {
-                rootItem.IsHighlighted = false;
+                SelectedItem = null;
+                // Minden korábbi highlight törlése
+                foreach (CanvasItemBase rootItem in CanvasItems)
+                {
+                    rootItem.IsHighlighted = false;
 
-                foreach (CanvasItemBase child in rootItem.Children)
+                    foreach (CanvasItemBase child in rootItem.Children)
+                    {
+                        child.IsHighlighted = false;
+                    }
+                }
+                return;
+            }
+
+            // Ha az elem egy Application/önálló elem,
+            // akkor a korábbi kijelölések maradjanak meg.
+            if (item.Parent == null)
+            {
+                item.IsHighlighted = true;
+                foreach (CanvasItemBase child in item.Children)
                 {
                     child.IsHighlighted = false;
                 }
             }
-
-            // Üres canvasra kattintottunk
-            if (item == null)
+            else
             {
-                SelectedItem = null;
-                return;
-            }
+                // Ha child, akkor ugyanazon parent többi childját
+                // levesszük a kijelölésről.
+                foreach (CanvasItemBase sibling in item.Parent.Children)
+                {
+                    sibling.IsHighlighted = sibling == item;
+                }
 
-            // Az utoljára kattintott konkrét elem
-            SelectedItem = item;
-
-            // Gyermek elemre kattintottunk
-            if (item.Parent != null)
-            {
-                item.IsHighlighted = true;
+                // A parent is legyen kiemelve, mert a child benne van.
                 item.Parent.IsHighlighted = true;
-                return;
             }
 
-            // Root elemre kattintottunk
-            item.IsHighlighted = true;
+            if (SelectedItem != null && SelectedItem.Parent != null)
+            {
+                foreach (CanvasItemBase child in SelectedItem.Parent.Children)
+                {
+                    child.IsHighlighted = child == item;
+                }
+            }
+
+            // Ez csak a Properties panelhez tartozó kijelölés.
+            SelectedItem = item;
         }
 
         private void SelectedItems_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -398,12 +411,12 @@ namespace LadyIDE.WPF.ViewModel
 
         private void OnApplicationButtonClicked()
         {
-            AddApplication(0.0, 0.0);
+            AddApplication();
         }
 
         private void OnCommandButtonClicked()
         {
-            AddCommand(0.0,0.0);
+            AddCommand();
         }
 
         private void OnColorThemeButtonClicked()
@@ -412,10 +425,15 @@ namespace LadyIDE.WPF.ViewModel
 
             ThemeManager.SetTheme(IsLightMode);
         }
-
+        
         private void OnShowLadyElementsButtonClicked()
         {
             IsLadyElementsVisible = !IsLadyElementsVisible;
+        }
+
+        private void OnShowPropertiesButtonClicked()
+        {
+            IsPropertiesVisible = !IsPropertiesVisible;
         }
 
         public void UpdateCaretPosition(int line, int column)

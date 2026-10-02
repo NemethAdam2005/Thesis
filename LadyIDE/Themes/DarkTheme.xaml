@@ -91,14 +91,14 @@
     <SolidColorBrush x:Key="CodeBorder"
                      Color="#2D3B4B"/>
 
-	<SolidColorBrush x:Key="TabBackground"
+    <SolidColorBrush x:Key="TabBackground"
                      Color="#172331"/>
 
-	<SolidColorBrush x:Key="TabSelectedBackground"
-					 Color="#263F57"/>
+    <SolidColorBrush x:Key="TabSelectedBackground"
+                     Color="#263F57"/>
 
-	<SolidColorBrush x:Key="TabBorder"
-					 Color="#1688E8"/>
+    <SolidColorBrush x:Key="TabBorder"
+                     Color="#1688E8"/>
 
 
     <!-- ========================= -->
@@ -147,27 +147,29 @@
     <SolidColorBrush x:Key="PropertiesSectionHeader"
                      Color="#AEBAC8"/>
 
+
     <!-- ========================= -->
     <!-- Scroll Bar                -->
     <!-- ========================= -->
-    
+
     <SolidColorBrush x:Key="ScrollBarThumb"
-                 Color="#526477"/>
+                     Color="#526477"/>
 
     <SolidColorBrush x:Key="ScrollBarThumbHover"
-                 Color="#71869A"/>
+                     Color="#71869A"/>
 
     <SolidColorBrush x:Key="CodeScrollBarButtonBackground"
-                 Color="#252525"/>
+                     Color="#252525"/>
 
     <SolidColorBrush x:Key="CodeScrollBarHoverBackground"
-                 Color="#303030"/>
-    
+                     Color="#303030"/>
+
+
     <!-- ========================= -->
     <!-- Diagram colors            -->
     <!-- These stay independent    -->
     <!-- from the application      -->
-    <!-- theme for now.             -->
+    <!-- theme for now.            -->
     <!-- ========================= -->
 
     <SolidColorBrush x:Key="ApplicationBorder"

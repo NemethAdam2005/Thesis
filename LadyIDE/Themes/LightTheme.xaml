@@ -91,14 +91,15 @@
     <SolidColorBrush x:Key="CodeBorder"
                      Color="#D6DDE5"/>
 
-	<SolidColorBrush x:Key="TabBackground"
+    <SolidColorBrush x:Key="TabBackground"
                      Color="#FFFFFF"/>
 
-	<SolidColorBrush x:Key="TabSelectedBackground"
-					 Color="#E9F1F8"/>
+    <SolidColorBrush x:Key="TabSelectedBackground"
+                     Color="#E9F1F8"/>
 
-	<SolidColorBrush x:Key="TabBorder"
-					 Color="#1688E8"/>
+    <SolidColorBrush x:Key="TabBorder"
+                     Color="#1688E8"/>
+
 
     <!-- ========================= -->
     <!-- Canvas                    -->
@@ -141,26 +142,28 @@
     <!-- ========================= -->
 
     <SolidColorBrush x:Key="PropertiesBackground"
-                     Color="#FFFFFF"/>
+                     Color="#EEF2F6"/>
 
     <SolidColorBrush x:Key="PropertiesSectionHeader"
                      Color="#536170"/>
+
 
     <!-- ========================= -->
     <!-- Scroll Bar                -->
     <!-- ========================= -->
 
     <SolidColorBrush x:Key="ScrollBarThumb"
-                 Color="#B8C3CF"/>
+                     Color="#B8C3CF"/>
 
     <SolidColorBrush x:Key="ScrollBarThumbHover"
-                 Color="#8F9EAD"/>
+                     Color="#8F9EAD"/>
 
     <SolidColorBrush x:Key="CodeScrollBarButtonBackground"
-                 Color="#E5E5E5"/>
+                     Color="#E5E5E5"/>
 
     <SolidColorBrush x:Key="CodeScrollBarHoverBackground"
-                 Color="#DADADA"/>
+                     Color="#DADADA"/>
+
 
     <!-- ========================= -->
     <!-- Diagram colors            -->
