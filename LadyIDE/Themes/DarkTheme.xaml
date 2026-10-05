@@ -186,19 +186,19 @@
     <!-- ================================================= -->
 
     <SolidColorBrush x:Key="ApplicationBorder"
-                     Color="#1688E8"/>
+                 Color="#249BFF"/>
 
     <SolidColorBrush x:Key="ApplicationHeader"
-                     Color="#D7EBFF"/>
+                 Color="#173A57"/>
 
     <SolidColorBrush x:Key="ApplicationBackground"
-                     Color="#EFF7FF"/>
+                 Color="#122535"/>
 
     <SolidColorBrush x:Key="ApplicationHeaderText"
-                     Color="#1769A9"/>
+                 Color="#6FC2FF"/>
 
     <SolidColorBrush x:Key="ApplicationNameText"
-                     Color="#23405B"/>
+                 Color="#D4ECFF"/>
 
 
     <!-- ================================================= -->
@@ -206,19 +206,19 @@
     <!-- ================================================= -->
 
     <SolidColorBrush x:Key="CommandBorder"
-                     Color="#00A7A7"/>
+                 Color="#00D1C1"/>
 
     <SolidColorBrush x:Key="CommandHeader"
-                     Color="#D8F4F2"/>
+                 Color="#123F3D"/>
 
     <SolidColorBrush x:Key="CommandBackground"
-                     Color="#F1FCFB"/>
+                 Color="#102C2B"/>
 
     <SolidColorBrush x:Key="CommandHeaderText"
-                     Color="#087777"/>
+                 Color="#55E8DC"/>
 
     <SolidColorBrush x:Key="CommandNameText"
-                     Color="#234F50"/>
+                 Color="#D0F8F5"/>
 
 
     <!-- ================================================= -->
@@ -226,13 +226,19 @@
     <!-- ================================================= -->
 
     <SolidColorBrush x:Key="ComponentBorder"
-                     Color="#7448D8"/>
+                 Color="#9A63FF"/>
 
     <SolidColorBrush x:Key="ComponentHeader"
-                     Color="#E7DAFF"/>
+                 Color="#32234F"/>
 
     <SolidColorBrush x:Key="ComponentBackground"
-                     Color="#F7F2FF"/>
+                 Color="#211A31"/>
+
+    <SolidColorBrush x:Key="ComponentHeaderText"
+                 Color="#C7ADFF"/>
+
+    <SolidColorBrush x:Key="ComponentNameText"
+                 Color="#E8DEFF"/>
 
 
     <!-- ================================================= -->
@@ -240,13 +246,19 @@
     <!-- ================================================= -->
 
     <SolidColorBrush x:Key="RecordBorder"
-                     Color="#E69A00"/>
+                 Color="#FF822E"/>
 
     <SolidColorBrush x:Key="RecordHeader"
-                     Color="#FFF0C9"/>
+                 Color="#4A2818"/>
 
     <SolidColorBrush x:Key="RecordBackground"
-                     Color="#FFFBEE"/>
+                 Color="#301C13"/>
+
+    <SolidColorBrush x:Key="RecordHeaderText"
+                 Color="#FFB27A"/>
+
+    <SolidColorBrush x:Key="RecordNameText"
+                 Color="#FFE1CD"/>
 
 
     <!-- ================================================= -->
@@ -254,27 +266,39 @@
     <!-- ================================================= -->
 
     <SolidColorBrush x:Key="EntityBorder"
-                     Color="#D94DAF"/>
+                 Color="#FF4DB0"/>
 
     <SolidColorBrush x:Key="EntityHeader"
-                     Color="#FFDDF2"/>
+                 Color="#492039"/>
 
     <SolidColorBrush x:Key="EntityBackground"
-                     Color="#FFF2FA"/>
+                 Color="#301827"/>
+
+    <SolidColorBrush x:Key="EntityHeaderText"
+                 Color="#FF9DD3"/>
+
+    <SolidColorBrush x:Key="EntityNameText"
+                 Color="#FFD9ED"/>
 
 
     <!-- ================================================= -->
-    <!-- ENUM                                              -->
+    <!-- ENUMELEMENT                                       -->
     <!-- ================================================= -->
 
-    <SolidColorBrush x:Key="EnumBorder"
-                     Color="#3FA66B"/>
+    <SolidColorBrush x:Key="EnumElementBorder"
+                 Color="#3ED985"/>
 
-    <SolidColorBrush x:Key="EnumHeader"
-                     Color="#DDF3E4"/>
+    <SolidColorBrush x:Key="EnumElementHeader"
+                 Color="#193D2A"/>
 
-    <SolidColorBrush x:Key="EnumBackground"
-                     Color="#F1FAF4"/>
+    <SolidColorBrush x:Key="EnumElementBackground"
+                 Color="#122B1E"/>
+
+    <SolidColorBrush x:Key="EnumElementHeaderText"
+                 Color="#75EBA5"/>
+
+    <SolidColorBrush x:Key="EnumElementNameText"
+                 Color="#D3F9E1"/>
 
 
     <!-- ================================================= -->
@@ -282,13 +306,19 @@
     <!-- ================================================= -->
 
     <SolidColorBrush x:Key="CompositeBorder"
-                     Color="#D65A31"/>
+                 Color="#FF5050"/>
 
     <SolidColorBrush x:Key="CompositeHeader"
-                     Color="#F9DED3"/>
+                 Color="#492020"/>
 
     <SolidColorBrush x:Key="CompositeBackground"
-                     Color="#FFF5F0"/>
+                 Color="#301818"/>
+
+    <SolidColorBrush x:Key="CompositeHeaderText"
+                 Color="#FF9696"/>
+
+    <SolidColorBrush x:Key="CompositeNameText"
+                 Color="#FFD6D6"/>
 
 
     <!-- ================================================= -->
@@ -296,13 +326,19 @@
     <!-- ================================================= -->
 
     <SolidColorBrush x:Key="MediatorBorder"
-                     Color="#B07A00"/>
+                 Color="#FFD21C"/>
 
     <SolidColorBrush x:Key="MediatorHeader"
-                     Color="#F5E5B8"/>
+                 Color="#443C13"/>
 
     <SolidColorBrush x:Key="MediatorBackground"
-                     Color="#FFF9E8"/>
+                 Color="#2D2810"/>
+
+    <SolidColorBrush x:Key="MediatorHeaderText"
+                 Color="#FFE66B"/>
+
+    <SolidColorBrush x:Key="MediatorNameText"
+                 Color="#FFF2B0"/>
 
 
     <!-- ================================================= -->
@@ -310,12 +346,18 @@
     <!-- ================================================= -->
 
     <SolidColorBrush x:Key="ProxyBorder"
-                     Color="#5B6CFF"/>
+                 Color="#7080FF"/>
 
     <SolidColorBrush x:Key="ProxyHeader"
-                     Color="#E0E4FF"/>
+                 Color="#252D55"/>
 
     <SolidColorBrush x:Key="ProxyBackground"
-                     Color="#F3F5FF"/>
+                 Color="#191E38"/>
+
+    <SolidColorBrush x:Key="ProxyHeaderText"
+                 Color="#AFB9FF"/>
+
+    <SolidColorBrush x:Key="ProxyNameText"
+                 Color="#DEE2FF"/>
 
 </ResourceDictionary>

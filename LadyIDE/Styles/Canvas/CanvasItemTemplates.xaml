@@ -44,20 +44,20 @@
                         <TextBlock
                             Text="▣"
                             Foreground="{DynamicResource ApplicationBorder}"
-                            FontSize="18"
+                            FontSize="15"
                             Margin="0,0,10,0"/>
 
                         <TextBlock
                             Text="APPLICATION"
                             Foreground="{DynamicResource ApplicationHeaderText}"
                             FontWeight="Bold"
-                            FontSize="12"
+                            FontSize="11"
                             VerticalAlignment="Center"/>
 
                         <TextBlock
                             Text="{Binding Name}"
                             Foreground="{DynamicResource ApplicationNameText}"
-                            FontSize="15"
+                            FontSize="13"
                             FontWeight="SemiBold"
                             Margin="15,0,0,0"
                             VerticalAlignment="Center"/>
@@ -158,6 +158,7 @@
                         <TextBlock
                             Text="▤"
                             Foreground="{DynamicResource CommandBorder}"
+                            FontSize="15"
                             Margin="0,0,8,0"/>
 
                         <TextBlock
@@ -170,7 +171,484 @@
                             Text="{Binding Name}"
                             Foreground="{DynamicResource CommandNameText}"
                             FontWeight="SemiBold"
+                            FontSize="13"
                             Margin="12,0,0,0"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- COMPONENT TEMPLATE                                        -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Component}">
+
+        <Border
+            Style="{StaticResource ComponentCanvasItemStyle}"
+            behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+            RelativeSource={RelativeSource AncestorType=Window}}"
+            behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="43"/>
+
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <!-- ================================================= -->
+                <!-- COMPONENT HEADER                                  -->
+                <!-- ================================================= -->
+
+                <Border
+                    Grid.Row="0"
+                    Background="{DynamicResource ComponentHeader}"
+                    Padding="12,0">
+
+                    <StackPanel
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center">
+
+                        <TextBlock
+                            Text="◆"
+                            Foreground="{DynamicResource ComponentBorder}"
+                            FontSize="15"
+                            Margin="0,0,8,0"
+                            VerticalAlignment="Center"/>
+
+                        <TextBlock
+                            Text="COMPONENT"
+                            Foreground="{DynamicResource ComponentHeaderText}"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            VerticalAlignment="Center"/>
+
+                        <TextBlock
+                            Text="{Binding Name}"
+                            Foreground="{DynamicResource ComponentNameText}"
+                            FontSize="13"
+                            FontWeight="SemiBold"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Center"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- RECORD TEMPLATE                                           -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Record}">
+
+        <Border
+            Style="{StaticResource RecordCanvasItemStyle}"
+            behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+            RelativeSource={RelativeSource AncestorType=Window}}"
+            behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="43"/>
+
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <!-- ================================================= -->
+                <!-- RECORD HEADER                                     -->
+                <!-- ================================================= -->
+
+                <Border
+                Grid.Row="0"
+                Background="{DynamicResource RecordHeader}"
+                Padding="12,0">
+
+                    <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center">
+
+                        <TextBlock
+                        Text="◆"
+                        Foreground="{DynamicResource RecordBorder}"
+                        FontSize="15"
+                        Margin="0,0,8,0"
+                        VerticalAlignment="Center"/>
+
+                        <TextBlock
+                        Text="RECORD"
+                        Foreground="{DynamicResource RecordHeaderText}"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        VerticalAlignment="Center"/>
+
+                        <TextBlock
+                        Text="{Binding Name}"
+                        Foreground="{DynamicResource RecordNameText}"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- ENTITY TEMPLATE                                           -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Entity}">
+
+        <Border
+             Style="{StaticResource EntityCanvasItemStyle}"
+             behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+             RelativeSource={RelativeSource AncestorType=Window}}"
+             behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="43"/>
+
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <!-- ================================================= -->
+                <!-- ENTITY HEADER                                     -->
+                <!-- ================================================= -->
+
+                <Border
+             Grid.Row="0"
+             Background="{DynamicResource EntityHeader}"
+             Padding="12,0">
+
+                    <StackPanel
+                 Orientation="Horizontal"
+                 VerticalAlignment="Center">
+
+                        <TextBlock
+                     Text="◆"
+                     Foreground="{DynamicResource EntityBorder}"
+                     FontSize="15"
+                     Margin="0,0,8,0"
+                     VerticalAlignment="Center"/>
+
+                        <TextBlock
+                     Text="ENTITY"
+                     Foreground="{DynamicResource EntityHeaderText}"
+                     FontSize="11"
+                     FontWeight="Bold"
+                     VerticalAlignment="Center"/>
+
+                        <TextBlock
+                     Text="{Binding Name}"
+                     Foreground="{DynamicResource EntityNameText}"
+                     FontSize="13"
+                     FontWeight="SemiBold"
+                     Margin="12,0,0,0"
+                     VerticalAlignment="Center"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- ENUMELEMENT TEMPLATE                                      -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:EnumElement}">
+
+        <Border
+            Style="{StaticResource EnumElementCanvasItemStyle}"
+            behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+            RelativeSource={RelativeSource AncestorType=Window}}"
+            behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="43"/>
+
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <!-- ================================================= -->
+                <!-- ENUMELEMENT HEADER                                -->
+                <!-- ================================================= -->
+
+                <Border
+                    Grid.Row="0"
+                    Background="{DynamicResource EnumElementHeader}"
+                    Padding="12,0">
+
+                    <StackPanel
+                         Orientation="Horizontal"
+                         VerticalAlignment="Center">
+
+                        <TextBlock
+                             Text="◆"
+                             Foreground="{DynamicResource EnumElementBorder}"
+                             FontSize="15"
+                             Margin="0,0,8,0"
+                             VerticalAlignment="Center"/>
+
+                        <TextBlock
+                             Text="ENUM"
+                             Foreground="{DynamicResource EnumElementHeaderText}"
+                             FontSize="11"
+                             FontWeight="Bold"
+                             VerticalAlignment="Center"/>
+
+                        <TextBlock
+                             Text="{Binding Name}"
+                             Foreground="{DynamicResource EnumElementNameText}"
+                             FontSize="13"
+                             FontWeight="SemiBold"
+                             Margin="12,0,0,0"
+                             VerticalAlignment="Center"/>   
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- COMPOSITE TEMPLATE                                        -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Composite}">
+
+        <Border
+            Style="{StaticResource CompositeCanvasItemStyle}"
+            behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+            RelativeSource={RelativeSource AncestorType=Window}}"
+            behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="43"/>
+
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <!-- ================================================= -->
+                <!-- COMPOSITE HEADER                                  -->
+                <!-- ================================================= -->
+
+                <Border
+                Grid.Row="0"
+                Background="{DynamicResource CompositeHeader}"
+                Padding="12,0">
+
+                    <StackPanel
+                     Orientation="Horizontal"
+                     VerticalAlignment="Center">
+
+                        <TextBlock
+                         Text="◆"
+                         Foreground="{DynamicResource CompositeBorder}"
+                         FontSize="15"
+                         Margin="0,0,8,0"
+                         VerticalAlignment="Center"/>
+
+                        <TextBlock
+                         Text="COMPOSITE"
+                         Foreground="{DynamicResource CompositeHeaderText}"
+                         FontSize="11"
+                         FontWeight="Bold"
+                         VerticalAlignment="Center"/>
+
+                        <TextBlock
+                         Text="{Binding Name}"
+                         Foreground="{DynamicResource CompositeNameText}"
+                         FontSize="13"
+                         FontWeight="SemiBold"
+                         Margin="12,0,0,0"
+                         VerticalAlignment="Center"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- MEDIATOR TEMPLATE                                         -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Mediator}">
+
+        <Border
+         Style="{StaticResource MediatorCanvasItemStyle}"
+         behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+         RelativeSource={RelativeSource AncestorType=Window}}"
+         behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="43"/>
+
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <!-- ================================================= -->
+                <!-- MEDIATOR HEADER                                   -->
+                <!-- ================================================= -->
+
+                <Border
+             Grid.Row="0"
+             Background="{DynamicResource MediatorHeader}"
+             Padding="12,0">
+
+                    <StackPanel
+                  Orientation="Horizontal"
+                  VerticalAlignment="Center">
+
+                        <TextBlock
+                      Text="◆"
+                      Foreground="{DynamicResource MediatorBorder}"
+                      FontSize="15"
+                      Margin="0,0,8,0"
+                      VerticalAlignment="Center"/>
+
+                        <TextBlock
+                      Text="MEDIATOR"
+                      Foreground="{DynamicResource MediatorHeaderText}"
+                      FontSize="11"
+                      FontWeight="Bold"
+                      VerticalAlignment="Center"/>
+
+                        <TextBlock
+                      Text="{Binding Name}"
+                      Foreground="{DynamicResource MediatorNameText}"
+                      FontSize="13"
+                      FontWeight="SemiBold"
+                      Margin="12,0,0,0"
+                      VerticalAlignment="Center"/>
+
+                    </StackPanel>
+
+                </Border>
+
+            </Grid>
+
+        </Border>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- PROXY TEMPLATE                                            -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Proxy}">
+
+        <Border
+      Style="{StaticResource ProxyCanvasItemStyle}"
+      behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+      RelativeSource={RelativeSource AncestorType=Window}}"
+      behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="43"/>
+
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <!-- ================================================= -->
+                <!-- PROXY HEADER                                      -->
+                <!-- ================================================= -->
+
+                <Border
+          Grid.Row="0"
+          Background="{DynamicResource ProxyHeader}"
+          Padding="12,0">
+
+                    <StackPanel
+               Orientation="Horizontal"
+               VerticalAlignment="Center">
+
+                        <TextBlock
+                   Text="◆"
+                   Foreground="{DynamicResource ProxyBorder}"
+                   FontSize="15"
+                   Margin="0,0,8,0"
+                   VerticalAlignment="Center"/>
+
+                        <TextBlock
+                   Text="PROXY"
+                   Foreground="{DynamicResource ProxyHeaderText}"
+                   FontSize="11"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"/>
+
+                        <TextBlock
+                   Text="{Binding Name}"
+                   Foreground="{DynamicResource ProxyNameText}"
+                   FontSize="13"
+                   FontWeight="SemiBold"
+                   Margin="12,0,0,0"
+                   VerticalAlignment="Center"/>
 
                     </StackPanel>
 

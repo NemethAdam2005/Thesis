@@ -14,7 +14,7 @@ namespace LadyIDE.WPF.CanvasElements
         private double _width;
         private double _height;
         private bool _isHighlighted;
-        private string _name;
+        private string? _name;
 
         private readonly double _defaultWidth;
         private readonly double _defaultHeight;
@@ -38,7 +38,17 @@ namespace LadyIDE.WPF.CanvasElements
 
         public string Name
         {
-            get => _name;
+            get
+            {
+                if (_name != null)
+                {
+                    return _name;
+                }
+                else
+                {
+                    return "";
+                }
+            }
             set
             {
                 if (_name == value)

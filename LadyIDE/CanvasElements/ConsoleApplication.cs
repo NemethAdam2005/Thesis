@@ -2,7 +2,7 @@
 {
     public class ConsoleApplication : CanvasItemBase
     {
-        public ConsoleApplication() : base(400, 200, 190)
+        public ConsoleApplication() : base(220, 140, 120)
         {
         }
     }

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text;
 using System.Windows;
+using System.Windows.Media.Media3D;
 
 namespace LadyIDE.WPF.ViewModel
 {
@@ -176,128 +177,78 @@ namespace LadyIDE.WPF.ViewModel
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
             AddCommandToApplicationCommand = new DelegateCommand(param => OnAddCommandToApplication(param as ConsoleApplication));
             DeleteItemCommand = new DelegateCommand(param => OnDeleteItem(param as CanvasItemBase));
+            ComponentButtonClicked = new DelegateCommand(param => OnComponentButtonClicked());
+            RecordButtonClicked = new DelegateCommand(param => OnRecordButtonClicked());
+            EntityButtonClicked = new DelegateCommand(param => OnEntityButtonClicked());
+            EnumButtonClicked = new DelegateCommand(param => OnEnumButtonClicked());
+            CompositeButtonClicked = new DelegateCommand(param => OnCompositeButtonClicked());
+            MediatorButtonClicked = new DelegateCommand(param => OnMediatorButtonClicked());
+            ProxyButtonClicked = new DelegateCommand(param => OnProxyButtonClicked());
         }
-        
+
         //Commands
         public DelegateCommand LoadFileCommand { get; private set; }
         public DelegateCommand SaveFileCommand { get; private set; }
         public DelegateCommand ColorThemeButtonClicked { get; private set; }
         public DelegateCommand ShowLadyElementsButtonClicked { get; private set; }
         public DelegateCommand ShowPropertiesButtonClicked { get; private set; }
-        public DelegateCommand ApplicationButtonClicked { get; private set; }
-        public DelegateCommand CommandButtonClicked { get; private set; }
         public DelegateCommand SelectItemCommand { get; private set; }
         public DelegateCommand AddCommandToApplicationCommand { get; private set; }
         public DelegateCommand DeleteItemCommand { get; private set; }
+        public DelegateCommand ApplicationButtonClicked { get; private set; }
+        public DelegateCommand CommandButtonClicked { get; private set; }
+        public DelegateCommand ComponentButtonClicked { get; private set; }
+        public DelegateCommand RecordButtonClicked { get; private set; }
+        public DelegateCommand EntityButtonClicked { get; private set; }
+        public DelegateCommand EnumButtonClicked { get; private set; }
+        public DelegateCommand CompositeButtonClicked { get; private set; }
+        public DelegateCommand MediatorButtonClicked { get; private set; }
+        public DelegateCommand ProxyButtonClicked { get; private set; }
+
 
         //Events
         public event EventHandler? LoadFile;
         public event EventHandler? SaveFile;
         public event EventHandler<string>? CodeChanged;
 
-        public void AddApplication()
+        //Model event handlers
+        private void Model_CodeChanged(Object? sender, String e)
         {
-            const double spacing = 20;
-
-            int applicationNumber = CanvasItems
-                .OfType<ConsoleApplication>()
-                .Count() + 1;
-
-            ConsoleApplication application = new ConsoleApplication
-            {
-                Name = $"Application{applicationNumber}",
-                X = 0,
-                Y = 0
-            };
-
-            double newX = application.X;
-            double newY = application.Y;
-
-            while (CanvasItems.Any(item =>
-                newX < item.X + item.Width + spacing &&
-                newX + application.Width + spacing > item.X &&
-                newY < item.Y + item.Height + spacing &&
-                newY + application.Height + spacing > item.Y))
-            {
-                newX += application.Width + spacing;
-
-                if (newX + application.Width > 1200)
-                {
-                    newX = 20;
-                    newY += application.Height + spacing;
-                }
-            }
-
-            application.X = newX;
-            application.Y = newY;
-
-            CanvasItems.Add(application);
+            CodeChanged?.Invoke(this, e);
         }
 
-        public void AddCommand()
+        //Save and Load methods
+        private void OnLoadFile()
         {
-            const double spacing = 20;
-
-            int commandNumber = CanvasItems
-                .OfType<Command>()
-                .Count() + 1;
-
-            Command command = new Command
-            {
-                Name = $"Command{commandNumber}",
-                X = 0,
-                Y = 0
-            };
-
-            double newX = command.X;
-            double newY = command.Y;
-
-            while (CanvasItems.Any(item =>
-                newX < item.X + item.Width + spacing &&
-                newX + command.Width + spacing > item.X &&
-                newY < item.Y + item.Height + spacing &&
-                newY + command.Height + spacing > item.Y))
-            {
-                newX += command.Width + spacing;
-
-                if (newX + command.Width > 1200)
-                {
-                    newX = 20;
-                    newY += command.Height + spacing;
-                }
-            }
-
-            command.X = newX;
-            command.Y = newY;
-
-            CanvasItems.Add(command);
+            LoadFile?.Invoke(this, EventArgs.Empty);
         }
 
-        private void OnAddCommandToApplication(ConsoleApplication? application)
+        private void OnSaveFile()
         {
-            if (application == null)
-                return;
+            SaveFile?.Invoke(this, EventArgs.Empty);
+        }
 
-            int commandNumber = application.Children
-                .OfType<Command>()
-                .Count() + 1;
+        //UI event handlers
+        private void OnColorThemeButtonClicked()
+        {
+            IsLightMode = !IsLightMode;
 
-            Command command = new Command
-            {
-                Name = $"{application.Name}-Command{commandNumber}"
-            };
+            ThemeManager.SetTheme(IsLightMode);
+        }
 
-            Point position = application.FindFreeChildPosition(
-                command.Width,
-                command.Height);
+        private void OnShowLadyElementsButtonClicked()
+        {
+            IsLadyElementsVisible = !IsLadyElementsVisible;
+        }
 
-            command.X = position.X;
-            command.Y = position.Y;
+        private void OnShowPropertiesButtonClicked()
+        {
+            IsPropertiesVisible = !IsPropertiesVisible;
+        }
 
-            command.Parent = application;
-            application.Children.Add(command);
-
-            application.UpdateSizeFromChildren();
+        public void UpdateCaretPosition(int line, int column)
+        {
+            CaretPositionText = $"  Ln: {line}, Col: {column}";
         }
 
         private void OnDeleteItem(CanvasItemBase? item)
@@ -330,11 +281,6 @@ namespace LadyIDE.WPF.ViewModel
                 // Nincs már kijelölt elem
                 SelectedItem = null;
             }
-        }
-
-        private void Model_CodeChanged(Object? sender, String e)
-        {
-            CodeChanged?.Invoke(this, e);
         }
 
         private void OnSelectItem(CanvasItemBase? item)
@@ -399,46 +345,160 @@ namespace LadyIDE.WPF.ViewModel
             }
         }
 
-        private void OnLoadFile()
+        private void AddElementToCanvas(CanvasItemBase item)
         {
-            LoadFile?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnSaveFile()
-        {
-            SaveFile?.Invoke(this, EventArgs.Empty);
+            const double spacing = 20;
+            double newX = item.X;
+            double newY = item.Y;
+            while (CanvasItems.Any(existingItem =>
+                newX < existingItem.X + existingItem.Width + spacing &&
+                newX + item.Width + spacing > existingItem.X &&
+                newY < existingItem.Y + existingItem.Height + spacing &&
+                newY + item.Height + spacing > existingItem.Y))
+            {
+                newX += item.Width + spacing;
+                if (newX + item.Width > 1200)
+                {
+                    newX = 20;
+                    newY += item.Height + spacing;
+                }
+            }
+            item.X = newX;
+            item.Y = newY;
+            CanvasItems.Add(item);
         }
 
         private void OnApplicationButtonClicked()
         {
-            AddApplication();
+            ConsoleApplication application = new ConsoleApplication
+            {
+                Name = $"Application{CanvasItems.OfType<ConsoleApplication>().Count() + 1}",
+                X = 0,
+                Y = 0
+            };
+            AddElementToCanvas(application);
         }
 
         private void OnCommandButtonClicked()
         {
-            AddCommand();
+            Command command = new Command
+            {
+                Name = $"Command{CanvasItems.OfType<Command>().Count() + 1}",
+                X = 0,
+                Y = 0
+            };
+            AddElementToCanvas(command);
         }
 
-        private void OnColorThemeButtonClicked()
+        private void OnAddCommandToApplication(ConsoleApplication? application)
         {
-            IsLightMode = !IsLightMode;
+            if (application == null)
+                return;
 
-            ThemeManager.SetTheme(IsLightMode);
-        }
-        
-        private void OnShowLadyElementsButtonClicked()
-        {
-            IsLadyElementsVisible = !IsLadyElementsVisible;
+            int commandNumber = application.Children
+                .OfType<Command>()
+                .Count() + 1;
+
+            Command command = new Command
+            {
+                Name = $"{application.Name}-Command{commandNumber}"
+            };
+
+            Point position = application.FindFreeChildPosition(
+                command.Width,
+                command.Height);
+
+            command.X = position.X;
+            command.Y = position.Y;
+
+            command.Parent = application;
+            application.Children.Add(command);
+
+            application.UpdateSizeFromChildren();
         }
 
-        private void OnShowPropertiesButtonClicked()
+        private void OnComponentButtonClicked()
         {
-            IsPropertiesVisible = !IsPropertiesVisible;
+            Component component = new Component
+            {
+                Name = $"Component{CanvasItems.OfType<Component>().Count() + 1}",
+                X = 0,
+                Y = 0
+            };
+            AddElementToCanvas(component);
         }
 
-        public void UpdateCaretPosition(int line, int column)
+        private void OnRecordButtonClicked()
         {
-            CaretPositionText = $"  Ln: {line}, Col: {column}";
+            Record record = new Record
+            {
+                Name = $"Record{CanvasItems.OfType<Record>().Count() + 1}",
+                X = 0,
+                Y = 0
+            };
+
+            AddElementToCanvas(record);
         }
+
+        private void OnEntityButtonClicked()
+        {
+            Entity entity = new Entity
+            {
+                Name = $"Entity{CanvasItems.OfType<Entity>().Count() + 1}",
+                X = 0,
+                Y = 0
+            };
+
+            AddElementToCanvas(entity);
+        }
+
+        private void OnEnumButtonClicked()
+        {
+            EnumElement enumElement = new EnumElement
+            {
+                Name = $"Enum{CanvasItems.OfType<EnumElement>().Count() + 1}",
+                X = 0,
+                Y = 0
+            };
+
+            AddElementToCanvas(enumElement);
+        }
+
+        private void OnCompositeButtonClicked()
+        {
+            Composite composite = new Composite
+            {
+                Name = $"Composite{CanvasItems.OfType<Composite>().Count() + 1}",
+                X = 0,
+                Y = 0
+            };
+
+            AddElementToCanvas(composite);
+        }
+
+        private void OnMediatorButtonClicked()
+        {
+            Mediator mediator = new Mediator
+            {
+                Name = $"Mediator{CanvasItems.OfType<Mediator>().Count() + 1}",
+                X = 0,
+                Y = 0
+            };
+
+            AddElementToCanvas(mediator);
+        }
+
+        private void OnProxyButtonClicked()
+        {
+            Proxy proxy = new Proxy
+            {
+                Name = $"Proxy{CanvasItems.OfType<Proxy>().Count() + 1}",
+                X = 0,
+                Y = 0
+            };
+
+            AddElementToCanvas(proxy);
+        }
+
     }   
 }

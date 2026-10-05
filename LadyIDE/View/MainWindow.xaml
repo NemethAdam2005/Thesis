@@ -293,12 +293,12 @@
 
                             </Button>
 
-
                             <!-- ================================================= -->
                             <!-- COMPONENT                                        -->
                             <!-- ================================================= -->
 
-                            <Button Style="{StaticResource PaletteButton}">
+                            <Button Style="{StaticResource PaletteButton}"
+                                    Command="{Binding ComponentButtonClicked}">
 
                                 <StackPanel Orientation="Horizontal">
 
@@ -312,7 +312,7 @@
                                                    Foreground="White"
                                                    FontSize="15"
                                                    HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>             
+                                                   VerticalAlignment="Center"/>
 
                                     </Border>
 
@@ -323,12 +323,12 @@
 
                             </Button>
 
-
                             <!-- ================================================= -->
                             <!-- RECORD                                           -->
                             <!-- ================================================= -->
 
-                            <Button Style="{StaticResource PaletteButton}">
+                            <Button Style="{StaticResource PaletteButton}"
+                                    Command="{Binding RecordButtonClicked}">
 
                                 <StackPanel Orientation="Horizontal">
 
@@ -342,7 +342,7 @@
                                                     Foreground="White"
                                                     FontSize="14"
                                                     HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"/>             
+                                                    VerticalAlignment="Center"/>
 
                                     </Border>
 
@@ -353,12 +353,12 @@
 
                             </Button>
 
-
                             <!-- ================================================= -->
                             <!-- ENTITY                                           -->
                             <!-- ================================================= -->
 
-                            <Button Style="{StaticResource PaletteButton}">
+                            <Button Style="{StaticResource PaletteButton}"
+                                    Command="{Binding EntityButtonClicked}">
 
                                 <StackPanel Orientation="Horizontal">
 
@@ -372,7 +372,7 @@
                                                    Foreground="White"
                                                    FontSize="16"
                                                    HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>         
+                                                   VerticalAlignment="Center"/>
 
                                     </Border>
 
@@ -383,18 +383,18 @@
 
                             </Button>
 
-
                             <!-- ================================================= -->
                             <!-- ENUM                                             -->
                             <!-- ================================================= -->
 
-                            <Button Style="{StaticResource PaletteButton}">
+                            <Button Style="{StaticResource PaletteButton}"
+                                    Command="{Binding EnumButtonClicked}">
 
                                 <StackPanel Orientation="Horizontal">
 
                                     <Border Width="27"
                                             Height="27"
-                                            Background="{DynamicResource EnumBorder}"
+                                            Background="{DynamicResource EnumElementBorder}"
                                             CornerRadius="4"
                                             Margin="0,0,10,0">
 
@@ -403,7 +403,7 @@
                                                    FontSize="17"
                                                    FontWeight="Bold"
                                                    HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>         
+                                                   VerticalAlignment="Center"/>
 
                                     </Border>
 
@@ -414,12 +414,12 @@
 
                             </Button>
 
-
                             <!-- ================================================= -->
                             <!-- COMPOSITE                                        -->
                             <!-- ================================================= -->
 
-                            <Button Style="{StaticResource PaletteButton}">
+                            <Button Style="{StaticResource PaletteButton}"
+                                    Command="{Binding CompositeButtonClicked}">
 
                                 <StackPanel Orientation="Horizontal">
 
@@ -433,7 +433,7 @@
                                                    Foreground="White"
                                                    FontSize="16"
                                                    HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>         
+                                                   VerticalAlignment="Center"/>
 
                                     </Border>
 
@@ -444,12 +444,12 @@
 
                             </Button>
 
-
                             <!-- ================================================= -->
                             <!-- MEDIATOR                                         -->
                             <!-- ================================================= -->
 
-                            <Button Style="{StaticResource PaletteButton}">
+                            <Button Style="{StaticResource PaletteButton}"
+                                Command="{Binding MediatorButtonClicked}">
 
                                 <StackPanel Orientation="Horizontal">
 
@@ -463,7 +463,7 @@
                                                    Foreground="White"
                                                    FontSize="16"
                                                    HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>         
+                                                   VerticalAlignment="Center"/>
 
                                     </Border>
 
@@ -474,12 +474,12 @@
 
                             </Button>
 
-
                             <!-- ================================================= -->
                             <!-- PROXY                                            -->
                             <!-- ================================================= -->
 
-                            <Button Style="{StaticResource PaletteButton}">
+                            <Button Style="{StaticResource PaletteButton}"
+                                    Command="{Binding ProxyButtonClicked}">
 
                                 <StackPanel Orientation="Horizontal">
 

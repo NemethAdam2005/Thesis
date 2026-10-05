@@ -42,11 +42,30 @@
                 <!-- TYPE                                              -->
                 <!-- ================================================= -->
 
-                <TextBlock
-                    Text="Application"
-                    Foreground="{DynamicResource TextSecondary}"
-                    FontSize="12"
-                    Margin="0,0,0,12"/>
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource ApplicationBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="▣"
+								   Foreground="White"
+								   FontSize="12"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Application"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Foreground="{DynamicResource TextPrimary}"
+						   FontSize="12"/>
+
+				</StackPanel>
 
 
                 <!-- ================================================= -->
@@ -219,11 +238,30 @@
                 <!-- TYPE                                              -->
                 <!-- ================================================= -->
 
-                <TextBlock
-                    Text="Command"
-                    Foreground="{DynamicResource TextSecondary}"
-                    FontSize="12"
-                    Margin="0,0,0,12"/>
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource CommandBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="▤"
+								   Foreground="White"
+								   FontSize="12"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Command"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Foreground="{DynamicResource TextPrimary}"
+						   FontSize="12"/>
+
+				</StackPanel>
 
 
                 <!-- ================================================= -->
@@ -268,4 +306,752 @@
 
     </DataTemplate>
 
+	<!-- ========================================================= -->
+	<!-- COMPONENT PROPERTIES                                      -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Component}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource CompileButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource ComponentBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="◆"
+								   Foreground="White"
+								   FontSize="12"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Component"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Foreground="{DynamicResource TextPrimary}"
+						   FontSize="12"/>
+
+				</StackPanel>
+
+
+				<!-- ================================================= -->
+				<!-- NAME                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+
+				<!-- ================================================= -->
+				<!-- DELETE COMMAND                                     -->
+				<!-- ================================================= -->
+
+				<Button
+                    Content="DELETE"
+                    Height="32"
+                    Margin="0,15,0,0"
+                    Background="{DynamicResource DeleteButtonBackground}"
+                    Foreground="{DynamicResource DeleteButtonForeground}"
+                    BorderThickness="0"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    ToolTip="Delete Command"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+	<!-- ========================================================= -->
+	<!-- RECORD PROPERTIES                                         -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Record}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource CompileButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource RecordBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="●"
+								   Foreground="White"
+								   FontSize="12"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Record"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Foreground="{DynamicResource TextPrimary}"
+						   FontSize="12"/>
+
+				</StackPanel>
+
+				<!-- ================================================= -->
+				<!-- NAME                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+
+				<!-- ================================================= -->
+				<!-- DELETE COMMAND                                     -->
+				<!-- ================================================= -->
+
+				<Button
+                    Content="DELETE"
+                    Height="32"
+                    Margin="0,15,0,0"
+                    Background="{DynamicResource DeleteButtonBackground}"
+                    Foreground="{DynamicResource DeleteButtonForeground}"
+                    BorderThickness="0"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    ToolTip="Delete Command"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+	<!-- ========================================================= -->
+	<!-- ENTITY PROPERTIES                                        -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Entity}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource CompileButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource EntityBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="◇"
+								   Foreground="White"
+								   FontSize="12"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Entity"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Foreground="{DynamicResource TextPrimary}"
+						   FontSize="12"/>
+
+				</StackPanel>
+
+
+				<!-- ================================================= -->
+				<!-- NAME                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+
+				<!-- ================================================= -->
+				<!-- DELETE COMMAND                                     -->
+				<!-- ================================================= -->
+
+				<Button
+                    Content="DELETE"
+                    Height="32"
+                    Margin="0,15,0,0"
+                    Background="{DynamicResource DeleteButtonBackground}"
+                    Foreground="{DynamicResource DeleteButtonForeground}"
+                    BorderThickness="0"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    ToolTip="Delete Command"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+	<!-- ========================================================= -->
+	<!-- ENUM PROPERTIES                                           -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:EnumElement}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource CompileButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource EnumElementBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="≡"
+								   Foreground="White"
+								   FontSize="12"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Enum"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Foreground="{DynamicResource TextPrimary}"
+						   FontSize="12"/>
+
+				</StackPanel>
+
+
+				<!-- ================================================= -->
+				<!-- NAME                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+
+				<!-- ================================================= -->
+				<!-- DELETE COMMAND                                     -->
+				<!-- ================================================= -->
+
+				<Button
+                    Content="DELETE"
+                    Height="32"
+                    Margin="0,15,0,0"
+                    Background="{DynamicResource DeleteButtonBackground}"
+                    Foreground="{DynamicResource DeleteButtonForeground}"
+                    BorderThickness="0"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    ToolTip="Delete Command"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+	<!-- ========================================================= -->
+	<!-- COMPOSITE PROPERTIES                                      -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Composite}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource CompileButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource CompositeBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="▤"
+								   Foreground="White"
+								   FontSize="12"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Composite"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Foreground="{DynamicResource TextPrimary}"
+						   FontSize="12"/>
+
+				</StackPanel>
+
+
+				<!-- ================================================= -->
+				<!-- NAME                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+
+				<!-- ================================================= -->
+				<!-- DELETE COMMAND                                     -->
+				<!-- ================================================= -->
+
+				<Button
+                    Content="DELETE"
+                    Height="32"
+                    Margin="0,15,0,0"
+                    Background="{DynamicResource DeleteButtonBackground}"
+                    Foreground="{DynamicResource DeleteButtonForeground}"
+                    BorderThickness="0"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    ToolTip="Delete Command"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+	<!-- ========================================================= -->
+	<!-- MEDIATOR PROPERTIES                                       -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Mediator}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource CompileButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource MediatorBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="✦"
+								   Foreground="White"
+								   FontSize="12"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Mediator"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Foreground="{DynamicResource TextPrimary}"
+						   FontSize="12"/>
+
+				</StackPanel>
+
+
+				<!-- ================================================= -->
+				<!-- NAME                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+
+				<!-- ================================================= -->
+				<!-- DELETE COMMAND                                     -->
+				<!-- ================================================= -->
+
+				<Button
+                    Content="DELETE"
+                    Height="32"
+                    Margin="0,15,0,0"
+                    Background="{DynamicResource DeleteButtonBackground}"
+                    Foreground="{DynamicResource DeleteButtonForeground}"
+                    BorderThickness="0"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    ToolTip="Delete Command"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+	<!-- ========================================================= -->
+	<!-- PROXY PROPERTIES                                          -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Proxy}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource CompileButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource ProxyBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="⬡"
+								   Foreground="White"
+								   FontSize="12"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Proxy"
+						   VerticalAlignment="Center"
+						   HorizontalAlignment="Center"
+						   Foreground="{DynamicResource TextPrimary}"
+						   FontSize="12"/>
+
+				</StackPanel>
+
+
+				<!-- ================================================= -->
+				<!-- NAME                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+
+				<!-- ================================================= -->
+				<!-- DELETE COMMAND                                     -->
+				<!-- ================================================= -->
+
+				<Button
+                    Content="DELETE"
+                    Height="32"
+                    Margin="0,15,0,0"
+                    Background="{DynamicResource DeleteButtonBackground}"
+                    Foreground="{DynamicResource DeleteButtonForeground}"
+                    BorderThickness="0"
+                    FontSize="11"
+                    FontWeight="Bold"
+                    ToolTip="Delete Command"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+	
 </ResourceDictionary>
