@@ -6,7 +6,7 @@ namespace LadyIDE.WPF.CanvasElements
 {
     public class Entity : CanvasItemBase
     {
-        public Entity() : base(220, 140, 120)
+        public Entity() : base()
         {
             //BaseList
             //Fields

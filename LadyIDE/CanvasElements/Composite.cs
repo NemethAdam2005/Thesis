@@ -6,7 +6,7 @@ namespace LadyIDE.WPF.CanvasElements
 {
     class Composite : CanvasItemBase
     {
-        public Composite() : base(220, 140, 120)
+        public Composite() : base()
         {
             //Parts -> Típuslista
             //Type -> 1 - N vagy N-N

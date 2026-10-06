@@ -6,7 +6,7 @@ namespace LadyIDE.WPF.CanvasElements
 {
     public class Proxy : CanvasItemBase
     {
-        public Proxy() : base(220, 140, 120)
+        public Proxy() : base()
         {
             //Type
             //Fields

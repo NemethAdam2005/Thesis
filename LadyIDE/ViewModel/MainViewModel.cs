@@ -7,28 +7,26 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Text;
 using System.Windows;
-using System.Windows.Media.Media3D;
+using System.IO;
 
 namespace LadyIDE.WPF.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
         private readonly ApplicationModel _model;
+
         private string _code = string.Empty;
-
-        public string Code
-        {
-            get => _code;
-            set
-            {
-                if (_code == value)
-                    return;
-
-                _code = value;
-                _model.Code = value;
-
+        public string Code 
+        { 
+            get => _code; 
+            private set 
+            { 
+                if (_code == value) 
+                    return; 
+                _code = value; 
                 OnPropertyChanged();
-            }
+                HasUnsavedChanges = true;
+            } 
         }
 
         private bool _isLightMode = false;
@@ -141,6 +139,48 @@ namespace LadyIDE.WPF.ViewModel
             }
         }
 
+        private string? _currentFilePath;
+        public string? CurrentFilePath
+        {
+            get => _currentFilePath;
+            set
+            {
+                if (_currentFilePath == value)
+                    return;
+                _currentFilePath = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CodeTabHeader));
+            }
+        }
+
+        private bool _hasUnsavedChanges = false;
+
+        public bool HasUnsavedChanges
+        {
+            get => _hasUnsavedChanges;
+            set
+            {
+                if (_hasUnsavedChanges == value)
+                    return;
+                _hasUnsavedChanges = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CodeTabHeader));
+            }
+        }
+
+        public string CodeTabHeader
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(CurrentFilePath))
+                {
+                    return "Code";
+                }
+
+                return $"{Path.GetFileName(CurrentFilePath)}{(HasUnsavedChanges ? " *" : "")}";
+            }
+        }
+
         private CanvasItemBase? _selectedItem;
         public CanvasItemBase? SelectedItem
         {
@@ -165,8 +205,10 @@ namespace LadyIDE.WPF.ViewModel
 
             _model = model;
             _model.CodeChanged += new EventHandler<string>(Model_CodeChanged);
+            _model.FileLoaded += new EventHandler<string>(Model_FileLoaded);
 
             LoadFileCommand = new DelegateCommand(param => OnLoadFile());
+            SaveAsFileCommand = new DelegateCommand(param => OnSaveAsFile());
             SaveFileCommand = new DelegateCommand(param => OnSaveFile());
             ColorThemeButtonClicked = new DelegateCommand(param => OnColorThemeButtonClicked());
             ShowLadyElementsButtonClicked = new DelegateCommand(param => OnShowLadyElementsButtonClicked());
@@ -188,6 +230,7 @@ namespace LadyIDE.WPF.ViewModel
 
         //Commands
         public DelegateCommand LoadFileCommand { get; private set; }
+        public DelegateCommand SaveAsFileCommand { get; private set; }
         public DelegateCommand SaveFileCommand { get; private set; }
         public DelegateCommand ColorThemeButtonClicked { get; private set; }
         public DelegateCommand ShowLadyElementsButtonClicked { get; private set; }
@@ -208,12 +251,19 @@ namespace LadyIDE.WPF.ViewModel
 
         //Events
         public event EventHandler? LoadFile;
+        public event EventHandler? SaveAsFile;
         public event EventHandler? SaveFile;
         public event EventHandler<string>? CodeChanged;
 
         //Model event handlers
         private void Model_CodeChanged(Object? sender, String e)
         {
+            Code = e;
+        }
+
+        private void Model_FileLoaded(Object? sender, String e)
+        {
+            Code = e;
             CodeChanged?.Invoke(this, e);
         }
 
@@ -225,7 +275,19 @@ namespace LadyIDE.WPF.ViewModel
 
         private void OnSaveFile()
         {
-            SaveFile?.Invoke(this, EventArgs.Empty);
+            if (string.IsNullOrEmpty(CurrentFilePath))
+            {
+                OnSaveAsFile();
+            }
+            else
+            {
+                SaveFile?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        private void OnSaveAsFile()
+        {
+            SaveAsFile?.Invoke(this, EventArgs.Empty);
         }
 
         //UI event handlers

@@ -6,7 +6,7 @@ namespace LadyIDE.WPF.CanvasElements
 {
     public class Mediator : CanvasItemBase
     {
-        public Mediator() : base(220, 140, 120)
+        public Mediator() : base()
         {
             //TypePairs
         }

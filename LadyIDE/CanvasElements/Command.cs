@@ -4,7 +4,7 @@ namespace LadyIDE.WPF.CanvasElements
 {
     public class Command : CanvasItemBase
     {
-        public Command() : base(220, 140, 120)
+        public Command() : base()
         {
         }
 

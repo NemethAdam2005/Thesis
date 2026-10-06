@@ -26,6 +26,16 @@
     </Window.Resources>
 
     <!-- ========================================================= -->
+    <!-- KEY BINDINGS                                              -->
+    <!-- ========================================================= -->
+    
+    <Window.InputBindings>
+        <KeyBinding Key="S"
+                Modifiers="Control"
+                Command="{Binding SaveFileCommand}"/>
+    </Window.InputBindings>
+
+    <!-- ========================================================= -->
     <!-- MAIN LAYOUT                                               -->
     <!-- ========================================================= -->
 
@@ -104,14 +114,17 @@
                     <MenuItem Header="File"
                               Style="{StaticResource TopMenuItem}">
 
-                        <MenuItem Header="Load"
-                                  Command="{Binding LoadFileCommand}"
-                                  Style="{StaticResource SubMenuItem}"/>
-
                         <MenuItem Header="Save"
                                   Command="{Binding SaveFileCommand}"
                                   Style="{StaticResource SubMenuItem}"/>
 
+                        <MenuItem Header="Save As"
+                                  Command="{Binding SaveAsFileCommand}"
+                                  Style="{StaticResource SubMenuItem}"/>
+
+                        <MenuItem Header="Load"
+                                  Command="{Binding LoadFileCommand}"
+                                  Style="{StaticResource SubMenuItem}"/>
                     </MenuItem>
 
 
@@ -621,7 +634,7 @@
                         <!-- CODE                                              -->
                         <!-- ================================================= -->
 
-                        <TabItem Header="Code"
+                        <TabItem Header="{Binding CodeTabHeader}"
                                  Style="{StaticResource CodeTabItem}">
 
                             <TabItem.Content>

@@ -24,14 +24,14 @@ namespace LadyIDE.WPF.CanvasElements
 
         public ObservableCollection<CanvasItemBase> Children { get; } = new();
 
-        protected CanvasItemBase(double defaultWidth, double defaultHeight, double headerExtraWidth = 120)
+        protected CanvasItemBase()
         {
-            _defaultWidth = defaultWidth;
-            _defaultHeight = defaultHeight;
-            _headerExtraWidth = headerExtraWidth;
+            _defaultWidth = 250;
+            _defaultHeight = 150;
+            _headerExtraWidth = 120;
 
-            _width = Math.Max(defaultWidth, GetMinimumWidth());
-            _height = defaultHeight;
+            _width = _defaultWidth;
+            _height = _defaultHeight;
 
             Children.CollectionChanged += Children_CollectionChanged;
         }
@@ -147,12 +147,11 @@ namespace LadyIDE.WPF.CanvasElements
             if(_name == null)
                 return _defaultWidth;
 
-            const double minWidth = 150;
-            const double averageCharacterWidth = 10;
+            const double averageCharacterWidth = 8;
 
             double nameWidth = _name.Length * averageCharacterWidth;
 
-            return Math.Max(minWidth, _headerExtraWidth + nameWidth);
+            return Math.Max(_defaultWidth, _headerExtraWidth + nameWidth);
         }
 
         public void UpdateSizeFromChildren()

@@ -7,7 +7,7 @@ namespace LadyIDE.WPF.CanvasElements
     public class EnumElement : CanvasItemBase
     {
         public List<string> Fields { get; } = new List<string>();
-        public EnumElement() : base(220, 140, 120)
+        public EnumElement() : base()
         {
             
         }
