@@ -360,4 +360,21 @@
     <SolidColorBrush x:Key="ProxyNameText"
                  Color="#DEE2FF"/>
 
+    <!-- ================================================= -->
+    <!-- INPUT                                             -->
+    <!-- ================================================= -->
+
+    <SolidColorBrush x:Key="InputElementBorder" Color="#F43F5E"/>
+    <SolidColorBrush x:Key="InputElementHeader" Color="#4A202B"/>
+    <SolidColorBrush x:Key="InputElementBackground" Color="#301820"/>
+    <SolidColorBrush x:Key="InputElementHeaderText" Color="#FF9FB0"/>
+    <SolidColorBrush x:Key="InputElementNameText" Color="#FFD9DF"/>
+
+    <!-- ================================================= -->
+    <!-- PROPERTY COMBOBOX HOVER                           -->
+    <!-- ================================================= -->
+    
+    <SolidColorBrush x:Key="PropertyComboBoxHover" Color="#71869A"/>
+
+
 </ResourceDictionary>

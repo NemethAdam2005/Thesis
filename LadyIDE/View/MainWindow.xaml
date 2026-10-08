@@ -33,6 +33,9 @@
         <KeyBinding Key="S"
                 Modifiers="Control"
                 Command="{Binding SaveFileCommand}"/>
+
+        <KeyBinding Key="Delete"
+         Command="{Binding DeleteSelectedItemsCommand}"/>
     </Window.InputBindings>
 
     <!-- ========================================================= -->
@@ -585,16 +588,16 @@
                             <Style TargetType="richCanvas:RichItemContainer">
 
                                 <Setter Property="Top"
-                                        Value="{Binding Y, Mode=TwoWay}"/>
+                                        Value="{Binding Y}"/>
 
                                 <Setter Property="Left"
-                                        Value="{Binding X, Mode=TwoWay}"/>
+                                        Value="{Binding X}"/>
 
                                 <Setter Property="Width"
-                                        Value="{Binding Width, Mode=TwoWay}"/>
+                                        Value="{Binding Width}"/>
 
                                 <Setter Property="Height"
-                                        Value="{Binding Height, Mode=TwoWay}"/>
+                                        Value="{Binding Height}"/>
 
                             </Style>
 

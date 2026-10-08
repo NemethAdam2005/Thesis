@@ -24,6 +24,17 @@ namespace LadyIDE.WPF.CanvasElements
 
         public ObservableCollection<CanvasItemBase> Children { get; } = new();
 
+        protected CanvasItemBase(int width, int height)
+        {
+            _defaultWidth = width;
+            _defaultHeight = height;
+            _headerExtraWidth = 120;
+
+            _width = _defaultWidth;
+            _height = _defaultHeight;
+
+            Children.CollectionChanged += Children_CollectionChanged;
+        }
         protected CanvasItemBase()
         {
             _defaultWidth = 250;
@@ -179,6 +190,10 @@ namespace LadyIDE.WPF.CanvasElements
 
             Width = requiredWidth;
             Height = Math.Max(_defaultHeight, requiredHeight);
+            if (Parent != null)
+            {
+                Parent.UpdateSizeFromChildren();
+            }
         }
 
         public Point FindFreeChildPosition(double childWidth, double childHeight)

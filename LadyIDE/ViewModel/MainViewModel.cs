@@ -195,6 +195,16 @@ namespace LadyIDE.WPF.ViewModel
             }
         }
 
+        public ObservableCollection<string> InputTypes { get; } = new()
+        {
+            "String",
+            "Int",
+            "Double",
+            "Bool",
+            "Char",
+            "Object"
+        };
+
         public ObservableCollection<CanvasItemBase> CanvasItems { get; }
         public ObservableCollection<CanvasItemBase> SelectedItems { get; }
 
@@ -219,6 +229,7 @@ namespace LadyIDE.WPF.ViewModel
             SelectedItems.CollectionChanged += SelectedItems_CollectionChanged;
             AddCommandToApplicationCommand = new DelegateCommand(param => OnAddCommandToApplication(param as ConsoleApplication));
             DeleteItemCommand = new DelegateCommand(param => OnDeleteItem(param as CanvasItemBase));
+            DeleteSelectedItemsCommand = new DelegateCommand(param => OnDeleteSelectedItems());
             ComponentButtonClicked = new DelegateCommand(param => OnComponentButtonClicked());
             RecordButtonClicked = new DelegateCommand(param => OnRecordButtonClicked());
             EntityButtonClicked = new DelegateCommand(param => OnEntityButtonClicked());
@@ -226,6 +237,7 @@ namespace LadyIDE.WPF.ViewModel
             CompositeButtonClicked = new DelegateCommand(param => OnCompositeButtonClicked());
             MediatorButtonClicked = new DelegateCommand(param => OnMediatorButtonClicked());
             ProxyButtonClicked = new DelegateCommand(param => OnProxyButtonClicked());
+            AddInputToCommandCommand = new DelegateCommand(param => OnAddInputToCommand(param as Command));
         }
 
         //Commands
@@ -237,7 +249,9 @@ namespace LadyIDE.WPF.ViewModel
         public DelegateCommand ShowPropertiesButtonClicked { get; private set; }
         public DelegateCommand SelectItemCommand { get; private set; }
         public DelegateCommand AddCommandToApplicationCommand { get; private set; }
+        public DelegateCommand AddInputToCommandCommand { get; private set; }
         public DelegateCommand DeleteItemCommand { get; private set; }
+        public DelegateCommand DeleteSelectedItemsCommand { get; private set; }
         public DelegateCommand ApplicationButtonClicked { get; private set; }
         public DelegateCommand CommandButtonClicked { get; private set; }
         public DelegateCommand ComponentButtonClicked { get; private set; }
@@ -324,15 +338,10 @@ namespace LadyIDE.WPF.ViewModel
                 CanvasItemBase parent = item.Parent;
 
                 parent.Children.Remove(item);
-
                 item.Parent = null;
                 item.IsHighlighted = false;
-
-                // A szülő Application lesz újra kijelölve
                 SelectedItem = parent;
-
                 parent.IsHighlighted = true;
-
                 return;
             }
             else if (CanvasItems.Contains(item))
@@ -344,57 +353,63 @@ namespace LadyIDE.WPF.ViewModel
                 SelectedItem = null;
             }
         }
+        private void OnDeleteSelectedItems()
+        {
+            if (SelectedItems == null || SelectedItems.Count == 0)
+                return;
+
+            List<CanvasItemBase> itemsToDelete = SelectedItems.ToList();
+
+            Application.Current.Dispatcher.BeginInvoke(new System.Action(() =>
+            {
+                foreach (CanvasItemBase item in itemsToDelete)
+                {
+                    CanvasItems.Remove(item);
+                }
+
+                SelectedItem = null;
+                SelectedItems.Clear();
+            }));
+        
+        }
+
+        private void ClearHighlights(IEnumerable<CanvasItemBase> items)
+        {
+            foreach (CanvasItemBase item in items)
+            {
+                item.IsHighlighted = false;
+                ClearHighlights(item.Children);
+            }
+        }
 
         private void OnSelectItem(CanvasItemBase? item)
         {
             if (item == null)
             {
                 SelectedItem = null;
-                // Minden korábbi highlight törlése
-                foreach (CanvasItemBase rootItem in CanvasItems)
-                {
-                    rootItem.IsHighlighted = false;
-
-                    foreach (CanvasItemBase child in rootItem.Children)
-                    {
-                        child.IsHighlighted = false;
-                    }
-                }
+                ClearHighlights(CanvasItems);
                 return;
             }
 
-            // Ha az elem egy Application/önálló elem,
-            // akkor a korábbi kijelölések maradjanak meg.
-            if (item.Parent == null)
-            {
-                item.IsHighlighted = true;
-                foreach (CanvasItemBase child in item.Children)
-                {
-                    child.IsHighlighted = false;
-                }
-            }
-            else
-            {
-                // Ha child, akkor ugyanazon parent többi childját
-                // levesszük a kijelölésről.
-                foreach (CanvasItemBase sibling in item.Parent.Children)
-                {
-                    sibling.IsHighlighted = sibling == item;
-                }
+            CanvasItemBase? root = item;
 
-                // A parent is legyen kiemelve, mert a child benne van.
-                item.Parent.IsHighlighted = true;
+            while (root.Parent != null)
+                root = root.Parent;
+
+            foreach (CanvasItemBase rootItem in CanvasItems)
+            {
+                if (rootItem != root)
+                    ClearHighlights(rootItem.Children);
             }
 
-            if (SelectedItem != null && SelectedItem.Parent != null)
+            CanvasItemBase? current = item;
+
+            while (current != null)
             {
-                foreach (CanvasItemBase child in SelectedItem.Parent.Children)
-                {
-                    child.IsHighlighted = child == item;
-                }
+                current.IsHighlighted = true;
+                current = current.Parent;
             }
 
-            // Ez csak a Properties panelhez tartozó kijelölés.
             SelectedItem = item;
         }
 
@@ -477,6 +492,29 @@ namespace LadyIDE.WPF.ViewModel
             application.Children.Add(command);
 
             application.UpdateSizeFromChildren();
+        }
+
+        private void OnAddInputToCommand(Command? command)
+        {
+            if (command == null)
+                return;
+
+            int inputNumber = command.Children.OfType<Input>().Count() + 1;
+
+            Input input = new Input
+            {
+                Name = $"{command.Name}-Input{inputNumber}",
+                Type = "String"
+            };
+
+            Point position = command.FindFreeChildPosition(input.Width, input.Height);
+
+            input.X = position.X;
+            input.Y = position.Y;
+
+            input.Parent = command;
+            command.Children.Add(input);
+            command.UpdateSizeFromChildren();
         }
 
         private void OnComponentButtonClicked()

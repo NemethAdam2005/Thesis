@@ -70,6 +70,39 @@
     </Style>
 
     <!-- ========================================================= -->
+    <!-- INPUT BORDER STYLE                                        -->
+    <!-- ========================================================= -->
+
+    <Style x:Key="InputCanvasItemStyle"
+       TargetType="Border">
+
+        <Setter Property="BorderBrush"
+            Value="{DynamicResource InputElementBorder}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+        <Setter Property="Background"
+            Value="{DynamicResource InputElementBackground}"/>
+
+        <Setter Property="CornerRadius"
+            Value="5"/>
+
+        <Style.Triggers>
+
+            <DataTrigger Binding="{Binding IsHighlighted}"
+                     Value="True">
+
+                <Setter Property="BorderThickness"
+                    Value="5"/>
+
+            </DataTrigger>
+
+        </Style.Triggers>
+
+    </Style>
+
+    <!-- ========================================================= -->
     <!-- COMPONENT BORDER STYLE                                    -->
     <!-- ========================================================= -->
 
