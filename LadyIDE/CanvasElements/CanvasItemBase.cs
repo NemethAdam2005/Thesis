@@ -15,60 +15,38 @@ namespace LadyIDE.WPF.CanvasElements
         private double _height;
         private bool _isHighlighted;
         private string? _name;
+        private CanvasItemBase? _parent;
+        private bool _isUpdatingSize;
 
-        private readonly double _defaultWidth;
-        private readonly double _defaultHeight;
-        private readonly double _headerExtraWidth;
-
-        public CanvasItemBase? _parent;
+        protected readonly double DefaultWidth;
+        protected readonly double DefaultHeight;
 
         public ObservableCollection<CanvasItemBase> Children { get; } = new();
 
         protected CanvasItemBase(int width, int height)
         {
-            _defaultWidth = width;
-            _defaultHeight = height;
-            _headerExtraWidth = 120;
-
-            _width = _defaultWidth;
-            _height = _defaultHeight;
+            DefaultWidth = width;
+            DefaultHeight = height;
+            _width = width;
+            _height = height;
 
             Children.CollectionChanged += Children_CollectionChanged;
         }
-        protected CanvasItemBase()
+
+        protected CanvasItemBase() : this(250, 150)
         {
-            _defaultWidth = 250;
-            _defaultHeight = 150;
-            _headerExtraWidth = 120;
-
-            _width = _defaultWidth;
-            _height = _defaultHeight;
-
-            Children.CollectionChanged += Children_CollectionChanged;
         }
 
         public string Name
         {
-            get
-            {
-                if (_name != null)
-                {
-                    return _name;
-                }
-                else
-                {
-                    return "";
-                }
-            }
+            get => _name ?? string.Empty;
             set
             {
-                if (_name == value)
-                    return;
+                if (_name == value) return;
 
                 _name = value;
                 OnPropertyChanged();
-
-                Width = Math.Max(_defaultWidth, GetMinimumWidth());
+                UpdateLayoutAndSize();
             }
         }
 
@@ -77,8 +55,7 @@ namespace LadyIDE.WPF.CanvasElements
             get => _x;
             set
             {
-                if (_x == value)
-                    return;
+                if (_x == value) return;
 
                 _x = value;
                 OnPropertyChanged();
@@ -90,8 +67,7 @@ namespace LadyIDE.WPF.CanvasElements
             get => _y;
             set
             {
-                if (_y == value)
-                    return;
+                if (_y == value) return;
 
                 _y = value;
                 OnPropertyChanged();
@@ -101,15 +77,11 @@ namespace LadyIDE.WPF.CanvasElements
         public double Width
         {
             get => _width;
-            set
+            private set
             {
-                double newWidth = Math.Max(value, GetMinimumWidth());
+                if (_width == value) return;
 
-                if (_width == newWidth)
-                    return;
-
-                _width = newWidth;
-                UpdateSizeFromChildren();
+                _width = value;
                 OnPropertyChanged();
             }
         }
@@ -117,10 +89,9 @@ namespace LadyIDE.WPF.CanvasElements
         public double Height
         {
             get => _height;
-            set
+            private set
             {
-                if (_height == value)
-                    return;
+                if (_height == value) return;
 
                 _height = value;
                 OnPropertyChanged();
@@ -132,8 +103,7 @@ namespace LadyIDE.WPF.CanvasElements
             get => _isHighlighted;
             set
             {
-                if (_isHighlighted == value)
-                    return;
+                if (_isHighlighted == value) return;
 
                 _isHighlighted = value;
                 OnPropertyChanged();
@@ -145,55 +115,65 @@ namespace LadyIDE.WPF.CanvasElements
             get => _parent;
             set
             {
-                if (_parent == value)
-                    return;
+                if (_parent == value) return;
 
                 _parent = value;
                 OnPropertyChanged();
             }
         }
 
-        public double GetMinimumWidth()
+        protected virtual double GetHeaderWidth()
         {
-            if(_name == null)
-                return _defaultWidth;
-
             const double averageCharacterWidth = 8;
+            const double headerPadding = 120;
 
-            double nameWidth = _name.Length * averageCharacterWidth;
-
-            return Math.Max(_defaultWidth, _headerExtraWidth + nameWidth);
+            return headerPadding + Name.Length * averageCharacterWidth;
         }
 
-        public void UpdateSizeFromChildren()
+        protected virtual double GetHeaderHeight()
         {
-            const double padding = 20;
-            const double headerHeight = 48;
+            return 48;
+        }
 
-            double requiredWidth = _defaultWidth;
-            double requiredHeight = _defaultHeight;
+        public void UpdateLayoutAndSize()
+        {
+            if (_isUpdatingSize) return;
 
-            if (Children.Count > 0)
+            _isUpdatingSize = true;
+
+            try
             {
-                double maxRight = 0;
-                double maxBottom = 0;
+                ArrangeChildren();
 
-                foreach (CanvasItemBase child in Children)
+                double requiredWidth = Math.Max(DefaultWidth, GetHeaderWidth());
+                double requiredHeight = DefaultHeight;
+
+                if (Children.Count > 0)
                 {
-                    maxRight = Math.Max(maxRight, child.X + child.Width);
-                    maxBottom = Math.Max(maxBottom, child.Y + child.Height);
+                    const double padding = 20;
+
+                    double maxRight = 0;
+                    double maxBottom = 0;
+
+                    foreach (CanvasItemBase child in Children)
+                    {
+                        maxRight = Math.Max(maxRight, child.X + child.Width);
+                        maxBottom = Math.Max(maxBottom, child.Y + child.Height);
+                    }
+
+                    requiredWidth = Math.Max(requiredWidth, maxRight + padding);
+                    requiredHeight = Math.Max(requiredHeight, GetHeaderHeight() + maxBottom + padding);
                 }
 
-                requiredWidth = maxRight + padding;
-                requiredHeight = headerHeight + maxBottom + padding;
+                Width = requiredWidth;
+                Height = Math.Max(DefaultHeight, requiredHeight);
+            }
+            finally
+            {
+                _isUpdatingSize = false;
             }
 
-            Width = requiredWidth;
-            Height = Math.Max(_defaultHeight, requiredHeight);
-            if (Parent != null)
-            {
-                Parent.UpdateSizeFromChildren();
-            }
+            Parent?.UpdateLayoutAndSize();
         }
 
         public Point FindFreeChildPosition(double childWidth, double childHeight)
@@ -201,54 +181,33 @@ namespace LadyIDE.WPF.CanvasElements
             const double padding = 20;
             const double spacing = 20;
 
-            double firstColumnX = padding;
-            double secondColumnX = padding;
+            int row = Children.Count / 2;
+            int column = Children.Count % 2;
+
             double firstColumnWidth = 0;
 
-            foreach (CanvasItemBase child in Children)
-            {
-                if (child.X == firstColumnX)
-                    firstColumnWidth = Math.Max(firstColumnWidth, child.Width);
-            }
+            for (int i = 0; i < Children.Count; i += 2)
+                firstColumnWidth = Math.Max(firstColumnWidth, Children[i].Width);
 
-            secondColumnX += firstColumnWidth + spacing;
-
-            int row = Children.Count / 2;
+            double x = column == 0 ? padding : padding + firstColumnWidth + spacing;
             double y = padding;
 
-            for (int i = 0; i < row; i++)
+            for (int i = 0; i < row * 2; i += 2)
             {
-                CanvasItemBase leftChild = Children[i * 2];
-                double rowHeight = leftChild.Height;
+                double rowHeight = Children[i].Height;
 
-                if (i * 2 + 1 < Children.Count)
-                {
-                    CanvasItemBase rightChild = Children[i * 2 + 1];
-                    rowHeight = Math.Max(rowHeight, rightChild.Height);
-                }
+                if (i + 1 < Children.Count)
+                    rowHeight = Math.Max(rowHeight, Children[i + 1].Height);
 
                 y += rowHeight + spacing;
             }
 
-            return Children.Count % 2 == 0
-                ? new Point(firstColumnX, y)
-                : new Point(secondColumnX, y);
+            return new Point(x, y);
         }
 
         private void Children_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
-            {
-                foreach (CanvasItemBase child in e.NewItems)
-                {
-                    child.Parent = this;
-
-                    child.PropertyChanged -= Child_PropertyChanged;
-                    child.PropertyChanged += Child_PropertyChanged;
-                }
-            }
-
-            if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
+            if (e.OldItems != null)
             {
                 foreach (CanvasItemBase child in e.OldItems)
                 {
@@ -257,65 +216,59 @@ namespace LadyIDE.WPF.CanvasElements
                     if (child.Parent == this)
                         child.Parent = null;
                 }
-
-                RearrangeChildren();
             }
 
-            if (e.Action == NotifyCollectionChangedAction.Reset)
-                RearrangeChildren();
+            if (e.NewItems != null)
+            {
+                foreach (CanvasItemBase child in e.NewItems)
+                {
+                    child.Parent = this;
+                    child.PropertyChanged -= Child_PropertyChanged;
+                    child.PropertyChanged += Child_PropertyChanged;
+                }
+            }
 
-            UpdateSizeFromChildren();
+            UpdateLayoutAndSize();
         }
 
         private void Child_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Name) || e.PropertyName == nameof(Width) || e.PropertyName == nameof(Height))
-            {
-                RearrangeChildren();
-                UpdateSizeFromChildren();
-            }
+            if (e.PropertyName == nameof(Width) || e.PropertyName == nameof(Height))
+                UpdateLayoutAndSize();
         }
 
-        private void RearrangeChildren()
+        protected virtual void ArrangeChildren()
         {
-            const double padding = 20;
-            const double spacing = 20;
+            const double padding = 8;
+            const double spacing = 6;
 
             double firstColumnWidth = 0;
 
             for (int i = 0; i < Children.Count; i += 2)
                 firstColumnWidth = Math.Max(firstColumnWidth, Children[i].Width);
 
-            for (int i = 0; i < Children.Count; i++)
+            double y = padding;
+
+            for (int i = 0; i < Children.Count; i += 2)
             {
-                CanvasItemBase child = Children[i];
+                CanvasItemBase leftChild = Children[i];
 
-                int column = i % 2;
-                int row = i / 2;
+                leftChild.X = padding;
+                leftChild.Y = y;
 
-                child.X = column == 0
-                    ? padding
-                    : padding + firstColumnWidth + spacing;
+                double rowHeight = leftChild.Height;
 
-                double y = padding;
-
-                for (int previousRow = 0; previousRow < row; previousRow++)
+                if (i + 1 < Children.Count)
                 {
-                    int firstIndex = previousRow * 2;
-                    double previousRowHeight = 0;
+                    CanvasItemBase rightChild = Children[i + 1];
 
-                    if (firstIndex < Children.Count)
-                        previousRowHeight = Math.Max(previousRowHeight, Children[firstIndex].Height);
+                    rightChild.X = padding + firstColumnWidth + spacing;
+                    rightChild.Y = y;
 
-                    int secondIndex = firstIndex + 1;
-
-                    if (secondIndex < Children.Count)
-                        previousRowHeight = Math.Max(previousRowHeight, Children[secondIndex].Height);
-
-                    y += previousRowHeight + spacing;
+                    rowHeight = Math.Max(rowHeight, rightChild.Height);
                 }
 
-                child.Y = y;
+                y += rowHeight + spacing;
             }
         }
 

@@ -693,26 +693,153 @@
     <!-- ========================================================= -->
 
     <DataTemplate DataType="{x:Type canvasElements:Input}">
-        <Border Style="{DynamicResource InputCanvasItemStyle}"
-            behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-            behaviors:CommandBehavior.CommandParameter="{Binding}">
 
-            <StackPanel Orientation="Horizontal"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+        <Border
+        Style="{StaticResource InputCanvasItemStyle}">
 
-                <TextBlock Text="{Binding Name}"
-                   Foreground="{DynamicResource InputElementNameText}"/>
+            <Grid>
 
-                <TextBlock Text=" - "
-                   Foreground="{DynamicResource InputElementHeaderText}"
-                   Margin="3,0"/>
+                <Grid.RowDefinitions>
 
-                <TextBlock Text="{Binding Type}"
-                   Foreground="{DynamicResource InputElementHeaderText}"/>
+                    <RowDefinition Height="43"/>
+
+                    <RowDefinition Height="*"/>
+
+                </Grid.RowDefinitions>
+
+
+                <!-- ================================================= -->
+                <!-- INPUT HEADER                                      -->
+                <!-- ================================================= -->
+
+                <Border
+                Grid.Row="0"
+                Background="{DynamicResource InputElementHeader}"
+                Padding="12,0"
+                behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+                    <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center">
+
+                        <TextBlock
+                        Text="○"
+                        Foreground="{DynamicResource InputElementBorder}"
+                        FontSize="15"
+                        Margin="0,0,8,0"
+                        VerticalAlignment="Center"/>
+
+                        <TextBlock
+                        Text="INPUT"
+                        Foreground="{DynamicResource InputElementHeaderText}"
+                        FontWeight="Bold"
+                        FontSize="11"
+                        VerticalAlignment="Center"/>
+
+                    </StackPanel>
+
+                </Border>
+
+
+                <!-- ================================================= -->
+                <!-- PARAMETERS                                        -->
+                <!-- ================================================= -->
+
+                <ItemsControl
+                Grid.Row="1"
+                ItemsSource="{Binding Children}">
+
+                    <ItemsControl.ItemsPanel>
+
+                        <ItemsPanelTemplate>
+
+                            <Canvas/>
+
+                        </ItemsPanelTemplate>
+
+                    </ItemsControl.ItemsPanel>
+
+
+                    <ItemsControl.ItemContainerStyle>
+
+                        <Style TargetType="ContentPresenter">
+
+                            <Setter
+                                Property="Canvas.Left"
+                                Value="{Binding X}"/>
+
+                            <Setter
+                                Property="Canvas.Top"
+                                Value="{Binding Y}"/>
+
+                            <Setter
+                                Property="Width"
+                                Value="{Binding Width}"/>
+
+                            <Setter
+                                Property="Height"
+                                Value="{Binding Height}"/>
+
+                        </Style>
+
+                    </ItemsControl.ItemContainerStyle>
+
+                </ItemsControl>
+
+            </Grid>
+
+        </Border>
+
+    </DataTemplate>
+
+    <!-- ================================================= -->
+    <!-- PARAMETER TEMPLATE                                -->
+    <!-- ================================================= -->
+    
+    <DataTemplate DataType="{x:Type canvasElements:Parameter}">
+
+        <Border
+        Style="{StaticResource ParameterCanvasItemStyle}"
+        Padding="8,5"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+        RelativeSource={RelativeSource AncestorType=Window}}"
+        behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center">
+
+                <TextBlock
+                Text="⌗"
+                Foreground="{DynamicResource ParameterBorder}"
+                FontSize="10"
+                Margin="0,0,7,0"/>
+
+                <TextBlock
+                Text="{Binding Name}"
+                Foreground="{DynamicResource ParameterNameText}"
+                FontSize="11"
+                FontWeight="SemiBold"/>
+
+                <TextBlock
+                Text=" : "
+                Foreground="{DynamicResource ParameterHeaderText}"
+                FontSize="11"/>
+
+                <TextBlock
+                Text="{Binding Type}"
+                Foreground="{DynamicResource ParameterHeaderText}"
+                FontSize="11"/>
 
             </StackPanel>
 
         </Border>
+
     </DataTemplate>
+
 </ResourceDictionary>

@@ -287,22 +287,30 @@
 
 				<ComboBox
 					Style="{DynamicResource PropertyComboBoxStyle}"
+					ItemsSource="{Binding AvailableActions}"
+					SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
 					Height="32"
-					Margin="0,0,0,12">
+					Margin="0,0,0,12"/>
 
 					<!-- Ide később kerülnek az Action lehetőségek -->
-
-				</ComboBox>
 
 				<!-- ================================================= -->
 				<!-- INPUTS                                             -->
 				<!-- ================================================= -->
 
-				<TextBlock
-					Text="Inputs"
+				<StackPanel Orientation="Horizontal">
+					<TextBlock
+					Text="Input -"
 					Foreground="{DynamicResource PropertiesSectionHeader}"
 					FontSize="12"
 					Margin="0,0,0,8"/>
+					<TextBlock
+					Text=" (Only one input allowed)"
+					Foreground="{DynamicResource PropertiesSectionHeader}"
+					FontSize="12"
+					FontWeight="SemiBold"
+					Margin="0,0,0,8"/>
+				</StackPanel>
 
 
 				<ItemsControl ItemsSource="{Binding Children}">
@@ -330,7 +338,7 @@
 								   Padding="8,6">
 
 									<TextBlock
-                                        Text="{Binding Name}"
+                                        Text="Input"
                                         Foreground="{DynamicResource TextPrimary}"
                                         VerticalAlignment="Center"/>
 
@@ -370,7 +378,8 @@
 					Content="Add Input"
 					Command="{Binding DataContext.AddInputToCommandCommand,
 							  RelativeSource={RelativeSource AncestorType=Window}}"
-					CommandParameter="{Binding}"/>
+					CommandParameter="{Binding}"
+/>
 
 				<!-- ================================================= -->
 				<!-- DELETE COMMAND                                     -->
@@ -441,7 +450,7 @@
 						Margin="0,0,10,0">
 
 						<TextBlock
-							Text="→"
+							Text="○"
 							Foreground="White"
 							FontSize="12"
 							HorizontalAlignment="Center"
@@ -458,45 +467,84 @@
 
 				</StackPanel>
 
-
 				<!-- ================================================= -->
-				<!-- NAME                                              -->
-				<!-- ================================================= -->
-
-				<TextBlock
-					Text="Name"
-					Foreground="{DynamicResource PropertiesSectionHeader}"
-					FontSize="12"
-					Margin="0,0,0,5"/>
-
-				<TextBox
-					Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-					Background="{DynamicResource InputBackground}"
-					BorderBrush="{DynamicResource InputBorder}"
-					Foreground="{DynamicResource InputForeground}"
-					Padding="8,6"
-					Margin="0,0,0,15"/>
-
-
-				<!-- ================================================= -->
-				<!-- TYPE                                              -->
+				<!-- PARAMETERS                                         -->
 				<!-- ================================================= -->
 
 				<TextBlock
-					Text="Type"
+					Text="Parameters"
 					Foreground="{DynamicResource PropertiesSectionHeader}"
 					FontSize="12"
-					Margin="0,0,0,5"/>
+					Margin="0,0,0,8"/>
 
-				<ComboBox
-					Style="{DynamicResource PropertyComboBoxStyle}"
-					ItemsSource="{Binding DataContext.InputTypes,
-										  RelativeSource={RelativeSource AncestorType=Window}}"
-					SelectedItem="{Binding Type,
-										   Mode=TwoWay,
-										   UpdateSourceTrigger=PropertyChanged}"
-					Height="32"
-					Margin="0,0,0,12"/>
+
+				<ItemsControl ItemsSource="{Binding Children}">
+
+					<ItemsControl.ItemTemplate>
+
+						<DataTemplate DataType="{x:Type canvasElements:Parameter}">
+
+							<Grid Margin="0,0,0,6">
+
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="32"/>
+								</Grid.ColumnDefinitions>
+
+
+								<!-- Parameter name -->
+
+								<Border
+									Grid.Column="0"
+									Background="{DynamicResource InputBackground}"
+									BorderBrush="{DynamicResource InputBorder}"
+									BorderThickness="1"
+									CornerRadius="4"
+									Padding="8,6">
+
+									<TextBlock
+										Text="{Binding Name}"
+										Foreground="{DynamicResource TextPrimary}"
+										VerticalAlignment="Center"/>
+
+								</Border>
+
+
+								<!-- Delete parameter -->
+
+								<Button
+									Grid.Column="1"
+									Width="28"
+									Height="28"
+									Margin="5,0,0,0"
+									Content="✕"
+									Foreground="{DynamicResource DeleteButtonForeground}"
+									Background="Transparent"
+									BorderThickness="0"
+									FontSize="13"
+									Command="{Binding DataContext.DeleteItemCommand,
+                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+									CommandParameter="{Binding}"/>
+
+							</Grid>
+
+						</DataTemplate>
+
+					</ItemsControl.ItemTemplate>
+
+				</ItemsControl>
+
+
+				<!-- ================================================= -->
+				<!-- ADD PARAMETER                                      -->
+				<!-- ================================================= -->
+
+				<Button
+					Style="{DynamicResource AddButtonStyle}"
+					Content="Add Parameter"
+					Command="{Binding DataContext.AddParameterToInputCommand,
+                              RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"/>
 
 
 				<!-- ================================================= -->
@@ -508,7 +556,7 @@
 					Content="DELETE"
 					ToolTip="Delete Input"
 					Command="{Binding DataContext.DeleteItemCommand,
-							  RelativeSource={RelativeSource AncestorType=Window}}"
+                              RelativeSource={RelativeSource AncestorType=Window}}"
 					CommandParameter="{Binding}"/>
 
 			</StackPanel>
@@ -517,7 +565,99 @@
 
 	</DataTemplate>
 
+	<!-- ================================================= -->
+	<!-- PARAMETER TEMPLATE                                -->
+	<!-- ================================================= -->
+	
+	<DataTemplate DataType="{x:Type canvasElements:Parameter}">
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+			<StackPanel Margin="15">
 
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+						Text="Properties"
+						Foreground="{DynamicResource TextPrimary}"
+						FontSize="14"
+						FontWeight="SemiBold"
+						VerticalAlignment="Center"/>
+
+					<Button
+						Content="x"
+						Style="{StaticResource ClosePropertiesButtonStyle}"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Center"
+						Margin="0,0,14,0"
+						Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource ParameterBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="⌗"
+								   Foreground="White"
+								   FontSize="11"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Parameter"
+							   FontSize="16"
+							   FontWeight="SemiBold"
+							   Foreground="{DynamicResource TextPrimary}"
+							   VerticalAlignment="Center"/>
+
+				</StackPanel>
+
+
+				<TextBlock Text="Name"
+						   Foreground="{DynamicResource TextSecondary}"
+						   Margin="0,0,0,5"/>
+
+				<TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+						 Background="{DynamicResource InputBackground}"
+						 BorderBrush="{DynamicResource InputBorder}"
+						 Foreground="{DynamicResource InputForeground}"
+						 Padding="8,6"
+						 Margin="0,0,0,15"/>
+
+
+				<TextBlock Text="Type"
+						   Foreground="{DynamicResource TextSecondary}"
+						   Margin="0,0,0,5"/>
+
+				<ComboBox
+					Style="{DynamicResource PropertyComboBoxStyle}"
+					ItemsSource="{Binding DataContext.InputTypes,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+					SelectedItem="{Binding Type,
+                                       Mode=TwoWay,
+                                       UpdateSourceTrigger=PropertyChanged}"
+					Height="32"
+					Margin="0,0,0,15"/>
+
+
+				<Button Style="{DynamicResource DeleteButtonStyle}"
+						Content="DELETE"
+						ToolTip="Delete Parameter"
+						Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+						CommandParameter="{Binding}"/>
+
+			</StackPanel>
+		</ScrollViewer>
+	</DataTemplate>
+	
 	<!-- ========================================================= -->
 	<!-- COMPONENT PROPERTIES                                      -->
 	<!-- ========================================================= -->

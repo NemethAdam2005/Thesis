@@ -333,4 +333,37 @@
 
     </Style>
 
+    <!-- ========================================================= -->
+    <!-- PARAMETER BORDER STYLE                                    -->
+    <!-- ========================================================= -->
+
+    <Style x:Key="ParameterCanvasItemStyle"
+       TargetType="Border">
+
+        <Setter Property="BorderBrush"
+            Value="{DynamicResource ParameterBorder}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+        <Setter Property="Background"
+            Value="{DynamicResource ParameterBackground}"/>
+
+        <Setter Property="CornerRadius"
+            Value="5"/>
+
+        <Style.Triggers>
+
+            <DataTrigger Binding="{Binding IsHighlighted}"
+                     Value="True">
+
+                <Setter Property="BorderThickness"
+                    Value="5"/>
+
+            </DataTrigger>
+
+        </Style.Triggers>
+
+    </Style>
+
 </ResourceDictionary>

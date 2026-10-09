@@ -205,6 +205,8 @@ namespace LadyIDE.WPF.ViewModel
             "Object"
         };
 
+        public ObservableCollection<string> AvailableActions { get; } = new();
+
         public ObservableCollection<CanvasItemBase> CanvasItems { get; }
         public ObservableCollection<CanvasItemBase> SelectedItems { get; }
 
@@ -237,7 +239,8 @@ namespace LadyIDE.WPF.ViewModel
             CompositeButtonClicked = new DelegateCommand(param => OnCompositeButtonClicked());
             MediatorButtonClicked = new DelegateCommand(param => OnMediatorButtonClicked());
             ProxyButtonClicked = new DelegateCommand(param => OnProxyButtonClicked());
-            AddInputToCommandCommand = new DelegateCommand(param => OnAddInputToCommand(param as Command));
+            AddInputToCommandCommand = new DelegateCommand(param => IsAddInputButtonEnabled(param as Command),param => OnAddInputToCommand(param as Command));
+            AddParameterToInputCommand = new DelegateCommand(param => OnAddParameterToInput(param as Input));
         }
 
         //Commands
@@ -250,6 +253,7 @@ namespace LadyIDE.WPF.ViewModel
         public DelegateCommand SelectItemCommand { get; private set; }
         public DelegateCommand AddCommandToApplicationCommand { get; private set; }
         public DelegateCommand AddInputToCommandCommand { get; private set; }
+        public DelegateCommand AddParameterToInputCommand { get; private set; }
         public DelegateCommand DeleteItemCommand { get; private set; }
         public DelegateCommand DeleteSelectedItemsCommand { get; private set; }
         public DelegateCommand ApplicationButtonClicked { get; private set; }
@@ -338,6 +342,10 @@ namespace LadyIDE.WPF.ViewModel
                 CanvasItemBase parent = item.Parent;
 
                 parent.Children.Remove(item);
+
+                if (parent is Command)
+                    AddInputToCommandCommand.RaiseCanExecuteChanged();
+
                 item.Parent = null;
                 item.IsHighlighted = false;
                 SelectedItem = parent;
@@ -401,6 +409,8 @@ namespace LadyIDE.WPF.ViewModel
                 if (rootItem != root)
                     ClearHighlights(rootItem.Children);
             }
+
+            ClearHighlights(root.Children);
 
             CanvasItemBase? current = item;
 
@@ -491,7 +501,7 @@ namespace LadyIDE.WPF.ViewModel
             command.Parent = application;
             application.Children.Add(command);
 
-            application.UpdateSizeFromChildren();
+            application.UpdateLayoutAndSize();
         }
 
         private void OnAddInputToCommand(Command? command)
@@ -501,11 +511,7 @@ namespace LadyIDE.WPF.ViewModel
 
             int inputNumber = command.Children.OfType<Input>().Count() + 1;
 
-            Input input = new Input
-            {
-                Name = $"{command.Name}-Input{inputNumber}",
-                Type = "String"
-            };
+            Input input = new Input();
 
             Point position = command.FindFreeChildPosition(input.Width, input.Height);
 
@@ -514,7 +520,38 @@ namespace LadyIDE.WPF.ViewModel
 
             input.Parent = command;
             command.Children.Add(input);
-            command.UpdateSizeFromChildren();
+            command.UpdateLayoutAndSize();
+            AddInputToCommandCommand.RaiseCanExecuteChanged();
+        }
+
+        private void OnAddParameterToInput(Input? input)
+        {
+            if (input == null || input.Parent == null)
+                return;
+
+            int parameterNumber = input.Children.OfType<Parameter>().Count() + 1;
+
+            Parameter parameter = new Parameter
+            {
+                Name = $"{input.Parent.Name}-parameter{parameterNumber}",
+                Type = "String"
+            };
+
+            Point position = input.FindFreeChildPosition(parameter.Width, parameter.Height);
+
+            parameter.X = position.X;
+            parameter.Y = position.Y;
+
+            input.Children.Add(parameter);
+            input.UpdateLayoutAndSize();
+        }
+
+        private bool IsAddInputButtonEnabled(Command? command)
+        {
+            if (command == null)
+                return false;
+
+            return !command.Children.OfType<Input>().Any();
         }
 
         private void OnComponentButtonClicked()

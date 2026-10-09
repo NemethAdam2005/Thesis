@@ -1,44 +1,37 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-namespace LadyIDE.WPF.CanvasElements
+﻿namespace LadyIDE.WPF.CanvasElements
 {
-    public class Parameter : INotifyPropertyChanged
+    public class Parameter : CanvasItemBase
     {
-        private string _name = string.Empty;
-        private string _type = string.Empty;
-
-        public string Name
-        {
-            get => _name;
-            set
-            {
-                if (_name == value)
-                    return;
-
-                _name = value;
-                OnPropertyChanged();
-            }
-        }
+        private string _type = "String";
 
         public string Type
         {
             get => _type;
             set
             {
-                if (_type == value)
-                    return;
+                if (_type == value) return;
 
                 _type = value;
                 OnPropertyChanged();
+                UpdateLayoutAndSize();
             }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        public Parameter() : base(150,40)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected override double GetHeaderWidth()
+        {
+            const double averageCharacterWidth = 7;
+            const double extraWidth = 20;
+
+            return Math.Max(DefaultWidth, extraWidth + (Name.Length + Type.Length) * averageCharacterWidth);
+        }
+
+        protected override double GetHeaderHeight()
+        {
+            return 40;
         }
     }
 }

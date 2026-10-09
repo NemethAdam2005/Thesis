@@ -371,6 +371,25 @@
     <SolidColorBrush x:Key="InputElementNameText" Color="#FFD9DF"/>
 
     <!-- ================================================= -->
+    <!-- PARAMETER                                         -->
+    <!-- ================================================= -->
+
+    <SolidColorBrush x:Key="ParameterBorder"
+                     Color="#38BDF8"/>
+
+    <SolidColorBrush x:Key="ParameterHeader"
+                     Color="#163B4F"/>
+
+    <SolidColorBrush x:Key="ParameterBackground"
+                     Color="#102B3A"/>
+
+    <SolidColorBrush x:Key="ParameterHeaderText"
+                     Color="#7DD3FC"/>
+
+    <SolidColorBrush x:Key="ParameterNameText"
+                     Color="#D8F3FF"/>
+
+    <!-- ================================================= -->
     <!-- PROPERTY COMBOBOX HOVER                           -->
     <!-- ================================================= -->
     
