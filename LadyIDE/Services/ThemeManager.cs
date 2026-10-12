@@ -13,7 +13,11 @@ namespace LadyIDE.WPF.Services
                 ? "Themes/LightTheme.xaml"
                 : "Themes/DarkTheme.xaml";
 
-            dictionaries.Clear();
+            var currentMode = dictionaries.FirstOrDefault(d => d.Source != null && (d.Source.OriginalString.Contains("LightTheme.xaml") || d.Source.OriginalString.Contains("DarkTheme.xaml")));
+            if (currentMode != null)
+            {
+                dictionaries.Remove(currentMode);
+            }
 
             dictionaries.Add(new ResourceDictionary
             {

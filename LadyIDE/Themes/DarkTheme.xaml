@@ -180,6 +180,8 @@
     <SolidColorBrush x:Key="DeleteButtonForeground"
                      Color="#FFFFFF"/>
 
+    <SolidColorBrush x:Key="XDeleteButtonForeground"
+                 Color="#FFFFFF"/>
 
     <!-- ================================================= -->
     <!-- APPLICATION                                       -->
