@@ -17,7 +17,7 @@
             }
         }
 
-        public Parameter() : base(150,40)
+        public Parameter() : base(250,43)
         {
         }
 
@@ -31,7 +31,7 @@
 
         protected override double GetHeaderHeight()
         {
-            return 40;
+            return 43;
         }
     }
 }

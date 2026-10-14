@@ -5,9 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Windows;
-using System.IO;
 
 namespace LadyIDE.WPF.ViewModel
 {
@@ -28,6 +29,20 @@ namespace LadyIDE.WPF.ViewModel
                 HasUnsavedChanges = true;
             } 
         }
+
+        private string _consoleText = string.Empty;
+        public string ConsoleText
+        {
+            get => _consoleText;
+            private set
+            {
+                if (_consoleText == value)
+                    return;
+                _consoleText = value;
+                OnPropertyChanged();
+            }
+        }
+
 
         private bool _isLightMode = false;
 
@@ -205,7 +220,13 @@ namespace LadyIDE.WPF.ViewModel
             "Object"
         };
 
-        public ObservableCollection<string> AvailableActions { get; } = new();
+        public ObservableCollection<string> CompositeTypes { get; } = new()
+        {
+            "1-N",
+            "N-N"
+        };
+
+        public ObservableCollection<CanvasElements.Action> AvailableActions { get; } = new();
 
         public ObservableCollection<CanvasItemBase> CanvasItems { get; }
         public ObservableCollection<CanvasItemBase> SelectedItems { get; }
@@ -217,7 +238,8 @@ namespace LadyIDE.WPF.ViewModel
 
             _model = model;
             _model.CodeChanged += new EventHandler<string>(Model_CodeChanged);
-            _model.FileLoaded += new EventHandler<string>(Model_FileLoaded);
+            _model.FileLoaded += new EventHandler<(string,string)>(Model_FileLoaded);
+            _model.FileSaved += new EventHandler<string>(Model_FileSaved);
 
             LoadFileCommand = new DelegateCommand(param => OnLoadFile());
             SaveAsFileCommand = new DelegateCommand(param => OnSaveAsFile());
@@ -233,6 +255,9 @@ namespace LadyIDE.WPF.ViewModel
             DeleteItemCommand = new DelegateCommand(param => OnDeleteItem(param as CanvasItemBase));
             DeleteSelectedItemsCommand = new DelegateCommand(param => OnDeleteSelectedItems());
             ComponentButtonClicked = new DelegateCommand(param => OnComponentButtonClicked());
+            AddRecordToComponentCommand = new DelegateCommand(param => IsAddRecordButtonEnabled(param as Component), param => OnAddRecordToComponent(param as Component));
+            AddActionToComponentCommand = new DelegateCommand(param => IsAddActionButtonEnabled(param as Component), param => OnAddActionToComponent(param as Component));
+            AddMediatorToComponentCommand = new DelegateCommand(param => IsAddMediatorButtonEnabled(param as Component), param => OnAddMediatorToComponent(param as Component));
             RecordButtonClicked = new DelegateCommand(param => OnRecordButtonClicked());
             EntityButtonClicked = new DelegateCommand(param => OnEntityButtonClicked());
             EnumButtonClicked = new DelegateCommand(param => OnEnumButtonClicked());
@@ -241,6 +266,22 @@ namespace LadyIDE.WPF.ViewModel
             ProxyButtonClicked = new DelegateCommand(param => OnProxyButtonClicked());
             AddInputToCommandCommand = new DelegateCommand(param => IsAddInputButtonEnabled(param as Command),param => OnAddInputToCommand(param as Command));
             AddParameterToInputCommand = new DelegateCommand(param => OnAddParameterToInput(param as Input));
+            AddFieldToRecordCommand = new DelegateCommand(param => OnAddFieldToRecord(param as Record));
+            AddBaseListToRecordCommand = new DelegateCommand(param => IsAddBaseListButtonEnabled(param as Record),param => OnAddBaseListToRecord(param as Record));
+            AddBaseToBaseListCommand = new DelegateCommand(param => OnAddBaseToBaseList(param as BaseList));
+            AddFieldToEntityCommand = new DelegateCommand(param => OnAddFieldToEntity(param as Entity));
+            AddBaseListToEntityCommand = new DelegateCommand(param => IsAddBaseListButtonEnabled(param as Entity), param => OnAddBaseListToEntity(param as Entity));
+            AddLogicToFieldCommand = new DelegateCommand(param => IsAddLogicButtonEnabled(param as Field),param => OnAddLogicToField(param as Field));
+            FieldLazyChangedCommand = new DelegateCommand(param => OnFieldLazyChanged(param as CanvasItemBase));
+            AddBaseToEnumElementCommand = new DelegateCommand(param => IsAddBaseToEnumElementButtonEnabled(param as EnumElement),param => OnAddBaseToEnumElement(param as EnumElement));
+            AddEnumFieldToEnumElementCommand = new DelegateCommand(param => OnAddEnumFieldToEnumElement(param as EnumElement));
+            AddPartsToCompositeCommand = new DelegateCommand(param => IsAddPartsButtonEnabled(param as Composite),param => OnAddPartsToComposite(param as Composite));
+            AddPartToPartsCommand = new DelegateCommand(param => OnAddPartToParts(param as Parts));
+            AddInputToActionCommand = new DelegateCommand(param => IsAddInputToActionButtonEnabled(param as LadyIDE.WPF.CanvasElements.Action),param => OnAddInputToAction(param as LadyIDE.WPF.CanvasElements.Action));
+            AddOutputToActionCommand = new DelegateCommand(param => IsAddOutputToActionButtonEnabled(param as LadyIDE.WPF.CanvasElements.Action),param => OnAddOutputToAction(param as LadyIDE.WPF.CanvasElements.Action));
+            AddParameterToOutputCommand = new DelegateCommand(param => OnAddParameterToOutput(param as Output));
+            AddLogicToActionCommand = new DelegateCommand(param => IsAddLogicToActionButtonEnabled(param as LadyIDE.WPF.CanvasElements.Action),param => OnAddLogicToAction(param as LadyIDE.WPF.CanvasElements.Action));
+            AddActionReferenceToCommandCommand = new DelegateCommand(param => IsAddActionReferenceToCommandButtonEnabled(param as Command),param => OnAddActionReferenceToCommand(param as Command));
         }
 
         //Commands
@@ -258,13 +299,38 @@ namespace LadyIDE.WPF.ViewModel
         public DelegateCommand DeleteSelectedItemsCommand { get; private set; }
         public DelegateCommand ApplicationButtonClicked { get; private set; }
         public DelegateCommand CommandButtonClicked { get; private set; }
+        public DelegateCommand AddActionReferenceToCommandCommand { get; private set; }
         public DelegateCommand ComponentButtonClicked { get; private set; }
+
+        public DelegateCommand AddRecordToComponentCommand { get; }
+        public DelegateCommand AddActionToComponentCommand { get; }
+        public DelegateCommand AddMediatorToComponentCommand { get; }
+
         public DelegateCommand RecordButtonClicked { get; private set; }
+        public DelegateCommand AddFieldToRecordCommand { get; private set; }
+
+        public DelegateCommand AddBaseListToRecordCommand { get; private set; }
+        public DelegateCommand AddBaseToBaseListCommand { get; private set; }
+
         public DelegateCommand EntityButtonClicked { get; private set; }
+        public DelegateCommand AddFieldToEntityCommand { get; private set; }
+        public DelegateCommand AddBaseListToEntityCommand { get; private set; }
+        public DelegateCommand AddLogicToFieldCommand { get; private set; }
+        public DelegateCommand FieldLazyChangedCommand { get; private set; }
         public DelegateCommand EnumButtonClicked { get; private set; }
+        public DelegateCommand AddBaseToEnumElementCommand { get; private set; }
+        public DelegateCommand AddEnumFieldToEnumElementCommand { get; private set; }
         public DelegateCommand CompositeButtonClicked { get; private set; }
+        public DelegateCommand AddPartsToCompositeCommand { get; private set; }
+        public DelegateCommand AddPartToPartsCommand { get; private set; }
         public DelegateCommand MediatorButtonClicked { get; private set; }
         public DelegateCommand ProxyButtonClicked { get; private set; }
+
+        public DelegateCommand AddInputToActionCommand { get; private set; }
+        public DelegateCommand AddOutputToActionCommand { get; private set; }
+        public DelegateCommand AddParameterToOutputCommand { get; private set; }
+        public DelegateCommand AddLogicToActionCommand { get; private set; }
+
 
 
         //Events
@@ -279,10 +345,16 @@ namespace LadyIDE.WPF.ViewModel
             Code = e;
         }
 
-        private void Model_FileLoaded(Object? sender, String e)
+        private void Model_FileLoaded(Object? sender, (String e, String path) args)
         {
-            Code = e;
-            CodeChanged?.Invoke(this, e);
+            Code = args.e;
+            CodeChanged?.Invoke(this, args.e);
+            ConsoleText += $"[{DateTime.Now:HH:mm:ss}] File loaded successfully from {args.path}.\n";
+        }
+
+        private void Model_FileSaved(Object? sender, String e)
+        { 
+            ConsoleText += $"[{DateTime.Now:HH:mm:ss}] File saved successfully to {e}.\n";
         }
 
         //Save and Load methods
@@ -306,6 +378,37 @@ namespace LadyIDE.WPF.ViewModel
         private void OnSaveAsFile()
         {
             SaveAsFile?.Invoke(this, EventArgs.Empty);
+        }
+
+        //Log
+
+        private void LogAction(string message)
+        {
+            ConsoleText += $"[{DateTime.Now:HH:mm:ss}] {message}\n";
+        }
+
+        private void LogDeletion(CanvasItemBase item, CanvasItemBase? parent)
+        {
+            string itemDescription = item.Name == String.Empty 
+                ? $"{item.GetType().Name}"
+                : $"{item.GetType().Name} '{item.Name}'";
+            string location = parent == null
+                ? "canvas"
+                : parent.Name == String.Empty ? $"{parent.GetType().Name}" : $"{parent.GetType().Name} '{parent.Name}'";
+
+            LogAction($"{itemDescription} deleted from {location}.");
+        }
+
+        private void LogAddition(CanvasItemBase item, CanvasItemBase? parent)
+        {
+            string itemDescription = item.Name == String.Empty
+                ? $"{item.GetType().Name}"
+                : $"{item.GetType().Name} '{item.Name}'";
+            string location = parent == null
+                ? "canvas"
+                : parent.Name == String.Empty ? $"{parent.GetType().Name}" : $"{parent.GetType().Name} '{parent.Name}'";
+
+            LogAction($"{itemDescription} added to {location}.");
         }
 
         //UI event handlers
@@ -336,35 +439,80 @@ namespace LadyIDE.WPF.ViewModel
             if (item == null)
                 return;
 
-            // Ha egy Applicationön belüli Commandot törlünk
+            // Ha egy gyermekelemet törlünk
             if (item.Parent != null)
             {
                 CanvasItemBase parent = item.Parent;
 
+                if (item is Entity entity)
+                    RemoveEntityReferences(entity);
+                if (item is CanvasElements.Action action)
+                    RemoveActionReferences(action);
+
                 parent.Children.Remove(item);
+                LogDeletion(item, parent);
 
                 if (parent is Command)
                     AddInputToCommandCommand.RaiseCanExecuteChanged();
+                    AddActionReferenceToCommandCommand.RaiseCanExecuteChanged();
+
+                if (parent is Record)
+                    AddBaseListToRecordCommand.RaiseCanExecuteChanged();
+
+                if (parent is Entity)
+                    AddBaseListToEntityCommand.RaiseCanExecuteChanged();
+
+                if (parent is Field)
+                    AddLogicToFieldCommand.RaiseCanExecuteChanged();
+
+                if (parent is EnumElement)
+                    AddBaseToEnumElementCommand.RaiseCanExecuteChanged();
+
+                if (parent is Composite)
+                    AddPartsToCompositeCommand.RaiseCanExecuteChanged();
+
+                if (parent is Component)
+                    AddActionToComponentCommand.RaiseCanExecuteChanged();
+                    AddRecordToComponentCommand.RaiseCanExecuteChanged();
+                    AddMediatorToComponentCommand.RaiseCanExecuteChanged();
+
+                if (parent is CanvasElements.Action)
+                    AddInputToActionCommand.RaiseCanExecuteChanged();
+                    AddOutputToActionCommand.RaiseCanExecuteChanged();
+                    AddLogicToActionCommand.RaiseCanExecuteChanged();
 
                 item.Parent = null;
                 item.IsHighlighted = false;
                 SelectedItem = parent;
                 parent.IsHighlighted = true;
+
+                RefreshPartsAvailableEntities();
+                RefreshAvailableActions();
                 return;
             }
             else if (CanvasItems.Contains(item))
             {
+                if (item is Entity entity)
+                    RemoveEntityReferences(entity);
+                if (item is Component component && component.Action != null)
+                    RemoveActionReferences(component.Action);
+
                 CanvasItems.Remove(item);
                 SelectedItems.Remove(item);
+                LogDeletion(item, null);
 
                 // Nincs már kijelölt elem
                 SelectedItem = null;
+
+                RefreshPartsAvailableEntities();
+                RefreshAvailableActions();
             }
         }
+
+
         private void OnDeleteSelectedItems()
         {
-            if (SelectedItems == null || SelectedItems.Count == 0)
-                return;
+            if (SelectedItems == null || SelectedItems.Count == 0) return;
 
             List<CanvasItemBase> itemsToDelete = SelectedItems.ToList();
 
@@ -372,13 +520,100 @@ namespace LadyIDE.WPF.ViewModel
             {
                 foreach (CanvasItemBase item in itemsToDelete)
                 {
+                    if (item is Entity entity)
+                        RemoveEntityReferences(entity);
+                    if(item is Component component && component.Action != null)
+                        RemoveActionReferences(component.Action);
+                    if (item is CanvasElements.Action action)
+                        RemoveActionReferences(action);
+
                     CanvasItems.Remove(item);
+                    LogDeletion(item, null);
                 }
 
                 SelectedItem = null;
                 SelectedItems.Clear();
+
+                RefreshPartsAvailableEntities();
+                RefreshAvailableActions();
             }));
-        
+        }
+
+
+        private void RemoveEntityReferences(Entity entity)
+        {
+            foreach (Parts parts in GetAllCanvasItems(CanvasItems).OfType<Parts>())
+            {
+                foreach (Part part in parts.Children.OfType<Part>().Where(p => p.Entity == entity).ToList())
+                {
+                    parts.Children.Remove(part);
+                }
+            }
+            RefreshPartsAvailableEntities();
+        }
+
+        private void RemoveActionReferences(CanvasElements.Action action)
+        {
+            List<Command> commands = GetAllCanvasItems(CanvasItems)
+                .OfType<Command>()
+                .ToList();
+
+            foreach (Command command in commands)
+            {
+                List<ActionReference> references = command.Children
+                    .OfType<ActionReference>()
+                    .Where(reference => reference.Action == action)
+                    .ToList();
+
+                foreach (ActionReference reference in references)
+                {
+                    command.Children.Remove(reference);
+                    LogDeletion(reference, command);
+
+                    reference.Parent = null;
+                    reference.IsHighlighted = false;
+
+                    command.UpdateLayoutAndSize();
+                    AddActionReferenceToCommandCommand.RaiseCanExecuteChanged();
+                }
+
+                if (command.SelectedAction == action)
+                    command.SelectedAction = null;
+            }
+        }
+
+        private void RefreshPartsAvailableEntities()
+        {
+            List<Entity> entities = CanvasItems.OfType<Entity>().ToList();
+
+            foreach (Parts parts in GetAllCanvasItems(CanvasItems).OfType<Parts>())
+                parts.RefreshAvailableEntities(entities);
+        }
+
+        private void RefreshAvailableActions()
+        {
+            List<CanvasElements.Action> actions = GetAllCanvasItems(CanvasItems)
+                .OfType<CanvasElements.Action>()
+                .ToList();
+
+            AvailableActions.Clear();
+
+            foreach (CanvasElements.Action action in actions)
+                AvailableActions.Add(action);
+        }
+
+
+        private IEnumerable<CanvasItemBase> GetAllCanvasItems(IEnumerable<CanvasItemBase> items)
+        {
+            List<CanvasItemBase> allItems = new List<CanvasItemBase>(); 
+            foreach (CanvasItemBase item in items)
+            {
+                allItems.Add(item);
+
+                foreach (CanvasItemBase child in GetAllCanvasItems(item.Children))
+                    allItems.Add(child);
+            }
+            return allItems;
         }
 
         private void ClearHighlights(IEnumerable<CanvasItemBase> items)
@@ -396,6 +631,7 @@ namespace LadyIDE.WPF.ViewModel
             {
                 SelectedItem = null;
                 ClearHighlights(CanvasItems);
+                SelectedItems.Clear();
                 return;
             }
 
@@ -464,6 +700,7 @@ namespace LadyIDE.WPF.ViewModel
                 Y = 0
             };
             AddElementToCanvas(application);
+            LogAddition(application, null);
         }
 
         private void OnCommandButtonClicked()
@@ -475,6 +712,38 @@ namespace LadyIDE.WPF.ViewModel
                 Y = 0
             };
             AddElementToCanvas(command);
+            LogAddition(command, null);
+        }
+
+        private bool IsAddActionReferenceToCommandButtonEnabled(Command? command)
+        {
+            return command != null && !command.Children.OfType<ActionReference>().Any();
+        }
+
+        private void OnAddActionReferenceToCommand(Command? command)
+        {
+            if (command == null || command.SelectedAction == null || command.Children.OfType<ActionReference>().Any()) return;
+
+            CanvasElements.Action selectedAction = command.SelectedAction;
+
+            ActionReference actionReference = new ActionReference
+            {
+                Action = selectedAction,
+                Parent = command
+            };
+
+            Point position = command.FindFreeChildPosition(actionReference.Width, actionReference.Height);
+
+            actionReference.X = position.X;
+            actionReference.Y = position.Y;
+
+            command.Children.Add(actionReference);
+            command.SelectedAction = null;
+
+            command.UpdateLayoutAndSize();
+            AddActionReferenceToCommandCommand.RaiseCanExecuteChanged();
+
+            LogAddition(actionReference, command);
         }
 
         private void OnAddCommandToApplication(ConsoleApplication? application)
@@ -502,6 +771,7 @@ namespace LadyIDE.WPF.ViewModel
             application.Children.Add(command);
 
             application.UpdateLayoutAndSize();
+            LogAddition(command, application);
         }
 
         private void OnAddInputToCommand(Command? command)
@@ -522,6 +792,7 @@ namespace LadyIDE.WPF.ViewModel
             command.Children.Add(input);
             command.UpdateLayoutAndSize();
             AddInputToCommandCommand.RaiseCanExecuteChanged();
+            LogAddition(input, command);
         }
 
         private void OnAddParameterToInput(Input? input)
@@ -529,9 +800,9 @@ namespace LadyIDE.WPF.ViewModel
             if (input == null || input.Parent == null)
                 return;
 
-            int parameterNumber = input.Children.OfType<Parameter>().Count() + 1;
+            int parameterNumber = input.Children.OfType<CanvasElements.Parameter>().Count() + 1;
 
-            Parameter parameter = new Parameter
+            CanvasElements.Parameter parameter = new CanvasElements.Parameter
             {
                 Name = $"{input.Parent.Name}-parameter{parameterNumber}",
                 Type = "String"
@@ -544,6 +815,7 @@ namespace LadyIDE.WPF.ViewModel
 
             input.Children.Add(parameter);
             input.UpdateLayoutAndSize();
+            LogAddition(parameter, input);
         }
 
         private bool IsAddInputButtonEnabled(Command? command)
@@ -563,7 +835,98 @@ namespace LadyIDE.WPF.ViewModel
                 Y = 0
             };
             AddElementToCanvas(component);
+            LogAddition(component, null);
         }
+
+
+        private bool IsAddRecordButtonEnabled(Component? component)
+        {
+            if (component == null) return false;
+
+            return !component.Children.OfType<Record>().Any();
+        }
+
+        private void OnAddRecordToComponent(Component? component)
+        {
+            if (component == null || component.Children.OfType<Record>().Any()) return;
+
+            Record record = new Record
+            {
+                Name = $"Record{CanvasItems.OfType<Record>().Count() + 1}",
+                Parent = component
+            };
+
+            component.Children.Add(record);
+            component.UpdateLayoutAndSize();
+
+            AddRecordToComponentCommand.RaiseCanExecuteChanged();
+
+            LogAddition(record, component);
+        }
+
+
+        private bool IsAddActionButtonEnabled(Component? component)
+        {
+            if (component == null) return false;
+
+            return !component.Children.OfType<CanvasElements.Action>().Any();
+        }
+
+        private void OnAddActionToComponent(Component? component)
+        {
+            if (component == null || component.Children.OfType<CanvasElements.Action>().Any()) return;
+
+            int actionCount = 0;
+
+            foreach (Component comp in CanvasItems.OfType<Component>().ToList())
+            {
+                if (comp.Action is not null)
+                {
+                    actionCount += 1;
+                }
+            }
+
+            CanvasElements.Action action = new CanvasElements.Action
+            {
+                Name = $"Action{actionCount + 1}",
+                Parent = component
+            };
+
+            component.Children.Add(action);
+            component.UpdateLayoutAndSize();
+
+            AddActionToComponentCommand.RaiseCanExecuteChanged();
+            RefreshAvailableActions();
+
+            LogAddition(action, component);
+        }
+
+
+        private bool IsAddMediatorButtonEnabled(Component? component)
+        {
+            if (component == null) return false;
+
+            return !component.Children.OfType<Mediator>().Any();
+        }
+
+        private void OnAddMediatorToComponent(Component? component)
+        {
+            if (component == null || component.Children.OfType<Mediator>().Any()) return;
+
+            Mediator mediator = new Mediator
+            {
+                Name = $"Mediator{CanvasItems.OfType<Mediator>().Count() + 1}",
+                Parent = component
+            };
+
+            component.Children.Add(mediator);
+            component.UpdateLayoutAndSize();
+
+            AddMediatorToComponentCommand.RaiseCanExecuteChanged();
+
+            LogAddition(mediator, component);
+        }
+
 
         private void OnRecordButtonClicked()
         {
@@ -575,6 +938,91 @@ namespace LadyIDE.WPF.ViewModel
             };
 
             AddElementToCanvas(record);
+            LogAddition(record, null);
+        }
+
+        private void OnAddFieldToRecord(Record? record)
+        {
+            if (record == null) return;
+
+            int fieldNumber = record.Children
+                .OfType<Field>()
+                .Count() + 1;
+
+            Field field = new Field
+            {
+                Name = $"Field{fieldNumber}"
+            };
+
+            Point position = record.FindFreeChildPosition(
+                field.Width,
+                field.Height);
+
+            field.X = position.X;
+            field.Y = position.Y;
+
+            field.Parent = record;
+            record.Children.Add(field);
+
+            record.UpdateLayoutAndSize();
+            LogAddition(field, record);
+        }
+
+        private bool IsAddBaseListButtonEnabled(Record? record)
+        {
+            if (record == null) return false;
+
+            return !record.Children.OfType<BaseList>().Any();
+        }
+
+        private bool IsAddBaseListButtonEnabled(Entity? entity)
+        {
+            if (entity == null) return false;
+
+            return !entity.Children.OfType<BaseList>().Any();
+        }
+
+        private void OnAddBaseListToRecord(Record? record)
+        {
+            if (record == null || record.Children.OfType<BaseList>().Any()) return;
+
+            BaseList baseList = new BaseList
+            {
+                Name = "BaseList",
+                Parent = record
+            };
+
+            Point position = record.FindFreeChildPosition(baseList.Width, baseList.Height);
+            baseList.X = position.X;
+            baseList.Y = position.Y;
+
+            record.Children.Add(baseList);
+            record.UpdateLayoutAndSize();
+
+            AddBaseListToRecordCommand.RaiseCanExecuteChanged();
+            LogAddition(baseList, record);
+        }
+
+
+        private void OnAddBaseToBaseList(BaseList? baseList)
+        {
+            if (baseList == null) return;
+
+            int baseNumber = baseList.Children.OfType<Base>().Count() + 1;
+
+            Base baseItem = new Base
+            {
+                Name = $"Base{baseNumber}",
+                Parent = baseList
+            };
+
+            Point position = baseList.FindFreeChildPosition(baseItem.Width, baseItem.Height);
+            baseItem.X = position.X;
+            baseItem.Y = position.Y;
+
+            baseList.Children.Add(baseItem);
+            baseList.UpdateLayoutAndSize();
+            LogAddition(baseItem, baseList);
         }
 
         private void OnEntityButtonClicked()
@@ -587,6 +1035,100 @@ namespace LadyIDE.WPF.ViewModel
             };
 
             AddElementToCanvas(entity);
+            RefreshPartsAvailableEntities();
+            LogAddition(entity, null);
+        }
+
+        private void OnAddFieldToEntity(Entity? entity)
+        {
+            if (entity == null) return;
+
+            int fieldNumber = entity.Children
+                .OfType<Field>()
+                .Count() + 1;
+
+            Field field = new Field
+            {
+                Name = $"Field{fieldNumber}"
+            };
+
+            field.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(Field.IsLazy))
+                    AddLogicToFieldCommand.RaiseCanExecuteChanged();
+            };
+
+            Point position = entity.FindFreeChildPosition(field.Width,field.Height);
+            field.X = position.X;
+            field.Y = position.Y;
+
+            field.Parent = entity;
+            entity.Children.Add(field);
+
+            entity.UpdateLayoutAndSize();
+            LogAddition(field, entity);
+        }
+
+        private void OnFieldLazyChanged(CanvasItemBase? item)
+        {
+            if (item is not Field field || field.IsLazy) return;
+
+            Logic? logic = field.Children.OfType<Logic>().FirstOrDefault();
+
+            if (logic != null) OnDeleteItem(logic);
+        }
+
+        private void OnAddBaseListToEntity(Entity? entity)
+        {
+            if (entity == null || entity.Children.OfType<BaseList>().Any()) return;
+
+            BaseList baseList = new BaseList
+            {
+                Name = "BaseList"
+            };
+
+            Point position = entity.FindFreeChildPosition(baseList.Width, baseList.Height);
+            baseList.X = position.X;
+            baseList.Y = position.Y;
+
+            baseList.Parent = entity;
+            entity.Children.Add(baseList);
+
+            entity.UpdateLayoutAndSize();
+            AddBaseListToEntityCommand.RaiseCanExecuteChanged();
+            LogAddition(baseList, entity);
+        }
+
+        private bool IsAddLogicButtonEnabled(Field? field)
+        {
+            if (field == null) return false;
+
+            return field.Parent is Entity &&
+                   field.IsLazy &&
+                   !field.Children.OfType<Logic>().Any();
+        }
+
+        private void OnAddLogicToField(Field? field)
+        {
+            if (field == null || !IsAddLogicButtonEnabled(field)) return;
+
+            Logic logic = new Logic
+            {
+            };
+
+
+
+            Point position = field.FindFreeChildPosition(logic.Width, logic.Height);
+
+            logic.X = position.X;
+            logic.Y = position.Y;
+
+            logic.Parent = field;
+            field.Children.Add(logic);
+            field.UpdateLayoutAndSize();
+
+            AddLogicToFieldCommand.RaiseCanExecuteChanged();
+            LogAddition(logic, field);
         }
 
         private void OnEnumButtonClicked()
@@ -599,6 +1141,56 @@ namespace LadyIDE.WPF.ViewModel
             };
 
             AddElementToCanvas(enumElement);
+            LogAddition(enumElement, null);
+        }
+
+        private bool IsAddBaseToEnumElementButtonEnabled(EnumElement? enumElement)
+        {
+            if (enumElement == null) return false;
+
+            return !enumElement.Children.OfType<Base>().Any();
+        }
+
+        private void OnAddBaseToEnumElement(EnumElement? enumElement)
+        {
+            if (enumElement == null || enumElement.Children.OfType<Base>().Any()) return;
+
+            Base baseItem = new Base
+            {
+                Name = "Base",
+                Parent = enumElement
+            };
+
+            Point position = enumElement.FindFreeChildPosition(baseItem.Width, baseItem.Height);
+            baseItem.X = position.X;
+            baseItem.Y = position.Y;
+
+            enumElement.Children.Add(baseItem);
+            enumElement.UpdateLayoutAndSize();
+
+            AddBaseToEnumElementCommand.RaiseCanExecuteChanged();
+            LogAddition(baseItem, enumElement);
+        }
+
+        private void OnAddEnumFieldToEnumElement(EnumElement? enumElement)
+        {
+            if (enumElement == null) return;
+
+            int fieldNumber = enumElement.Children.OfType<EnumField>().Count() + 1;
+
+            EnumField field = new EnumField
+            {
+                Name = $"Field{fieldNumber}",
+                Parent = enumElement
+            };
+
+            Point position = enumElement.FindFreeChildPosition(field.Width, field.Height);
+            field.X = position.X;
+            field.Y = position.Y;
+
+            enumElement.Children.Add(field);
+            enumElement.UpdateLayoutAndSize();
+            LogAddition(field, enumElement);
         }
 
         private void OnCompositeButtonClicked()
@@ -610,7 +1202,81 @@ namespace LadyIDE.WPF.ViewModel
                 Y = 0
             };
 
+            CompositeTypeElement type = new CompositeTypeElement
+            {
+                Name = composite.CompositeType,
+                Parent = composite
+            };
+
+            Point typePosition = composite.FindFreeChildPosition(type.Width, type.Height);
+            type.X = typePosition.X;
+            type.Y = typePosition.Y;
+            composite.Children.Add(type);
+
+            composite.UpdateLayoutAndSize();
+
             AddElementToCanvas(composite);
+            LogAddition(composite, null);
+        }
+
+        private bool IsAddPartsButtonEnabled(Composite? composite)
+        {
+            if (composite == null) return false;
+
+            return !composite.Children.OfType<Parts>().Any();
+        }
+
+
+        private void OnAddPartsToComposite(Composite? composite)
+        {
+            if (composite == null || composite.Children.OfType<Parts>().Any()) return;
+
+            Parts parts = new Parts
+            {
+            };
+
+            Point position = composite.FindFreeChildPosition(parts.Width, parts.Height);
+
+            parts.X = position.X;
+            parts.Y = position.Y;
+            parts.Parent = composite;
+
+            composite.Children.Add(parts);
+            composite.UpdateLayoutAndSize();
+
+            AddPartsToCompositeCommand.RaiseCanExecuteChanged();
+            RefreshPartsAvailableEntities();
+
+            LogAddition(parts, composite);
+        }
+
+
+        private void OnAddPartToParts(Parts? parts)
+        {
+            if (parts == null || parts.SelectedEntity == null) return;
+
+            Entity entity = parts.SelectedEntity;
+
+            if (parts.Children.OfType<Part>().Any(part => part.Entity == entity)) return;
+
+            Part part = new Part
+            {
+                Entity = entity
+            };
+
+            Point position = parts.FindFreeChildPosition(part.Width, part.Height);
+
+            part.X = position.X;
+            part.Y = position.Y;
+            part.Parent = parts;
+
+            parts.Children.Add(part);
+            parts.SelectedEntity = null;
+
+            parts.UpdateLayoutAndSize();
+            RefreshPartsAvailableEntities();
+
+            LogAddition(part, parts);
         }
 
         private void OnMediatorButtonClicked()
@@ -623,6 +1289,7 @@ namespace LadyIDE.WPF.ViewModel
             };
 
             AddElementToCanvas(mediator);
+            LogAddition(mediator, null);
         }
 
         private void OnProxyButtonClicked()
@@ -635,7 +1302,125 @@ namespace LadyIDE.WPF.ViewModel
             };
 
             AddElementToCanvas(proxy);
+            LogAddition(proxy, null);
         }
 
-    }   
+        private bool IsAddInputToActionButtonEnabled(CanvasElements.Action? action)
+        {
+            if (action == null) return false;
+
+            return action.InputElement == null;
+        }
+
+        private void OnAddInputToAction(CanvasElements.Action? action)
+        {
+            if (action == null || !IsAddInputToActionButtonEnabled(action)) return;
+
+            Input input = new Input
+            {
+                Parent = action
+            };
+
+            Point position = action.FindFreeChildPosition(input.Width, input.Height);
+            input.X = position.X;
+            input.Y = position.Y;
+
+            action.Children.Add(input);
+            action.UpdateLayoutAndSize();
+
+            AddInputToActionCommand.RaiseCanExecuteChanged();
+            LogAddition(input, action);
+        }
+
+        private bool IsAddOutputToActionButtonEnabled(CanvasElements.Action? action)
+        {
+            if (action == null) return false;
+
+            return action.OutputElement == null;
+        }
+
+        private void OnAddOutputToAction(CanvasElements.Action? action)
+        {
+            if (action == null || !IsAddOutputToActionButtonEnabled(action)) return;
+
+            Output output = new Output
+            {
+                Parent = action
+            };
+
+            Point position = action.FindFreeChildPosition(output.Width, output.Height);
+            output.X = position.X;
+            output.Y = position.Y;
+
+            action.Children.Add(output);
+            action.UpdateLayoutAndSize();
+
+            AddOutputToActionCommand.RaiseCanExecuteChanged();
+            LogAddition(output, action);
+
+            CanvasElements.Parameter result = new CanvasElements.Parameter
+            {
+                Name = $"result",
+                Type = "String"
+            };
+            Point resultPosition = output.FindFreeChildPosition(result.Width, result.Height);
+
+            result.X = resultPosition.X;
+            result.Y = resultPosition.Y;
+
+            output.Children.Add(result);
+            LogAddition(result, output);
+        }
+
+        private void OnAddParameterToOutput(Output? output)
+        {
+            if (output == null || output.Parent == null)
+                return;
+
+            int parameterNumber = output.Children.OfType<CanvasElements.Parameter>().Count() + 1;
+
+            CanvasElements.Parameter parameter = new CanvasElements.Parameter
+            {
+                Name = $"{output.Parent.Name}-parameter{parameterNumber}",
+                Type = "String"
+            };
+
+            Point position = output.FindFreeChildPosition(parameter.Width, parameter.Height);
+
+            parameter.X = position.X;
+            parameter.Y = position.Y;
+
+            output.Children.Add(parameter);
+            LogAddition(parameter, output);
+        }
+
+        private bool IsAddLogicToActionButtonEnabled(CanvasElements.Action? action)
+        {
+            if (action == null) return false;
+
+            return action.LogicElement == null;
+        }
+
+        private void OnAddLogicToAction(CanvasElements.Action? action)
+        {
+            if (action == null || !IsAddLogicToActionButtonEnabled(action)) return;
+
+            Logic logic = new Logic
+            {
+                Parent = action
+            };
+
+            Point position = action.FindFreeChildPosition(logic.Width, logic.Height);
+            logic.X = position.X;
+            logic.Y = position.Y;
+
+            action.Children.Add(logic);
+            action.UpdateLayoutAndSize();
+
+            AddLogicToActionCommand.RaiseCanExecuteChanged();
+            LogAddition(logic, action);
+        }
+
+
+    }
 }

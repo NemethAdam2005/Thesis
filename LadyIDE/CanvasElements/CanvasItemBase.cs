@@ -37,7 +37,7 @@ namespace LadyIDE.WPF.CanvasElements
         {
         }
 
-        public string Name
+        public virtual string Name
         {
             get => _name ?? string.Empty;
             set
@@ -83,6 +83,7 @@ namespace LadyIDE.WPF.CanvasElements
 
                 _width = value;
                 OnPropertyChanged();
+                UpdateLayoutAndSize();
             }
         }
 
@@ -95,6 +96,7 @@ namespace LadyIDE.WPF.CanvasElements
 
                 _height = value;
                 OnPropertyChanged();
+                UpdateLayoutAndSize();
             }
         }
 
@@ -146,7 +148,7 @@ namespace LadyIDE.WPF.CanvasElements
                 ArrangeChildren();
 
                 double requiredWidth = Math.Max(DefaultWidth, GetHeaderWidth());
-                double requiredHeight = DefaultHeight;
+                double requiredHeight = Math.Max(DefaultHeight, GetHeaderHeight());
 
                 if (Children.Count > 0)
                 {

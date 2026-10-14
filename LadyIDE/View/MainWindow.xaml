@@ -36,6 +36,9 @@
 
         <KeyBinding Key="Delete"
          Command="{Binding DeleteSelectedItemsCommand}"/>
+
+        <KeyBinding Key="Esc"
+         Command="{Binding SelectItemCommand}"/>
     </Window.InputBindings>
 
     <!-- ========================================================= -->
@@ -445,7 +448,7 @@
                                             CornerRadius="4"
                                             Margin="0,0,10,0">
 
-                                        <TextBlock Text="▤"
+                                        <TextBlock Text="◎"
                                                    Foreground="White"
                                                    FontSize="16"
                                                    HorizontalAlignment="Center"
@@ -684,7 +687,8 @@
 
                                 <Grid Background="{DynamicResource CodeBackground}">
 
-                                    <TextBox Style="{StaticResource ConsoleTextBox}"/>
+                                    <TextBox Style="{StaticResource ConsoleTextBox}"
+                                             Text="{Binding ConsoleText, Mode=OneWay}"/>
 
                                 </Grid>
 

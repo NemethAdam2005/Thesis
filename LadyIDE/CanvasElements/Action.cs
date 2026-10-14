@@ -1,34 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿
+using System;
+using System.Linq;
 
 namespace LadyIDE.WPF.CanvasElements
 {
-    public class Action
+    public class Action : CanvasItemBase
     {
-        public bool PipeAndFilterAction { get; } = false;
+        private bool _pipeAndFilterAction;
+        private Input? _inputElement;
+        private Output? _outputElement;
+        private Logic? _logicElement;
 
-        public List<Parameter> Input { get; } = new();
-
-        public List<Parameter> Output { get; } = new();
-
-        public List<string> Logic { get; } = new();
-
-        public Action()
+        public bool PipeAndFilterAction
         {
-            Logic.Add("()");
-            Logic.Add("AND");
-            Logic.Add("OR");
-            Logic.Add("map");
-            Logic.Add("flatten");
-            Logic.Add("forall");
-            Logic.Add("==");
-            Logic.Add("!=");
-            Logic.Add(":=");
-            Logic.Add("code");
-            Logic.Add("create");
-            Logic.Add("!");
-            Logic.Add("EMPTY");
+            get => _pipeAndFilterAction;
+            set
+            {
+                if (_pipeAndFilterAction == value) return;
+
+                _pipeAndFilterAction = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Input? InputElement
+        {
+            get => _inputElement;
+            private set
+            {
+                if (_inputElement == value) return;
+
+                _inputElement = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Output? OutputElement
+        {
+            get => _outputElement;
+            private set
+            {
+                if (_outputElement == value) return;
+
+                _outputElement = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Logic? LogicElement
+        {
+            get => _logicElement;
+            private set
+            {
+                if (_logicElement == value) return;
+
+                _logicElement = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Action() : base()
+        {
+            Children.CollectionChanged += (_, _) => RefreshChildren();
+        }
+
+        private void RefreshChildren()
+        {
+            InputElement = Children.OfType<Input>().FirstOrDefault();
+            OutputElement = Children.OfType<Output>().FirstOrDefault();
+            LogicElement = Children.OfType<Logic>().FirstOrDefault();
+        }
+
+        protected override void ArrangeChildren()
+        {
+            const double padding = 8;
+            const double spacing = 6;
+
+            double y = padding;
+
+            foreach (var child in Children)
+            {
+                child.X = padding;
+                child.Y = y;
+
+                y += child.Height + spacing;
+            }
         }
     }
 }
