@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,12 +24,14 @@ namespace LadyIDE.WPF.CanvasElements
             get => _baseList;
             private set
             {
+                if (_baseList == value) return;
+
                 _baseList = value;
                 OnPropertyChanged();
             }
         }
 
-        public Entity() : base(260, 150)
+        public Entity() : base()
         {
             Children.CollectionChanged += (_, _) => RefreshChildren();
             RefreshChildren();
@@ -44,49 +46,7 @@ namespace LadyIDE.WPF.CanvasElements
 
         protected override void ArrangeChildren()
         {
-            const double padding = 8;
-            const double spacing = 6;
-
-            double y = padding;
-
-            foreach (Field field in Fields)
-            {
-                field.X = padding;
-                field.Y = y;
-                y += field.Height + spacing;
-            }
-
-            if (BaseList == null) return;
-
-            double fieldsWidth = Fields.Any()
-                ? Fields.Max(field => field.Width)
-                : 0;
-
-            BaseList.X = Fields.Any()
-                ? padding + fieldsWidth + spacing
-                : padding;
-
-            BaseList.Y = padding;
-        }
-
-        protected override double GetHeaderWidth()
-        {
-            const double padding = 8;
-            const double spacing = 6;
-
-            double fieldsWidth = Fields.Any()
-                ? Fields.Max(field => field.Width)
-                : 0;
-
-            double requiredWidth = padding * 2;
-
-            if (Fields.Any())
-                requiredWidth += fieldsWidth;
-
-            if (BaseList != null)
-                requiredWidth += (Fields.Any() ? spacing : 0) + BaseList.Width;
-
-            return Math.Max(requiredWidth, Name.Length * 8 + 100);
+            CanvasLayout.ArrangePrimaryColumnWithSideItem(Fields, BaseList);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿
-using System;
 using System.Linq;
 
 namespace LadyIDE.WPF.CanvasElements
@@ -20,6 +19,7 @@ namespace LadyIDE.WPF.CanvasElements
 
                 _pipeAndFilterAction = value;
                 OnPropertyChanged();
+                UpdateLayoutAndSize();
             }
         }
 
@@ -62,6 +62,7 @@ namespace LadyIDE.WPF.CanvasElements
         public Action() : base()
         {
             Children.CollectionChanged += (_, _) => RefreshChildren();
+            RefreshChildren();
         }
 
         private void RefreshChildren()
@@ -71,20 +72,18 @@ namespace LadyIDE.WPF.CanvasElements
             LogicElement = Children.OfType<Logic>().FirstOrDefault();
         }
 
+        protected override double GetRequiredOwnWidth()
+        {
+            double requiredWidth = base.GetRequiredOwnWidth();
+
+            if (PipeAndFilterAction) requiredWidth += 45;
+
+            return requiredWidth;
+        }
+
         protected override void ArrangeChildren()
         {
-            const double padding = 8;
-            const double spacing = 6;
-
-            double y = padding;
-
-            foreach (var child in Children)
-            {
-                child.X = padding;
-                child.Y = y;
-
-                y += child.Height + spacing;
-            }
+            CanvasLayout.ArrangeVertically(Children);
         }
     }
 }

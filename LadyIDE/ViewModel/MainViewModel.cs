@@ -685,24 +685,24 @@ namespace LadyIDE.WPF.ViewModel
         //Basic addition function
         private void AddElementToCanvas(CanvasItemBase item)
         {
-            const double spacing = 20;
-            double newX = item.X;
-            double newY = item.Y;
-            while (CanvasItems.Any(existingItem =>
-                newX < existingItem.X + existingItem.Width + spacing &&
-                newX + item.Width + spacing > existingItem.X &&
-                newY < existingItem.Y + existingItem.Height + spacing &&
-                newY + item.Height + spacing > existingItem.Y))
-            {
-                newX += item.Width + spacing;
-                if (newX + item.Width > 1200)
-                {
-                    newX = 20;
-                    newY += item.Height + spacing;
-                }
-            }
-            item.X = newX;
-            item.Y = newY;
+            //const double spacing = 20;
+            //double newX = item.X;
+            //double newY = item.Y;
+            //while (CanvasItems.Any(existingItem =>
+            //    newX < existingItem.X + existingItem.Width + spacing &&
+            //    newX + item.Width + spacing > existingItem.X &&
+            //    newY < existingItem.Y + existingItem.Height + spacing &&
+            //    newY + item.Height + spacing > existingItem.Y))
+            //{
+            //    newX += item.Width + spacing;
+            //    if (newX + item.Width > 1200)
+            //    {
+            //        newX = 20;
+            //        newY += item.Height + spacing;
+            //    }
+            //}
+            //item.X = newX;
+            //item.Y = newY;
             CanvasItems.Add(item);
         }
 
