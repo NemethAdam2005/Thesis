@@ -6,10 +6,22 @@ namespace LadyIDE.Model
     public class ApplicationModel
     {
         private readonly IFileDataAccess _dataAccess;
-        public string Code { get; set; } = string.Empty;
+        private string _code = string.Empty; 
+        public string Code 
+        {
+            get => _code; 
+            set 
+            { 
+                if (_code == value) 
+                    return; _code = value; 
+                CodeChanged?.Invoke(this, _code); 
+            } 
+        }
 
         //Events
         public event EventHandler<string>? CodeChanged;
+        public event EventHandler<(string,string)>? FileLoaded;
+        public event EventHandler<string>? FileSaved;
 
         public ApplicationModel(IFileDataAccess dataAccess)
         { 
@@ -23,7 +35,7 @@ namespace LadyIDE.Model
                 throw new InvalidOperationException("No data access is provided.");
 
             Code = await _dataAccess.LoadAsync(path);
-            CodeChanged?.Invoke(this, Code);
+            FileLoaded?.Invoke(this, (Code, path));
         }
 
         //Save
@@ -33,6 +45,7 @@ namespace LadyIDE.Model
                 throw new InvalidOperationException("No data access is provided.");
 
             await _dataAccess.SaveAsync(path, Code);
+            FileSaved?.Invoke(this, path);
         }
     }
 

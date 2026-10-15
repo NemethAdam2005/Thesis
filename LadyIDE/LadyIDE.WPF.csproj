@@ -6,11 +6,47 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+	<ApplicationIcon>Assets\LadyIDELogo.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\LadyIDELogo.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Model\LadyIDE.Model.csproj" />
     <ProjectReference Include="..\Persistence\LadyIDE.Persistence.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Themes\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AvalonEdit" Version="6.3.1.120" />
+    <PackageReference Include="RichCanvas" Version="2.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\LadyIDELogo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Styles\Canvas\CanvasItemStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Styles\Controls\MenuStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Styles\Controls\PaletteStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Styles\Controls\TabStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Styles\Properties\PropertyTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
 </Project>

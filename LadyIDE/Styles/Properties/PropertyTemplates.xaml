@@ -1,0 +1,3808 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:canvasElements="clr-namespace:LadyIDE.WPF.CanvasElements">
+
+	<!-- ========================================================= -->
+	<!-- APPLICATION PROPERTIES                                    -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:ConsoleApplication}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource ClosePropertiesButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,15">
+
+					<Border
+                        Width="27"
+                        Height="27"
+                        Background="{DynamicResource ApplicationBorder}"
+                        CornerRadius="4"
+                        Margin="0,0,10,0">
+
+						<TextBlock
+                            Text="▣"
+                            Foreground="White"
+                            FontSize="12"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock
+                        Text="Application"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="12"/>
+
+				</StackPanel>
+
+
+				<!-- ================================================= -->
+				<!-- NAME                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"
+                    Margin="0,0,0,15"/>
+
+
+				<!-- ================================================= -->
+				<!-- COMMANDS                                           -->
+				<!-- ================================================= -->
+
+				<TextBlock
+                    Text="Commands"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,8"/>
+
+
+				<ItemsControl ItemsSource="{Binding Children}">
+
+					<ItemsControl.ItemTemplate>
+
+						<DataTemplate>
+
+							<Grid Margin="0,0,0,6">
+
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="32"/>
+								</Grid.ColumnDefinitions>
+
+
+								<!-- Command name -->
+
+								<Border
+                                    Grid.Column="0"
+                                    Background="{DynamicResource InputBackground}"
+                                    BorderBrush="{DynamicResource InputBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8,6">
+
+									<TextBlock
+                                        Text="{Binding Name}"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        VerticalAlignment="Center"/>
+
+								</Border>
+
+
+								<!-- Delete command -->
+
+								<Button
+                                    Grid.Column="1"
+                                    Width="28"
+                                    Height="28"
+                                    Margin="5,0,0,0"
+                                    Content="✕"
+                                    Foreground="{DynamicResource XDeleteButtonForeground}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="13"
+                                    Command="{Binding DataContext.DeleteItemCommand,
+                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"/>
+
+							</Grid>
+
+						</DataTemplate>
+
+					</ItemsControl.ItemTemplate>
+
+				</ItemsControl>
+
+
+				<!-- ================================================= -->
+				<!-- ADD COMMAND                                        -->
+				<!-- ================================================= -->
+
+				<Button
+					Style="{DynamicResource AddButtonStyle}"
+					Content="Add Command"
+					Command="{Binding DataContext.AddCommandToApplicationCommand,
+							  RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"/>
+
+
+				<!-- ================================================= -->
+				<!-- DELETE APPLICATION                                 -->
+				<!-- ================================================= -->
+
+				<Button
+					Style="{DynamicResource DeleteButtonStyle}"
+					Content="DELETE"
+					Command="{Binding DataContext.DeleteItemCommand,
+							RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+
+	<!-- ========================================================= -->
+	<!-- COMMAND PROPERTIES                                        -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Command}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+						Text="Properties"
+						Foreground="{DynamicResource TextPrimary}"
+						FontSize="14"
+						FontWeight="SemiBold"
+						VerticalAlignment="Center"/>
+
+					<Button
+						Content="x"
+						Style="{StaticResource ClosePropertiesButtonStyle}"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Center"
+						Margin="0,0,14,0"
+						Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border
+						Width="27"
+						Height="27"
+						Background="{DynamicResource CommandBorder}"
+						CornerRadius="4"
+						Margin="0,0,10,0">
+
+						<TextBlock
+							Text="▤"
+							Foreground="White"
+							FontSize="12"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock
+						Text="Command"
+						VerticalAlignment="Center"
+						HorizontalAlignment="Center"
+						Foreground="{DynamicResource TextPrimary}"
+						FontSize="12"/>
+
+				</StackPanel>
+
+
+				<!-- ================================================= -->
+				<!-- NAME                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+					Text="Name"
+					Foreground="{DynamicResource PropertiesSectionHeader}"
+					FontSize="12"
+					Margin="0,0,0,5"/>
+
+				<TextBox
+					Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+					Background="{DynamicResource InputBackground}"
+					BorderBrush="{DynamicResource InputBorder}"
+					Foreground="{DynamicResource InputForeground}"
+					Padding="8,6"
+					Margin="0,0,0,15"/>
+
+				<!-- ================================================= -->
+				<!-- ACTION                                              -->
+				<!-- ================================================= -->
+
+				<TextBlock
+					Text="Action"
+					Foreground="{DynamicResource PropertiesSectionHeader}"
+					FontSize="12"
+					Margin="0,15,0,5"/>
+
+                <TextBlock
+                    Text="The Action container holds references to existing Action elements."
+                    Foreground="{DynamicResource TextSecondary}"
+                    FontSize="11"
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,10"/>
+
+                <!-- ================================================= -->
+                <!-- ACTION REFERENCE                                  -->
+                <!-- ================================================= -->
+
+                <ContentControl Content="{Binding ActionReference}" Margin="0,0,0,6">
+
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="Visibility" Value="Visible"/>
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ActionReference}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- ActionReference neve -->
+                                <Border
+                                    Grid.Column="0"
+                                    Background="{DynamicResource InputBackground}"
+                                    BorderBrush="{DynamicResource InputBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8,6">
+
+                                    <TextBlock
+                                        Text="{Binding Name}"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        VerticalAlignment="Center"
+                                        TextTrimming="CharacterEllipsis"/>      
+                                </Border>
+
+                                <!-- ActionReference törlése -->
+                                <Button
+                                    Grid.Column="1"
+                                    Width="28"
+                                    Height="28"
+                                    Margin="5,0,0,0"
+                                    Content="✕"
+                                    Foreground="{DynamicResource XDeleteButtonForeground}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    FontSize="13"
+                                    Command="{Binding DataContext.DeleteItemCommand,
+                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"/>
+
+                            </Grid>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+
+                </ContentControl>
+
+                <ComboBox
+                    Style="{DynamicResource PropertyComboBoxStyle}"
+                    ItemsSource="{Binding DataContext.AvailableActions,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    SelectedItem="{Binding SelectedAction, Mode=TwoWay}"
+                    DisplayMemberPath="Name"
+                    Height="32"
+                    Margin="0,0,0,12">  
+
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                </ComboBox>
+
+                <Button
+                    Content="Add Action"
+                    Command="{Binding DataContext.AddActionReferenceToCommandCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"
+                    Margin="0,0,0,12">  
+
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource AddButtonStyle}">
+                            <Setter Property="IsEnabled" Value="True"/>
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedAction}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- ================================================= -->
+				<!-- INPUTS                                             -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal">
+					<TextBlock
+					Text="Input -"
+					Foreground="{DynamicResource PropertiesSectionHeader}"
+					FontSize="12"
+					Margin="0,0,0,8"/>
+					<TextBlock
+					Text=" (Only one input allowed)"
+					Foreground="{DynamicResource PropertiesSectionHeader}"
+					FontSize="12"
+					FontWeight="SemiBold"
+					Margin="0,0,0,8"/>
+				</StackPanel>
+
+
+				<ContentControl Content="{Binding Input}">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Input}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+
+                    <ContentControl.ContentTemplate>
+
+						<DataTemplate DataType="{x:Type canvasElements:Input}">
+
+							<Grid Margin="0,0,0,6">
+
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="32"/>
+								</Grid.ColumnDefinitions>
+
+
+								<!-- Input name -->
+
+								<Border
+								   Grid.Column="0"
+								   Background="{DynamicResource InputBackground}"
+								   BorderBrush="{DynamicResource InputBorder}"
+								   BorderThickness="1"
+								   CornerRadius="4"
+								   Padding="8,6">
+
+									<TextBlock
+                                        Text="Input"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        VerticalAlignment="Center"/>
+
+								</Border>
+
+								<!-- Delete input -->
+
+								<Button
+									Grid.Column="2"
+									Width="28"
+									Height="28"
+									Margin="5,0,0,0"
+									Content="✕"
+									Foreground="{DynamicResource XDeleteButtonForeground}"
+									Background="Transparent"
+									BorderThickness="0"
+									FontSize="13"
+									Command="{Binding DataContext.DeleteItemCommand,
+                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+									CommandParameter="{Binding}"/>
+
+							</Grid>
+
+						</DataTemplate>
+
+					</ContentControl.ContentTemplate>
+
+				</ContentControl>
+
+
+				<!-- ================================================= -->
+				<!-- ADD INPUT                                          -->
+				<!-- ================================================= -->
+
+				<Button
+					Style="{DynamicResource AddButtonStyle}"
+					Content="Add Input"
+					Command="{Binding DataContext.AddInputToCommandCommand,
+							  RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"
+/>
+
+				<!-- ================================================= -->
+				<!-- DELETE COMMAND                                     -->
+				<!-- ================================================= -->
+
+				<Button
+					Style="{DynamicResource DeleteButtonStyle}"
+					Content="DELETE"
+					Command="{Binding DataContext.DeleteItemCommand,
+							  RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+
+	<!-- ========================================================= -->
+	<!-- INPUT PROPERTIES                                          -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Input}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<!-- ================================================= -->
+				<!-- PROPERTIES HEADER                                 -->
+				<!-- ================================================= -->
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+						Text="Properties"
+						Foreground="{DynamicResource TextPrimary}"
+						FontSize="14"
+						FontWeight="SemiBold"
+						VerticalAlignment="Center"/>
+
+					<Button
+						Content="x"
+						Style="{StaticResource ClosePropertiesButtonStyle}"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Center"
+						Margin="0,0,14,0"
+						Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<!-- ================================================= -->
+				<!-- TYPE                                              -->
+				<!-- ================================================= -->
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border
+						Width="27"
+						Height="27"
+						Background="{DynamicResource InputElementBorder}"
+						CornerRadius="4"
+						Margin="0,0,10,0">
+
+						<TextBlock
+							Text="○"
+							Foreground="White"
+							FontSize="12"
+							HorizontalAlignment="Center"
+							VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock
+						Text="Input"
+						VerticalAlignment="Center"
+						HorizontalAlignment="Center"
+						Foreground="{DynamicResource TextPrimary}"
+						FontSize="12"/>
+
+				</StackPanel>
+
+				<!-- ================================================= -->
+				<!-- PARAMETERS                                         -->
+				<!-- ================================================= -->
+
+				<TextBlock
+					Text="Parameters"
+					Foreground="{DynamicResource PropertiesSectionHeader}"
+					FontSize="12"
+					Margin="0,0,0,8"/>
+
+
+				<ItemsControl ItemsSource="{Binding Children}">
+
+					<ItemsControl.ItemTemplate>
+
+						<DataTemplate DataType="{x:Type canvasElements:Parameter}">
+
+							<Grid Margin="0,0,0,6">
+
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="32"/>
+								</Grid.ColumnDefinitions>
+
+
+								<!-- Parameter name -->
+
+								<Border
+									Grid.Column="0"
+									Background="{DynamicResource InputBackground}"
+									BorderBrush="{DynamicResource InputBorder}"
+									BorderThickness="1"
+									CornerRadius="4"
+									Padding="8,6">
+
+									<TextBlock
+										Text="{Binding Name}"
+										Foreground="{DynamicResource TextPrimary}"
+										VerticalAlignment="Center"/>
+
+								</Border>
+
+
+								<!-- Delete parameter -->
+
+								<Button
+									Grid.Column="1"
+									Width="28"
+									Height="28"
+									Margin="5,0,0,0"
+									Content="✕"
+									Foreground="{DynamicResource XDeleteButtonForeground}"
+									Background="Transparent"
+									BorderThickness="0"
+									FontSize="13"
+									Command="{Binding DataContext.DeleteItemCommand,
+                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+									CommandParameter="{Binding}"/>
+
+							</Grid>
+
+						</DataTemplate>
+
+					</ItemsControl.ItemTemplate>
+
+				</ItemsControl>
+
+
+				<!-- ================================================= -->
+				<!-- ADD PARAMETER                                      -->
+				<!-- ================================================= -->
+
+				<Button
+					Style="{DynamicResource AddButtonStyle}"
+					Content="Add Parameter"
+					Command="{Binding DataContext.AddParameterToInputCommand,
+                              RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"/>
+
+
+				<!-- ================================================= -->
+				<!-- DELETE INPUT                                       -->
+				<!-- ================================================= -->
+
+				<Button
+					Style="{DynamicResource DeleteButtonStyle}"
+					Content="DELETE"
+					Command="{Binding DataContext.DeleteItemCommand,
+                              RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+	<!-- ================================================= -->
+	<!-- PARAMETER PROPERTY                                -->
+	<!-- ================================================= -->
+	
+	<DataTemplate DataType="{x:Type canvasElements:Parameter}">
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+			<StackPanel Margin="15">
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+						Text="Properties"
+						Foreground="{DynamicResource TextPrimary}"
+						FontSize="14"
+						FontWeight="SemiBold"
+						VerticalAlignment="Center"/>
+
+					<Button
+						Content="x"
+						Style="{StaticResource ClosePropertiesButtonStyle}"
+						HorizontalAlignment="Right"
+						VerticalAlignment="Center"
+						Margin="0,0,14,0"
+						Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+
+				<StackPanel Orientation="Horizontal"
+							Margin="0,0,0,15">
+
+					<Border Width="27"
+							Height="27"
+							Background="{DynamicResource ParameterBorder}"
+							CornerRadius="4"
+							Margin="0,0,10,0">
+
+						<TextBlock Text="⌗"
+								   Foreground="White"
+								   FontSize="11"
+								   HorizontalAlignment="Center"
+								   VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock Text="Parameter"
+							   FontSize="16"
+							   FontWeight="SemiBold"
+							   Foreground="{DynamicResource TextPrimary}"
+							   VerticalAlignment="Center"/>
+
+				</StackPanel>
+
+
+				<TextBlock Text="Name"
+						   Foreground="{DynamicResource TextSecondary}"
+						   Margin="0,0,0,5"/>
+
+				<TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+						 Background="{DynamicResource InputBackground}"
+						 BorderBrush="{DynamicResource InputBorder}"
+						 Foreground="{DynamicResource InputForeground}"
+						 Padding="8,6"
+						 Margin="0,0,0,15"/>
+
+
+				<TextBlock Text="Type"
+						   Foreground="{DynamicResource TextSecondary}"
+						   Margin="0,0,0,5"/>
+
+				<ComboBox
+					Style="{DynamicResource PropertyComboBoxStyle}"
+					ItemsSource="{Binding DataContext.InputTypes,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+					SelectedItem="{Binding Type,
+                                       Mode=TwoWay,
+                                       UpdateSourceTrigger=PropertyChanged}"
+					Height="32"
+					Margin="0,0,0,15"/>
+
+
+				<Button Style="{DynamicResource DeleteButtonStyle}"
+						Content="DELETE"
+						Command="{Binding DataContext.DeleteItemCommand,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+						CommandParameter="{Binding}"/>
+
+			</StackPanel>
+		</ScrollViewer>
+	</DataTemplate>
+	
+	<!-- ========================================================= -->
+	<!-- COMPONENT PROPERTIES                                      -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Component}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource ClosePropertiesButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+				<StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,15">
+
+					<Border
+                        Width="27"
+                        Height="27"
+                        Background="{DynamicResource ComponentBorder}"
+                        CornerRadius="4"
+                        Margin="0,0,10,0">
+
+						<TextBlock
+                            Text="◆"
+                            Foreground="White"
+                            FontSize="12"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock
+                        Text="Component"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="12"/>
+
+				</StackPanel>
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+                <!-- RECORD -->
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <TextBlock Text="Record - "
+               Foreground="{DynamicResource PropertiesSectionHeader}"
+               FontSize="12"/>
+
+                    <TextBlock Text="Only one Record allowed"
+               Foreground="{DynamicResource PropertiesSectionHeader}"
+               FontSize="12"
+               FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <ContentControl Content="{Binding Record}" Margin="0,0,0,8">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Record}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                        Background="{DynamicResource InputBackground}"
+                        BorderBrush="{DynamicResource InputBorder}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="8,6">
+                                    <TextBlock Text="{Binding Name}"
+                               Foreground="{DynamicResource TextPrimary}"
+                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <Button Grid.Column="1"
+                        Width="28"
+                        Height="28"
+                        Margin="5,0,0,0"
+                        Content="✕"
+                        Foreground="{DynamicResource XDeleteButtonForeground}"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding DataContext.DeleteItemCommand,
+                            RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
+
+                <Button Style="{DynamicResource AddButtonStyle}"
+        Content="Add Record"
+        Command="{Binding DataContext.AddRecordToComponentCommand,
+            RelativeSource={RelativeSource AncestorType=Window}}"
+        CommandParameter="{Binding}"
+        Margin="0,0,0,18"/>
+
+
+                <!-- ACTION -->
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <TextBlock Text="Action - "
+               Foreground="{DynamicResource PropertiesSectionHeader}"
+               FontSize="12"/>
+
+                    <TextBlock Text="Only one Action allowed"
+               Foreground="{DynamicResource PropertiesSectionHeader}"
+               FontSize="12"
+               FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <ContentControl Content="{Binding Action}" Margin="0,0,0,8">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Action}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                        Background="{DynamicResource InputBackground}"
+                        BorderBrush="{DynamicResource InputBorder}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="8,6">
+                                    <TextBlock Text="{Binding Name}"
+                               Foreground="{DynamicResource TextPrimary}"
+                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <Button Grid.Column="1"
+                        Width="28"
+                        Height="28"
+                        Margin="5,0,0,0"
+                        Content="✕"
+                        Foreground="{DynamicResource XDeleteButtonForeground}"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding DataContext.DeleteItemCommand,
+                            RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
+
+                <Button Style="{DynamicResource AddButtonStyle}"
+        Content="Add Action"
+        Command="{Binding DataContext.AddActionToComponentCommand,
+            RelativeSource={RelativeSource AncestorType=Window}}"
+        CommandParameter="{Binding}"
+        Margin="0,0,0,18"/>
+
+
+                <!-- MEDIATOR -->
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                    <TextBlock Text="Mediator - "
+               Foreground="{DynamicResource PropertiesSectionHeader}"
+               FontSize="12"/>
+
+                    <TextBlock Text="Only one Mediator allowed"
+               Foreground="{DynamicResource PropertiesSectionHeader}"
+               FontSize="12"
+               FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <ContentControl Content="{Binding Mediator}" Margin="0,0,0,8">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Mediator}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                        Background="{DynamicResource InputBackground}"
+                        BorderBrush="{DynamicResource InputBorder}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="8,6">
+                                    <TextBlock Text="{Binding Name}"
+                               Foreground="{DynamicResource TextPrimary}"
+                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <Button Grid.Column="1"
+                        Width="28"
+                        Height="28"
+                        Margin="5,0,0,0"
+                        Content="✕"
+                        Foreground="{DynamicResource XDeleteButtonForeground}"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding DataContext.DeleteItemCommand,
+                            RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
+
+                <Button Style="{DynamicResource AddButtonStyle}"
+                    Content="Add Mediator"
+                    Command="{Binding DataContext.AddMediatorToComponentCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"
+                    Margin="0,0,0,18"/>
+
+                <Button
+					Style="{DynamicResource DeleteButtonStyle}"
+					Content="DELETE"
+					Command="{Binding DataContext.DeleteItemCommand,
+							  RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- RECORD PROPERTIES                                         -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Record}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                        RelativeSource={RelativeSource AncestorType=Window}}"/>
+                </DockPanel>
+
+                <!-- ELEMENT TYPE -->
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource RecordBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+                        <TextBlock
+                        Text="●"
+                        Foreground="White"
+                        FontSize="12"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+                    </Border>
+
+                    <TextBlock
+                    Text="Record"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+                </StackPanel>
+
+                <!-- NAME -->
+
+                <TextBlock
+                Text="Name"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <TextBox
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                Background="{DynamicResource InputBackground}"
+                BorderBrush="{DynamicResource InputBorder}"
+                Foreground="{DynamicResource InputForeground}"
+                Padding="8,6"
+                Margin="0,0,0,18"/>
+
+                <!-- FIELDS -->
+
+                <TextBlock
+                Text="Fields"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,8"/>
+
+                <ItemsControl ItemsSource="{Binding Fields}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                    Grid.Column="0"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="8,6">
+
+                                    <TextBlock
+                        Text="{Binding Name}"
+                        Foreground="{DynamicResource TextPrimary}"
+                        VerticalAlignment="Center"/>
+                                </Border>
+
+                                <Button
+                    Grid.Column="1"
+                    Width="28"
+                    Height="28"
+                    Margin="5,0,0,0"
+                    Content="✕"
+                    Foreground="{DynamicResource XDeleteButtonForeground}"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- ADD FIELD -->
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add Field"
+                Command="{Binding DataContext.AddFieldToRecordCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Margin="0,6,0,18"/>
+
+                <!-- BASELIST -->
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock
+				Text="BaseList -"
+				Foreground="{DynamicResource PropertiesSectionHeader}"
+				FontSize="12"
+				Margin="0,0,0,8"/>
+                    <TextBlock
+				Text=" (Only one baselist allowed)"
+				Foreground="{DynamicResource PropertiesSectionHeader}"
+				FontSize="12"
+				FontWeight="SemiBold"
+				Margin="0,0,0,8"/>
+                </StackPanel>
+
+                <ContentControl Content="{Binding BaseList}">
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding BaseList}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                    Grid.Column="0"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="8,6">
+
+                                    <TextBlock
+                        Text="{Binding Name}"
+                        Foreground="{DynamicResource TextPrimary}"
+                        VerticalAlignment="Center"/>
+                                </Border>
+
+                                <Button
+                    Grid.Column="1"
+                    Width="28"
+                    Height="28"
+                    Margin="5,0,0,0"
+                    Content="✕"
+                    Foreground="{DynamicResource XDeleteButtonForeground}"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
+                
+                <!-- ADD BASELIST -->
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add BaseList"
+                Command="{Binding DataContext.AddBaseListToRecordCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Margin="0,0,0,18"/>
+
+                <!-- DELETE RECORD -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                Command="{Binding DataContext.DeleteItemCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+        </ScrollViewer>
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- ENTITY PROPERTIES                                         -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Entity}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- ENTITY TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource EntityBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="◇"
+                        Foreground="White"
+                        FontSize="12"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Entity"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- NAME -->
+
+                <TextBlock
+                Text="Name"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <TextBox
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                Background="{DynamicResource InputBackground}"
+                BorderBrush="{DynamicResource InputBorder}"
+                Foreground="{DynamicResource InputForeground}"
+                Padding="8,6"
+                Margin="0,0,0,18"/>
+
+                <!-- FIELDS -->
+
+                <TextBlock
+                Text="Fields"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,8"/>
+
+                <ItemsControl ItemsSource="{Binding Fields}">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+
+                            <Grid Margin="0,0,0,6">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                Grid.Column="0"
+                                Background="{DynamicResource InputBackground}"
+                                BorderBrush="{DynamicResource InputBorder}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="8,6">
+
+                                    <TextBlock
+                                    Text="{Binding Name}"
+                                    Foreground="{DynamicResource TextPrimary}"
+                                    VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="5,0,0,0"
+                                Content="✕"
+                                Foreground="{DynamicResource XDeleteButtonForeground}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontSize="13"
+                                Command="{Binding DataContext.DeleteItemCommand,
+                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+
+                <!-- ADD FIELD -->
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add Field"
+                Command="{Binding DataContext.AddFieldToEntityCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Margin="0,6,0,18"/>
+
+                <!-- BASELIST -->
+
+                 <StackPanel Orientation="Horizontal">
+                     <TextBlock
+	                Text="BaseList -"
+	                Foreground="{DynamicResource PropertiesSectionHeader}"
+	                FontSize="12"
+	                Margin="0,0,0,8"/>
+                     <TextBlock
+	                Text=" (Only one baselist allowed)"
+	                Foreground="{DynamicResource PropertiesSectionHeader}"
+	                FontSize="12"
+	                FontWeight="SemiBold"
+	                Margin="0,0,0,8"/>
+                 </StackPanel>
+
+                <ContentControl Content="{Binding BaseList}">
+
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+
+                            <Setter
+                            Property="Visibility"
+                            Value="Visible"/>
+
+                            <Style.Triggers>
+                                <DataTrigger
+                                Binding="{Binding BaseList}"
+                                Value="{x:Null}">
+
+                                    <Setter
+                                    Property="Visibility"
+                                    Value="Collapsed"/>
+
+                                </DataTrigger>
+                            </Style.Triggers>
+
+                        </Style>
+                    </ContentControl.Style>
+
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+
+                            <Grid Margin="0,0,0,6">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                Grid.Column="0"
+                                Background="{DynamicResource InputBackground}"
+                                BorderBrush="{DynamicResource InputBorder}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="8,6">
+
+                                    <TextBlock
+                                    Text="{Binding Name}"
+                                    Foreground="{DynamicResource TextPrimary}"
+                                    VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="5,0,0,0"
+                                Content="✕"
+                                Foreground="{DynamicResource XDeleteButtonForeground}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding DataContext.DeleteItemCommand,
+                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+
+                </ContentControl>
+
+                <!-- ADD BASELIST -->
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add BaseList"
+                ToolTip="Add a BaseList to this Entity"
+                Command="{Binding DataContext.AddBaseListToEntityCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Margin="0,0,0,18"/>
+
+                <!-- DELETE ENTITY -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                ToolTip="Delete Entity"
+                Command="{Binding DataContext.DeleteItemCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- ENUM PROPERTIES                                          -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:EnumElement}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- ELEMENT TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource EnumElementBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="≡"
+                        Foreground="White"
+                        FontSize="12"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Enum"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- NAME -->
+
+                <TextBlock
+                Text="Name"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <TextBox
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                Background="{DynamicResource InputBackground}"
+                BorderBrush="{DynamicResource InputBorder}"
+                Foreground="{DynamicResource InputForeground}"
+                Padding="8,6"
+                Margin="0,0,0,18"/>
+
+                <!-- FIELDS -->
+
+                <TextBlock
+                Text="Fields"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,8"/>
+
+                <ItemsControl ItemsSource="{Binding Fields}">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+
+                            <Grid Margin="0,0,0,6">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                Grid.Column="0"
+                                Background="{DynamicResource InputBackground}"
+                                BorderBrush="{DynamicResource InputBorder}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="8,6">
+
+                                    <TextBlock
+                                    Text="{Binding Name}"
+                                    Foreground="{DynamicResource TextPrimary}"
+                                    VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="5,0,0,0"
+                                Content="✕"
+                                Foreground="{DynamicResource XDeleteButtonForeground}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontSize="13"
+                                Command="{Binding DataContext.DeleteItemCommand,
+                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+
+                <!-- ADD FIELD -->
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add Field"
+                Command="{Binding DataContext.AddEnumFieldToEnumElementCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Margin="0,6,0,18"/>
+
+                <!-- BASE -->
+
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock
+                    Text="Base -"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,8"/>
+
+                    <TextBlock
+                    Text=" (Only one Base allowed)"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,8"/>
+
+                </StackPanel>
+
+                <ContentControl Content="{Binding BaseItem}">
+
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+
+                            <Setter
+                            Property="Visibility"
+                            Value="Visible"/>
+
+                            <Style.Triggers>
+                                <DataTrigger
+                                Binding="{Binding BaseItem}"
+                                Value="{x:Null}">
+
+                                    <Setter
+                                    Property="Visibility"
+                                    Value="Collapsed"/>
+
+                                </DataTrigger>
+                            </Style.Triggers>
+
+                        </Style>
+                    </ContentControl.Style>
+
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+
+                            <Grid Margin="0,0,0,6">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                Grid.Column="0"
+                                Background="{DynamicResource InputBackground}"
+                                BorderBrush="{DynamicResource InputBorder}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="8,6">
+
+                                    <TextBlock
+                                    Text="{Binding Name}"
+                                    Foreground="{DynamicResource TextPrimary}"
+                                    VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="5,0,0,0"
+                                Content="✕"
+                                Foreground="{DynamicResource XDeleteButtonForeground}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontSize="13"
+                                Command="{Binding DataContext.DeleteItemCommand,
+                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+
+                </ContentControl>
+
+                <!-- ADD BASE -->
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add Base"
+                ToolTip="Add a Base to this Enum"
+                Command="{Binding DataContext.AddBaseToEnumElementCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Margin="0,0,0,18"/>
+
+                <!-- DELETE ENUM -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                Command="{Binding DataContext.DeleteItemCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+
+    <!-- ========================================================= -->
+    <!-- ENUMFIELD PROPERTIES                                     -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:EnumField}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- ================================================= -->
+                <!-- PROPERTIES HEADER                                 -->
+                <!-- ================================================= -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- ================================================= -->
+                <!-- TYPE                                              -->
+                <!-- ================================================= -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource EnumFieldBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="∈"
+                        Foreground="White"
+                        FontSize="12"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Enum Field"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- ================================================= -->
+                <!-- NAME                                              -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                Text="Name"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <TextBox
+                Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Background="{DynamicResource InputBackground}"
+                BorderBrush="{DynamicResource InputBorder}"
+                Foreground="{DynamicResource InputForeground}"
+                Padding="8,6"
+                Margin="0,0,0,15"/>
+
+                <!-- ================================================= -->
+                <!-- DELETE ENUM FIELD                                 -->
+                <!-- ================================================= -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                Command="{Binding DataContext.DeleteItemCommand,
+                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+
+
+    <!-- ========================================================= -->
+    <!-- COMPOSITE PROPERTIES                                      -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Composite}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                        RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- COMPOSITE TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource CompositeBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="◎"
+                        Foreground="White"
+                        FontSize="12"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Composite"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- NAME -->
+
+                <TextBlock
+                Text="Name"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <TextBox
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                Background="{DynamicResource InputBackground}"
+                BorderBrush="{DynamicResource InputBorder}"
+                Foreground="{DynamicResource InputForeground}"
+                Padding="8,6"
+                Margin="0,0,0,18"/>
+
+                <!-- COMPOSITE TYPE SELECTION -->
+
+                <TextBlock
+                Text="Composite type"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+
+                <ComboBox
+                    Style="{DynamicResource PropertyComboBoxStyle}"
+                    ItemsSource="{Binding DataContext.CompositeTypes,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    SelectedItem="{Binding CompositeType,
+                        Mode=TwoWay,
+                        UpdateSourceTrigger=PropertyChanged}"
+                    Tag="No Composite types available"
+                    Height="32"
+                    Margin="0,0,0,20"/>
+
+
+                <!-- PARTS SECTION HEADER -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,8">
+
+                    <TextBlock
+                    Text="Parts - "
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"/>
+
+                    <TextBlock
+                    Text="Only one Parts allowed"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    FontWeight="SemiBold"/>
+
+                </StackPanel>
+
+                <!-- EXISTING PARTS -->
+
+                <ContentControl Content="{Binding Parts}"
+                Margin="0,0,0,8">
+
+                    <ContentControl.Style>
+                        <Style TargetType="{x:Type ContentControl}">
+                            <Setter Property="Visibility" Value="Visible"/>
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Parts}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ContentControl.Style>
+
+                    <ContentControl.ContentTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0"
+                        Background="{DynamicResource InputBackground}"
+                        BorderBrush="{DynamicResource InputBorder}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        Padding="8,6">
+
+                                    <TextBlock Text="Parts"
+                               Foreground="{DynamicResource TextPrimary}"
+                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <Button Grid.Column="1"
+                        Width="28"
+                        Height="28"
+                        Margin="5,0,0,0"
+                        Content="✕"
+                        Foreground="{DynamicResource XDeleteButtonForeground}"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding DataContext.DeleteItemCommand,
+                            RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ContentControl.ContentTemplate>
+                </ContentControl>
+
+                <!-- ADD PARTS -->
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add Parts"
+                Command="{Binding DataContext.AddPartsToCompositeCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Margin="0,0,0,18"/>
+
+                <!-- DELETE COMPOSITE -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                ToolTip="Delete Composite"
+                Command="{Binding DataContext.DeleteItemCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+
+    <!-- ========================================================= -->
+	<!-- MEDIATOR PROPERTIES                                       -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Mediator}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource ClosePropertiesButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+				<StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,15">
+
+					<Border
+                        Width="27"
+                        Height="27"
+                        Background="{DynamicResource MediatorBorder}"
+                        CornerRadius="4"
+                        Margin="0,0,10,0">
+
+						<TextBlock
+                            Text="✦"
+                            Foreground="White"
+                            FontSize="12"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock
+                        Text="Mediator"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="12"/>
+
+				</StackPanel>
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+				<Button
+					Style="{DynamicResource DeleteButtonStyle}"
+					Content="DELETE"
+					Command="{Binding DataContext.DeleteItemCommand,
+							  RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+
+	<!-- ========================================================= -->
+	<!-- PROXY PROPERTIES                                          -->
+	<!-- ========================================================= -->
+
+	<DataTemplate DataType="{x:Type canvasElements:Proxy}">
+
+		<ScrollViewer VerticalScrollBarVisibility="Auto">
+
+			<StackPanel Margin="15">
+
+				<DockPanel Margin="0,0,0,18">
+
+					<TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+					<Button
+                        Content="x"
+                        Style="{StaticResource ClosePropertiesButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+				</DockPanel>
+
+				<StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,15">
+
+					<Border
+                        Width="27"
+                        Height="27"
+                        Background="{DynamicResource ProxyBorder}"
+                        CornerRadius="4"
+                        Margin="0,0,10,0">
+
+						<TextBlock
+                            Text="⬡"
+                            Foreground="White"
+                            FontSize="12"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+
+					</Border>
+
+					<TextBlock
+                        Text="Proxy"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="12"/>
+
+				</StackPanel>
+
+				<TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+				<TextBox
+                    Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    Foreground="{DynamicResource InputForeground}"
+                    Padding="8,6"/>
+
+				<Button
+					Style="{DynamicResource DeleteButtonStyle}"
+					Content="DELETE"
+					Command="{Binding DataContext.DeleteItemCommand,
+							  RelativeSource={RelativeSource AncestorType=Window}}"
+					CommandParameter="{Binding}"/>
+
+			</StackPanel>
+
+		</ScrollViewer>
+
+	</DataTemplate>
+
+
+    <!-- ========================================================= -->
+    <!-- FIELD PROPERTIES                                          -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Field}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- ================================================= -->
+                <!-- PROPERTIES HEADER                                 -->
+                <!-- ================================================= -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- ================================================= -->
+                <!-- FIELD TYPE                                        -->
+                <!-- ================================================= -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource FieldBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="▱"
+                        Foreground="White"
+                        FontSize="12"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Field"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- ================================================= -->
+                <!-- NAME                                              -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                Text="Name"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <TextBox
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                Background="{DynamicResource InputBackground}"
+                BorderBrush="{DynamicResource InputBorder}"
+                Foreground="{DynamicResource InputForeground}"
+                Padding="8,6"
+                Margin="0,0,0,15"/>
+
+                <!-- ================================================= -->
+                <!-- LAZY                                              -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                Text="Lazy"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEntityField}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <!-- LAZY CHECKBOX -->
+
+                <CheckBox
+                    Content="Is lazy?"
+                    IsChecked="{Binding IsLazy, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Margin="0,0,0,15"
+                    Command="{Binding DataContext.FieldLazyChangedCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}">
+
+                    <CheckBox.Style>
+                        <Style TargetType="CheckBox"
+                               BasedOn="{StaticResource CheckBoxStyle}">
+
+                            <Setter Property="Visibility"
+                                    Value="Collapsed"/>
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEntityField}"
+                                             Value="True">
+
+                                    <Setter Property="Visibility"
+                                            Value="Visible"/>
+
+                                </DataTrigger>
+                            </Style.Triggers>
+
+                        </Style>
+                    </CheckBox.Style>
+
+                </CheckBox>
+
+                <!-- ================================================= -->
+                <!-- TYPE                                              -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                Text="Type"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+
+                <ComboBox
+					Style="{DynamicResource PropertyComboBoxStyle}"
+					ItemsSource="{Binding DataContext.InputTypes,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+					SelectedItem="{Binding Type,
+                                       Mode=TwoWay,
+                                       UpdateSourceTrigger=PropertyChanged}"
+					Height="32"
+					Margin="0,0,0,15"/>
+                
+                <!-- ================================================= -->
+                <!-- LOGIC                                             -->
+                <!-- ================================================= -->
+
+                <StackPanel Margin="0,15,0,0">
+
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsLazy}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+
+                    <!-- LOGIC HEADER -->
+
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock
+                            Text="Logic -"
+                            Foreground="{DynamicResource PropertiesSectionHeader}"
+                            FontSize="12"
+                            Margin="0,0,4,8"/>      
+
+                        <TextBlock
+                            Text="(Only one logic allowed)"
+                            Foreground="{DynamicResource PropertiesSectionHeader}"
+                            FontSize="12"
+                            FontWeight="SemiBold"
+                            Margin="0,0,0,8"/>
+
+                    </StackPanel>
+
+                    <!-- LOGIC LIST -->
+
+                    <ItemsControl ItemsSource="{Binding Children}">
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <Grid Margin="0,0,0,6">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="32"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- LOGIC NAME -->
+
+                                    <Border
+                                         Grid.Column="0"
+                                        Background="{DynamicResource InputBackground}"
+                                        BorderBrush="{DynamicResource InputBorder}"
+                                        BorderThickness="1"
+                                        CornerRadius="4"
+                                        Padding="8,6">  
+
+                                        <TextBlock
+                                            Text="Logic"
+                                            Foreground="{DynamicResource TextPrimary}"
+                                            VerticalAlignment="Center"/>        
+
+                                    </Border>
+
+                                    <!-- DELETE LOGIC -->
+
+                                    <Button
+                                        Grid.Column="1"
+                                        Width="28"
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Content="✕"
+                                        Foreground="{DynamicResource XDeleteButtonForeground}"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        FontSize="13"
+                                        Command="{Binding DataContext.DeleteItemCommand,
+                                            RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding}"/>      
+
+                                </Grid>
+
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+
+                    </ItemsControl>
+
+                    <!-- ADD LOGIC -->
+
+                    <Button
+                        Style="{DynamicResource AddButtonStyle}"
+                        Content="Add Logic"
+                        IsEnabled="True"
+                        Command="{Binding DataContext.AddLogicToFieldCommand,
+                            RelativeSource={RelativeSource AncestorType=Window}}"
+                        CommandParameter="{Binding}"
+                        Margin="0,6,0,18"/>
+
+                </StackPanel>
+
+                <!-- ================================================= -->
+                <!-- DELETE FIELD                                      -->
+                <!-- ================================================= -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                Command="{Binding DataContext.DeleteItemCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- BASELIST PROPERTIES                                       -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:BaseList}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- ELEMENT TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource BaseListBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="▦"
+                        Foreground="White"
+                        FontSize="14"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="BaseList"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- BASES -->
+
+                <TextBlock
+                Text="Bases"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,8"/>
+
+                <ItemsControl ItemsSource="{Binding Children}">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+
+                            <Grid Margin="0,0,0,6">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                Grid.Column="0"
+                                Background="{DynamicResource InputBackground}"
+                                BorderBrush="{DynamicResource InputBorder}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="8,6">
+
+                                    <TextBlock
+                                    Text="{Binding Name}"
+                                    Foreground="{DynamicResource TextPrimary}"
+                                    VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="5,0,0,0"
+                                Content="✕"
+                                Foreground="{DynamicResource XDeleteButtonForeground}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontSize="13"
+                                Command="{Binding DataContext.DeleteItemCommand,
+                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+
+                <!-- ADD BASE -->
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add Base"
+                Command="{Binding DataContext.AddBaseToBaseListCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Margin="0,6,0,18"/>
+
+                <!-- DELETE BASELIST -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                Command="{Binding DataContext.DeleteItemCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- BASE PROPERTIES                                           -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Base}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- ELEMENT TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource BaseBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="↳"
+                        Foreground="White"
+                        FontSize="13"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Base"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- NAME -->
+
+                <TextBlock
+                Text="Name"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <TextBox
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                Background="{DynamicResource InputBackground}"
+                BorderBrush="{DynamicResource InputBorder}"
+                Foreground="{DynamicResource InputForeground}"
+                Padding="8,6"
+                Margin="0,0,0,18"/>
+
+                <!-- DELETE BASE -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                Command="{Binding DataContext.DeleteItemCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+
+    <!-- ========================================================= -->
+    <!-- LOGIC PROPERTIES                                          -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Logic}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                    RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- ELEMENT TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource LogicBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="ƒ"
+                        Foreground="White"
+                        FontSize="15"
+                        FontWeight="Bold"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Logic"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- TEXT -->
+
+                <TextBlock
+                Text="Text"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <TextBox
+                Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Background="{DynamicResource InputBackground}"
+                BorderBrush="{DynamicResource InputBorder}"
+                Foreground="{DynamicResource InputForeground}"
+                Padding="8,6"
+                AcceptsReturn="True"
+                TextWrapping="Wrap"
+                MinHeight="100"
+                VerticalScrollBarVisibility="Auto"
+                Margin="0,0,0,15"/>
+
+                <!-- DELETE LOGIC -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                Command="{Binding DataContext.DeleteItemCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+
+
+    <!-- ========================================================= -->
+    <!-- PARTS PROPERTIES                                          -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Parts}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                        RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- PARTS TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource PartsBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="⊞"
+                        Foreground="White"
+                        FontSize="15"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Parts"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- ENTITY SELECTION -->
+
+                <TextBlock
+                Text="Add Part"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <ComboBox
+                Style="{DynamicResource PropertyComboBoxStyle}"
+                ItemsSource="{Binding AvailableEntities}"
+                SelectedItem="{Binding SelectedEntity, Mode=TwoWay}"
+                Tag="No entities available"
+                Height="32"
+                Margin="0,0,0,8">
+
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                            Text="{Binding Name}"
+                            Foreground="{DynamicResource TextPrimary}"
+                            VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+
+                </ComboBox>
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add Part"
+                Command="{Binding DataContext.AddPartToPartsCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"
+                Margin="0,0,0,20"/>
+
+                <!-- ADDED PARTS -->
+
+                <TextBlock
+                Text="Added Parts"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                FontWeight="SemiBold"
+                Margin="0,0,0,8"/>
+
+                <ItemsControl ItemsSource="{Binding Children}">
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+
+                            <Grid Margin="0,0,0,6">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border
+                                Grid.Column="0"
+                                Background="{DynamicResource InputBackground}"
+                                BorderBrush="{DynamicResource InputBorder}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="8,6">
+
+                                    <TextBlock
+                                    Text="{Binding Entity.Name}"
+                                    Foreground="{DynamicResource TextPrimary}"
+                                    VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="5,0,0,0"
+                                Content="✕"
+                                Foreground="{DynamicResource XDeleteButtonForeground}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                ToolTip="Remove Part"
+                                Command="{Binding DataContext.DeleteItemCommand,
+                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+
+                            </Grid>
+
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+
+                <!-- DELETE PARTS CONTAINER -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                ToolTip="Delete Parts container"
+                Margin="0,18,0,0"
+                Command="{Binding DataContext.DeleteItemCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- PART PROPERTIES                                           -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Part}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                        RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- PART TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource PartBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="◈"
+                        Foreground="White"
+                        FontSize="12"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Part"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- NAME -->
+
+                <TextBlock
+                    Text="Name"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+                <TextBlock
+                    Text="{Binding Name}"
+                    Background="{DynamicResource InputBackground}"
+                    Foreground="{DynamicResource TextPrimary}"
+                    Padding="8,6"
+                    Margin="0,0,0,15"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- COMPOSITE TYPE PROPERTIES                                 -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:CompositeTypeElement}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource CompositeTypeBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="▰"
+                        Foreground="White"
+                        FontSize="14"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Composite Type"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- COMPOSITE TYPE -->
+
+                <TextBlock
+                Text="Relationship type"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <ComboBox
+                Style="{DynamicResource PropertyComboBoxStyle}"
+                ItemsSource="{Binding DataContext.CompositeTypes,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                SelectedItem="{Binding Parent.CompositeType,
+                                       Mode=TwoWay,
+                                       UpdateSourceTrigger=PropertyChanged}"
+                Height="32"
+                Margin="0,0,0,15"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+
+    <!-- ========================================================= -->
+    <!-- ACTION PROPERTIES                                         -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Action}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <Button
+                    Content="x"
+                    DockPanel.Dock="Right"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                        RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                </DockPanel>
+
+                <!-- ELEMENT TYPE -->
+
+                <StackPanel
+                Orientation="Horizontal"
+                Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource ActionBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="⊕"
+                        Foreground="White"
+                        FontSize="15"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Action"
+                    VerticalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- NAME -->
+
+                <TextBlock
+                Text="Name"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,5"/>
+
+                <TextBox
+                Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                Background="{DynamicResource InputBackground}"
+                BorderBrush="{DynamicResource InputBorder}"
+                Foreground="{DynamicResource InputForeground}"
+                Padding="8,6"
+                Margin="0,0,0,15"/>
+
+                <!-- PIPE AND FILTER -->
+
+                <CheckBox
+                Content="Pipe and Filter Action"
+                IsChecked="{Binding PipeAndFilterAction, Mode=TwoWay}"
+                Foreground="{DynamicResource TextPrimary}"
+                Margin="0,0,0,20"/>
+
+                <!-- INPUT SECTION -->
+
+                <StackPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Input — only one allowed"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,8"/>
+
+                    <ContentControl Content="{Binding InputElement}">
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding InputElement}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+
+                        <ContentControl.ContentTemplate>
+                            <DataTemplate>
+
+                                <Grid Margin="0,0,0,8">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="32"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border
+                                    Grid.Column="0"
+                                    Background="{DynamicResource InputBackground}"
+                                    BorderBrush="{DynamicResource InputBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8,6">
+
+                                        <TextBlock
+                                        Text="Input"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        VerticalAlignment="Center"/>
+
+                                    </Border>
+
+                                    <Button
+                                    Grid.Column="1"
+                                    Width="28"
+                                    Height="28"
+                                    Margin="5,0,0,0"
+                                    Content="✕"
+                                    Foreground="{DynamicResource XDeleteButtonForeground}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Command="{Binding DataContext.DeleteItemCommand,
+                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"/>
+
+                                </Grid>
+
+                            </DataTemplate>
+                        </ContentControl.ContentTemplate>
+
+                    </ContentControl>
+
+                    <Button
+                    Style="{DynamicResource AddButtonStyle}"
+                    Content="Add Input"
+                    Command="{Binding DataContext.AddInputToActionCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+                </StackPanel>
+
+                <!-- OUTPUT SECTION -->
+
+                <StackPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Output — only one allowed"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,8"/>
+
+                    <ContentControl Content="{Binding OutputElement}">
+
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding OutputElement}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                        
+                        <ContentControl.ContentTemplate>
+                            <DataTemplate>
+
+                                <Grid Margin="0,0,0,8">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="32"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border
+                                    Grid.Column="0"
+                                    Background="{DynamicResource InputBackground}"
+                                    BorderBrush="{DynamicResource InputBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8,6">
+
+                                        <TextBlock
+                                        Text="Output"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        VerticalAlignment="Center"/>
+
+                                    </Border>
+
+                                    <Button
+                                    Grid.Column="1"
+                                    Width="28"
+                                    Height="28"
+                                    Margin="5,0,0,0"
+                                    Content="✕"
+                                    Foreground="{DynamicResource XDeleteButtonForeground}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Command="{Binding DataContext.DeleteItemCommand,
+                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"/>
+
+                                </Grid>
+
+                            </DataTemplate>
+                        </ContentControl.ContentTemplate>
+
+                    </ContentControl>
+
+                    <Button
+                    Style="{DynamicResource AddButtonStyle}"
+                    Content="Add Output"
+                    Command="{Binding DataContext.AddOutputToActionCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+                </StackPanel>
+
+                <!-- LOGIC SECTION -->
+
+                <StackPanel Margin="0,0,0,20">
+
+                    <TextBlock
+                    Text="Logic — only one allowed"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,8"/>
+
+                    <ContentControl Content="{Binding LogicElement}">
+
+                        <ContentControl.Style>
+                            <Style TargetType="{x:Type ContentControl}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding LogicElement}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                        
+                        <ContentControl.ContentTemplate>
+                            <DataTemplate>
+
+                                <Grid Margin="0,0,0,8">
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="32"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border
+                                    Grid.Column="0"
+                                    Background="{DynamicResource InputBackground}"
+                                    BorderBrush="{DynamicResource InputBorder}"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8,6">
+
+                                        <TextBlock
+                                        Text="Logic"
+                                        Foreground="{DynamicResource TextPrimary}"
+                                        VerticalAlignment="Center"/>
+
+                                    </Border>
+
+                                    <Button
+                                    Grid.Column="1"
+                                    Width="28"
+                                    Height="28"
+                                    Margin="5,0,0,0"
+                                    Content="✕"
+                                    Foreground="{DynamicResource XDeleteButtonForeground}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    Command="{Binding DataContext.DeleteItemCommand,
+                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding}"/>
+
+                                </Grid>
+
+                            </DataTemplate>
+                        </ContentControl.ContentTemplate>
+
+                    </ContentControl>
+
+                    <Button
+                    Style="{DynamicResource AddButtonStyle}"
+                    Content="Add Logic"
+                    Command="{Binding DataContext.AddLogicToActionCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+                </StackPanel>
+
+                <!-- DELETE ACTION -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                Command="{Binding DataContext.DeleteItemCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- OUTPUT PROPERTIES                                         -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Output}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- ================================================= -->
+                <!-- PROPERTIES HEADER                                 -->
+                <!-- ================================================= -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                    Text="Properties"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center"/>
+
+                    <Button
+                    Content="x"
+                    Style="{StaticResource ClosePropertiesButtonStyle}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="0,0,14,0"
+                    Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- ================================================= -->
+                <!-- TYPE                                              -->
+                <!-- ================================================= -->
+
+                <StackPanel Orientation="Horizontal"
+                        Margin="0,0,0,15">
+
+                    <Border
+                    Width="27"
+                    Height="27"
+                    Background="{DynamicResource OutputElementBorder}"
+                    CornerRadius="4"
+                    Margin="0,0,10,0">
+
+                        <TextBlock
+                        Text="↗"
+                        Foreground="White"
+                        FontSize="12"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                    Text="Output"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Foreground="{DynamicResource TextPrimary}"
+                    FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- ================================================= -->
+                <!-- PARAMETERS                                        -->
+                <!-- ================================================= -->
+
+                <TextBlock
+                Text="Parameters"
+                Foreground="{DynamicResource PropertiesSectionHeader}"
+                FontSize="12"
+                Margin="0,0,0,8"/>
+
+                <ItemsControl ItemsSource="{Binding Children}">
+
+                    <ItemsControl.ItemTemplate>
+
+                        <DataTemplate DataType="{x:Type canvasElements:Parameter}">
+
+                            <Grid Margin="0,0,0,6">
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="32"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Parameter name -->
+
+                                <Border
+                                Grid.Column="0"
+                                Background="{DynamicResource InputBackground}"
+                                BorderBrush="{DynamicResource InputBorder}"
+                                BorderThickness="1"
+                                CornerRadius="4"
+                                Padding="8,6">
+
+                                    <TextBlock
+                                    Text="{Binding Name}"
+                                    Foreground="{DynamicResource TextPrimary}"
+                                    VerticalAlignment="Center"/>
+
+                                </Border>
+
+                                <!-- Delete parameter -->
+
+                                <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="5,0,0,0"
+                                Content="✕"
+                                Foreground="{DynamicResource XDeleteButtonForeground}"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                FontSize="13"
+                                Command="{Binding DataContext.DeleteItemCommand,
+                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding}"/>
+
+                            </Grid>
+
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+
+                <!-- ================================================= -->
+                <!-- ADD PARAMETER                                     -->
+                <!-- ================================================= -->
+
+                <Button
+                Style="{DynamicResource AddButtonStyle}"
+                Content="Add Parameter"
+                Command="{Binding DataContext.AddParameterToOutputCommand,
+                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+                <!-- ================================================= -->
+                <!-- DELETE OUTPUT                                     -->
+                <!-- ================================================= -->
+
+                <Button
+                Style="{DynamicResource DeleteButtonStyle}"
+                Content="DELETE"
+                Command="{Binding DataContext.DeleteItemCommand,
+                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- ACTION REFERENCE PROPERTIES                               -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:ActionReference}">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Margin="15">
+
+                <!-- PROPERTIES HEADER -->
+
+                <DockPanel Margin="0,0,0,18">
+
+                    <TextBlock
+                        Text="Properties"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        VerticalAlignment="Center"/>
+
+                    <Button
+                        Content="x"
+                        Style="{StaticResource ClosePropertiesButtonStyle}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        Margin="0,0,14,0"
+                        Command="{Binding DataContext.ShowPropertiesButtonClicked,
+                            RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+                </DockPanel>
+
+                <!-- TYPE -->
+
+                <StackPanel
+                    Orientation="Horizontal"
+                    Margin="0,0,0,15">
+
+                    <Border
+                        Width="27"
+                        Height="27"
+                        Background="{DynamicResource ActionReferenceBorder}"
+                        CornerRadius="4"
+                        Margin="0,0,10,0">
+
+                        <TextBlock
+                            Text="↗"
+                            Foreground="White"
+                            FontSize="15"
+                            FontWeight="Bold"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+
+                    </Border>
+
+                    <TextBlock
+                        Text="Action Reference"
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource TextPrimary}"
+                        FontSize="12"/>
+
+                </StackPanel>
+
+                <!-- REFERENCED ACTION -->
+
+                <TextBlock
+                    Text="Referenced Action"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
+
+                <Border
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="8,6"
+                    Margin="0,0,0,15">
+
+                    <TextBlock
+                        Text="{Binding Name}"
+                        Foreground="{DynamicResource TextPrimary}"
+                        VerticalAlignment="Center"
+                        TextTrimming="CharacterEllipsis"/>
+
+                </Border>
+
+                <!-- DELETE -->
+
+                <Button
+                    Style="{DynamicResource DeleteButtonStyle}"
+                    Content="DELETE"
+                    ToolTip="Delete Action Reference"
+                    Command="{Binding DataContext.DeleteItemCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"/>
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+    </DataTemplate>
+
+</ResourceDictionary>

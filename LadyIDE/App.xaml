@@ -3,6 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:LadyIDE.WPF">
     <Application.Resources>
-         
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Themes/DarkTheme.xaml"/>
+
+
+                <!-- ================================================= -->
+                <!-- CONTROLS                                          -->
+                <!-- ================================================= -->
+
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Controls/ButtonStyles.xaml"/>
+
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Controls/MenuStyles.xaml"/>
+
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Controls/PaletteStyles.xaml"/>
+
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Controls/ScrollBarStyles.xaml"/>
+
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Controls/TabStyles.xaml"/>
+
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Controls/TextBoxStyles.xaml"/>
+
+
+                <!-- ================================================= -->
+                <!-- CANVAS                                            -->
+                <!-- ================================================= -->
+
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Canvas/CanvasItemStyles.xaml"/>
+
+                <!-- ================================================= -->
+                <!-- PROPERTIES                                        -->
+                <!-- ================================================= -->
+
+                <ResourceDictionary Source="/LadyIDE.WPF;component/Styles/Properties/PropertyStyles.xaml"/>
+
+            </ResourceDictionary.MergedDictionaries>
+
+        </ResourceDictionary>
+
     </Application.Resources>
 </Application>
