@@ -9,6 +9,11 @@ namespace LadyIDE.WPF.CanvasElements
 {
     public abstract class CanvasItemBase : INotifyPropertyChanged
     {
+        private const double DefaultHeaderHeight = 48;
+        private const double DefaultHeaderPadding = 120;
+        private const double AverageCharacterWidth = 8;
+        private const double ContentPadding = 20;
+
         private double _x;
         private double _y;
         private double _width;
@@ -27,6 +32,7 @@ namespace LadyIDE.WPF.CanvasElements
         {
             DefaultWidth = width;
             DefaultHeight = height;
+
             _width = width;
             _height = height;
 
@@ -83,7 +89,6 @@ namespace LadyIDE.WPF.CanvasElements
 
                 _width = value;
                 OnPropertyChanged();
-                UpdateLayoutAndSize();
             }
         }
 
@@ -96,7 +101,6 @@ namespace LadyIDE.WPF.CanvasElements
 
                 _height = value;
                 OnPropertyChanged();
-                UpdateLayoutAndSize();
             }
         }
 
@@ -126,15 +130,12 @@ namespace LadyIDE.WPF.CanvasElements
 
         protected virtual double GetHeaderWidth()
         {
-            const double averageCharacterWidth = 8;
-            const double headerPadding = 120;
-
-            return headerPadding + Name.Length * averageCharacterWidth;
+            return DefaultHeaderPadding + Name.Length * AverageCharacterWidth;
         }
 
         protected virtual double GetHeaderHeight()
         {
-            return 48;
+            return DefaultHeaderHeight;
         }
 
         public void UpdateLayoutAndSize()
@@ -142,6 +143,9 @@ namespace LadyIDE.WPF.CanvasElements
             if (_isUpdatingSize) return;
 
             _isUpdatingSize = true;
+
+            double previousWidth = Width;
+            double previousHeight = Height;
 
             try
             {
@@ -152,8 +156,6 @@ namespace LadyIDE.WPF.CanvasElements
 
                 if (Children.Count > 0)
                 {
-                    const double padding = 20;
-
                     double maxRight = 0;
                     double maxBottom = 0;
 
@@ -163,19 +165,22 @@ namespace LadyIDE.WPF.CanvasElements
                         maxBottom = Math.Max(maxBottom, child.Y + child.Height);
                     }
 
-                    requiredWidth = Math.Max(requiredWidth, maxRight + padding);
-                    requiredHeight = Math.Max(requiredHeight, GetHeaderHeight() + maxBottom + padding);
+                    requiredWidth = Math.Max(requiredWidth, maxRight + ContentPadding);
+                    requiredHeight = Math.Max(
+                        requiredHeight,
+                        GetHeaderHeight() + maxBottom + ContentPadding);
                 }
 
                 Width = requiredWidth;
-                Height = Math.Max(DefaultHeight, requiredHeight);
+                Height = requiredHeight;
             }
             finally
             {
                 _isUpdatingSize = false;
             }
 
-            Parent?.UpdateLayoutAndSize();
+            if (Width != previousWidth || Height != previousHeight)
+                Parent?.UpdateLayoutAndSize();
         }
 
         public Point FindFreeChildPosition(double childWidth, double childHeight)
@@ -213,8 +218,6 @@ namespace LadyIDE.WPF.CanvasElements
             {
                 foreach (CanvasItemBase child in e.OldItems)
                 {
-                    child.PropertyChanged -= Child_PropertyChanged;
-
                     if (child.Parent == this)
                         child.Parent = null;
                 }
@@ -223,20 +226,10 @@ namespace LadyIDE.WPF.CanvasElements
             if (e.NewItems != null)
             {
                 foreach (CanvasItemBase child in e.NewItems)
-                {
                     child.Parent = this;
-                    child.PropertyChanged -= Child_PropertyChanged;
-                    child.PropertyChanged += Child_PropertyChanged;
-                }
             }
 
             UpdateLayoutAndSize();
-        }
-
-        private void Child_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Width) || e.PropertyName == nameof(Height))
-                UpdateLayoutAndSize();
         }
 
         protected virtual void ArrangeChildren()

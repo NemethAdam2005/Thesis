@@ -1,5 +1,4 @@
-﻿
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace LadyIDE.WPF.CanvasElements
 {
@@ -22,6 +21,7 @@ namespace LadyIDE.WPF.CanvasElements
 
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Name));
+                UpdateLayoutAndSize();
             }
         }
 
@@ -31,16 +31,16 @@ namespace LadyIDE.WPF.CanvasElements
             set { }
         }
 
-        public Part() : base(150,43)
+        public Part() : base(150, 43)
         {
-
         }
 
         private void Entity_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(CanvasItemBase.Name))
-                OnPropertyChanged(nameof(Name));
-                UpdateLayoutAndSize();
+            if (!string.IsNullOrEmpty(e.PropertyName) && e.PropertyName != nameof(CanvasItemBase.Name)) return;
+
+            OnPropertyChanged(nameof(Name));
+            UpdateLayoutAndSize();
         }
     }
 }
