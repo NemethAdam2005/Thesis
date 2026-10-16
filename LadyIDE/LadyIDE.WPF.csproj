@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="Assets\LadyIDELogo.ico" />
+    <None Remove="Styles\Syntax\LogicEditorSyntax.xshd" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +30,7 @@
 
   <ItemGroup>
     <Resource Include="Assets\LadyIDELogo.ico" />
+    <Resource Include="Styles\Syntax\LogicEditorSyntax.xshd" />
   </ItemGroup>
 
   <ItemGroup>

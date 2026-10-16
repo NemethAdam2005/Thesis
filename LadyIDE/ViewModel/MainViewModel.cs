@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Data.Common;
 using System.IO;
 using System.Reflection.Metadata;
 using System.Text;
@@ -12,10 +13,12 @@ using System.Windows;
 
 namespace LadyIDE.WPF.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public partial class MainViewModel : ViewModelBase
     {
         #region Fields and Properties
         private readonly ApplicationModel _model;
+        private readonly LogicEditorDialogService _logicEditorDialogService = new();
+        private readonly LogicEditorViewModel _logicEditorViewModel;
 
         private string _code = string.Empty;
         public string Code 
@@ -239,11 +242,14 @@ namespace LadyIDE.WPF.ViewModel
             CanvasItems = new ObservableCollection<CanvasItemBase>();
             SelectedItems = new ObservableCollection<CanvasItemBase>();
 
+            _logicEditorViewModel = new LogicEditorViewModel();
+
             _model = model;
             _model.CodeChanged += new EventHandler<string>(Model_CodeChanged);
             _model.FileLoaded += new EventHandler<(string,string)>(Model_FileLoaded);
             _model.FileSaved += new EventHandler<string>(Model_FileSaved);
 
+            EditLogicCommand = new DelegateCommand(param => OnEditLogic(param as Logic));
             LoadFileCommand = new DelegateCommand(param => OnLoadFile());
             SaveAsFileCommand = new DelegateCommand(param => OnSaveAsFile());
             SaveFileCommand = new DelegateCommand(param => OnSaveFile());
@@ -289,6 +295,7 @@ namespace LadyIDE.WPF.ViewModel
         #endregion
 
         #region Commands
+        public DelegateCommand EditLogicCommand { get; private set; }
         public DelegateCommand LoadFileCommand { get; private set; }
         public DelegateCommand SaveAsFileCommand { get; private set; }
         public DelegateCommand SaveFileCommand { get; private set; }
@@ -360,6 +367,18 @@ namespace LadyIDE.WPF.ViewModel
         { 
             ConsoleText += $"[{DateTime.Now:HH:mm:ss}] File saved successfully to {e}.\n";
         }
+        #endregion
+
+        #region Logic editor
+
+        private void OnEditLogic(Logic? logic)
+        {
+            if (logic is not Logic) return;
+
+            _logicEditorViewModel.LoadLogic(logic);
+            _logicEditorDialogService.ShowDialog(_logicEditorViewModel);
+        }
+
         #endregion
 
         #region Save and Load methods
@@ -1143,6 +1162,7 @@ namespace LadyIDE.WPF.ViewModel
 
             Logic logic = new Logic
             {
+                Text = "text", 
             };
 
 
@@ -1447,7 +1467,7 @@ namespace LadyIDE.WPF.ViewModel
 
             Logic logic = new Logic
             {
-                Parent = action
+                Text = "text",
             };
 
             Point position = action.FindFreeChildPosition(logic.Width, logic.Height);

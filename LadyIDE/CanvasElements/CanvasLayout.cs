@@ -42,27 +42,27 @@ namespace LadyIDE.WPF.CanvasElements
             }
         }
 
-        public static void ArrangeInTwoColumns(IList<CanvasItemBase> children)
+        public static void ArrangeInTwoColumns(IEnumerable<CanvasItemBase> children)
         {
             double firstColumnWidth = 0;
 
-            for (int i = 0; i < children.Count; i += 2)
-                firstColumnWidth = Math.Max(firstColumnWidth, children[i].Width);
+            for (int i = 0; i < children.Count(); i += 2)
+                firstColumnWidth = Math.Max(firstColumnWidth, children.ElementAt(i).Width);
 
             double y = Padding;
 
-            for (int i = 0; i < children.Count; i += 2)
+            for (int i = 0; i < children.Count(); i += 2)
             {
-                CanvasItemBase leftChild = children[i];
+                CanvasItemBase leftChild = children.ElementAt(i);
 
                 leftChild.X = Padding;
                 leftChild.Y = y;
 
                 double rowHeight = leftChild.Height;
 
-                if (i + 1 < children.Count)
+                if (i + 1 < children.Count())
                 {
-                    CanvasItemBase rightChild = children[i + 1];
+                    CanvasItemBase rightChild = children.ElementAt(i + 1);
 
                     rightChild.X = Padding + firstColumnWidth + Spacing;
                     rightChild.Y = y;

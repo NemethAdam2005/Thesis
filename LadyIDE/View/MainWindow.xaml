@@ -6,8 +6,6 @@
         xmlns:richCanvas="clr-namespace:RichCanvas;assembly=RichCanvas"
         Title="LadyIDE"
         Icon="/Assets/LadyIDELogo.ico"
-        Width="1400"
-        Height="850"
         MinWidth="1100"
         MinHeight="650"
         Background="{DynamicResource AppBackground}"

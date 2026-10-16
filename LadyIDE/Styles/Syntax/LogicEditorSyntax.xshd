@@ -1,0 +1,34 @@
+﻿
+<SyntaxDefinition
+    name="LADY"
+    extensions=".lady"
+    xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+    <Color name="LogicalOperator" foreground="#D97706" fontWeight="bold" />
+    <Color name="Function" foreground="#38BDF8" fontWeight="bold" />
+    <Color name="ComparisonOperator" foreground="#C084FC" fontWeight="bold" />
+    <Color name="SpecialValue" foreground="#4ADE80" fontWeight="bold" />
+    <Color name="CodeTag" foreground="#F472B6" fontWeight="bold" />
+
+    <RuleSet>
+        <Keywords color="LogicalOperator">
+            <Word>AND</Word>
+            <Word>OR</Word>
+        </Keywords>
+
+        <Keywords color="Function">
+            <Word>map</Word>
+            <Word>flatten</Word>
+            <Word>forall</Word>
+            <Word>create</Word>
+        </Keywords>
+
+        <Keywords color="SpecialValue">
+            <Word>EMPTY</Word>
+        </Keywords>
+
+        <Rule color="ComparisonOperator">==|!=|:=|!</Rule>
+		<Rule color="LogicalOperator">\(|\)</Rule>
+        <Rule color="CodeTag">&lt;/?code&gt;</Rule>
+    </RuleSet>
+</SyntaxDefinition>
