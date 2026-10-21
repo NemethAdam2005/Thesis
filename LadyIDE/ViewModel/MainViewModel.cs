@@ -267,12 +267,16 @@ namespace LadyIDE.WPF.ViewModel
             AddRecordToComponentCommand = new DelegateCommand(param => IsAddRecordButtonEnabled(param as Component), param => OnAddRecordToComponent(param as Component));
             AddActionToComponentCommand = new DelegateCommand(param => IsAddActionButtonEnabled(param as Component), param => OnAddActionToComponent(param as Component));
             AddMediatorToComponentCommand = new DelegateCommand(param => IsAddMediatorButtonEnabled(param as Component), param => OnAddMediatorToComponent(param as Component));
+            AddTypePairsToMediatorCommand = new DelegateCommand(param => IsAddTypePairsButtonEnabled(param as Mediator),param => OnAddTypePairsToMediator(param as Mediator));
+            AddTypePairToTypePairsCommand = new DelegateCommand(param => OnAddTypePairToTypePairs(param as TypePairs));
             RecordButtonClicked = new DelegateCommand(param => OnRecordButtonClicked());
             EntityButtonClicked = new DelegateCommand(param => OnEntityButtonClicked());
             EnumButtonClicked = new DelegateCommand(param => OnEnumButtonClicked());
             CompositeButtonClicked = new DelegateCommand(param => OnCompositeButtonClicked());
             MediatorButtonClicked = new DelegateCommand(param => OnMediatorButtonClicked());
             ProxyButtonClicked = new DelegateCommand(param => OnProxyButtonClicked());
+            AddFieldToProxyCommand = new DelegateCommand(param => OnAddFieldToProxy(param as Proxy));
+            AddTypeToProxyCommand = new DelegateCommand(param => IsAddTypeToProxyButtonEnabled(param as Proxy),param => OnAddTypeToProxy(param as Proxy));
             AddInputToCommandCommand = new DelegateCommand(param => IsAddInputButtonEnabled(param as Command),param => OnAddInputToCommand(param as Command));
             AddParameterToInputCommand = new DelegateCommand(param => OnAddParameterToInput(param as Input));
             AddFieldToRecordCommand = new DelegateCommand(param => OnAddFieldToRecord(param as Record));
@@ -316,6 +320,8 @@ namespace LadyIDE.WPF.ViewModel
         public DelegateCommand AddRecordToComponentCommand { get; }
         public DelegateCommand AddActionToComponentCommand { get; }
         public DelegateCommand AddMediatorToComponentCommand { get; }
+        public DelegateCommand AddTypePairsToMediatorCommand { get; private set; }
+        public DelegateCommand AddTypePairToTypePairsCommand { get; private set; }
 
         public DelegateCommand RecordButtonClicked { get; private set; }
         public DelegateCommand AddFieldToRecordCommand { get; private set; }
@@ -336,6 +342,8 @@ namespace LadyIDE.WPF.ViewModel
         public DelegateCommand AddPartToPartsCommand { get; private set; }
         public DelegateCommand MediatorButtonClicked { get; private set; }
         public DelegateCommand ProxyButtonClicked { get; private set; }
+        public DelegateCommand AddFieldToProxyCommand { get; private set; }
+        public DelegateCommand AddTypeToProxyCommand { get; private set; }
 
         public DelegateCommand AddInputToActionCommand { get; private set; }
         public DelegateCommand AddOutputToActionCommand { get; private set; }
@@ -510,6 +518,12 @@ namespace LadyIDE.WPF.ViewModel
                     AddOutputToActionCommand.RaiseCanExecuteChanged();
                     AddLogicToActionCommand.RaiseCanExecuteChanged();
 
+                if (parent is Mediator)
+                    AddTypePairsToMediatorCommand.RaiseCanExecuteChanged();
+
+                if (parent is Proxy)
+                    AddTypeToProxyCommand.RaiseCanExecuteChanged();
+
                 item.Parent = null;
                 item.IsHighlighted = false;
                 SelectedItem = parent;
@@ -517,6 +531,7 @@ namespace LadyIDE.WPF.ViewModel
 
                 RefreshPartsAvailableEntities();
                 RefreshAvailableActions();
+                RefreshAvailableTypesToTypePairs();
                 return;
             }
             else if (CanvasItems.Contains(item))
@@ -535,6 +550,7 @@ namespace LadyIDE.WPF.ViewModel
 
                 RefreshPartsAvailableEntities();
                 RefreshAvailableActions();
+                RefreshAvailableTypesToTypePairs();
             }
         }
 
@@ -565,6 +581,7 @@ namespace LadyIDE.WPF.ViewModel
 
                 RefreshPartsAvailableEntities();
                 RefreshAvailableActions();
+                RefreshAvailableTypesToTypePairs();
             }));
         }
 
@@ -628,6 +645,21 @@ namespace LadyIDE.WPF.ViewModel
 
             foreach (CanvasElements.Action action in actions)
                 AvailableActions.Add(action);
+        }
+
+        private void RefreshAvailableTypesToTypePairs()
+        {
+            List<CanvasItemBase> allItems = GetAllCanvasItems(CanvasItems).ToList();
+
+            List<CanvasItemBase> availableTypes = allItems
+                .Where(item => item is Entity or Record or Proxy)
+                .ToList();
+
+            foreach (TypePair typePair in allItems.OfType<TypePair>())
+                typePair.RefreshAvailableTypes(availableTypes);
+
+            foreach (CanvasElements.Type type in allItems.OfType<CanvasElements.Type>())
+                type.RefreshAvailableTypes(availableTypes);
         }
 
 
@@ -901,6 +933,7 @@ namespace LadyIDE.WPF.ViewModel
             component.UpdateLayoutAndSize();
 
             AddRecordToComponentCommand.RaiseCanExecuteChanged();
+            RefreshAvailableTypesToTypePairs();
 
             LogAddition(record, component);
         }
@@ -968,6 +1001,59 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(mediator, component);
         }
 
+        // TypePairs to Mediator
+        private bool IsAddTypePairsButtonEnabled(Mediator? mediator)
+        {
+            if (mediator == null) return false;
+
+            return !mediator.Children.OfType<TypePairs>().Any();
+        }
+
+        private void OnAddTypePairsToMediator(Mediator? mediator)
+        {
+            if (mediator == null || mediator.Children.OfType<TypePairs>().Any()) return;
+
+            TypePairs typePairs = new TypePairs
+            {
+                Parent = mediator
+            };
+
+            Point position = mediator.FindFreeChildPosition(typePairs.Width, typePairs.Height);
+
+            typePairs.X = position.X;
+            typePairs.Y = position.Y;
+
+            mediator.Children.Add(typePairs);
+            mediator.UpdateLayoutAndSize();
+
+            AddTypePairsToMediatorCommand.RaiseCanExecuteChanged();
+
+            LogAddition(typePairs, mediator);
+        }
+
+        // TypePair to TypePairs
+        private void OnAddTypePairToTypePairs(TypePairs? typePairs)
+        {
+            if (typePairs == null) return;
+
+            TypePair typePair = new TypePair
+            {
+                Parent = typePairs
+            };
+
+            typePair.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            Point position = typePairs.FindFreeChildPosition(typePair.Width, typePair.Height);
+
+            typePair.X = position.X;
+            typePair.Y = position.Y;
+
+            typePairs.Children.Add(typePair);
+            typePairs.UpdateLayoutAndSize();
+
+            LogAddition(typePair, typePairs);
+        }
+
         //Record
         private void OnRecordButtonClicked()
         {
@@ -980,6 +1066,7 @@ namespace LadyIDE.WPF.ViewModel
 
             AddElementToCanvas(record);
             LogAddition(record, null);
+            RefreshAvailableTypesToTypePairs();
         }
 
         //Field to Record
@@ -1072,6 +1159,7 @@ namespace LadyIDE.WPF.ViewModel
             };
 
             AddElementToCanvas(entity);
+            RefreshAvailableTypesToTypePairs();
             RefreshPartsAvailableEntities();
             LogAddition(entity, null);
         }
@@ -1107,7 +1195,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(field, entity);
         }
 
-        //Lazy to Field
+        //Lazy
         private void OnFieldLazyChanged(CanvasItemBase? item)
         {
             if (item is not Field field || field.IsLazy) return;
@@ -1151,7 +1239,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             if (field == null) return false;
 
-            return field.Parent is Entity &&
+            return field.Parent is Entity or Proxy &&
                    field.IsLazy &&
                    !field.Children.OfType<Logic>().Any();
         }
@@ -1359,6 +1447,69 @@ namespace LadyIDE.WPF.ViewModel
 
             AddElementToCanvas(proxy);
             LogAddition(proxy, null);
+            RefreshAvailableTypesToTypePairs();
+        }
+
+        // Field to Proxy
+        private void OnAddFieldToProxy(Proxy? proxy)
+        {
+            if (proxy == null) return;
+
+            int fieldNumber = proxy.Children.OfType<Field>().Count() + 1;
+
+            Field field = new Field
+            {
+                Name = $"Field{fieldNumber}",
+                Parent = proxy
+            };
+
+            field.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(Field.IsLazy))
+                    AddLogicToFieldCommand.RaiseCanExecuteChanged();
+            };
+
+            Point position = proxy.FindFreeChildPosition(field.Width, field.Height);
+
+            field.X = position.X;
+            field.Y = position.Y;
+
+            proxy.Children.Add(field);
+            proxy.UpdateLayoutAndSize();
+
+            LogAddition(field, proxy);
+        }
+
+        // Type to Proxy
+        private bool IsAddTypeToProxyButtonEnabled(Proxy? proxy)
+        {
+            if (proxy == null) return false;
+
+            return !proxy.Children.OfType<CanvasElements.Type>().Any();
+        }
+
+        private void OnAddTypeToProxy(Proxy? proxy)
+        {
+            if (proxy == null || proxy.Children.OfType<CanvasElements.Type>().Any()) return;
+
+            CanvasElements.Type type = new CanvasElements.Type
+            {
+                Parent = proxy
+            };
+
+            type.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            Point position = proxy.FindFreeChildPosition(type.Width, type.Height);
+
+            type.X = position.X;
+            type.Y = position.Y;
+
+            proxy.Children.Add(type);
+            proxy.UpdateLayoutAndSize();
+
+            AddTypeToProxyCommand.RaiseCanExecuteChanged();
+
+            LogAddition(type, proxy);
         }
 
         //Input to Action

@@ -1,7 +1,4 @@
-﻿
-using System;
-
-namespace LadyIDE.WPF.CanvasElements
+﻿namespace LadyIDE.WPF.CanvasElements
 {
     public class Field : CanvasItemBase
     {
@@ -10,7 +7,9 @@ namespace LadyIDE.WPF.CanvasElements
 
         public bool IsEntityField => Parent is Entity;
 
-        public bool ShowLazyIndicator => IsLazy && IsEntityField;
+        public bool IsLazyCapableField => Parent is Entity or Proxy;
+
+        public bool ShowLazyIndicator => IsLazy && IsLazyCapableField;
 
         public string Type
         {

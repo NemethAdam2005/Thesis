@@ -753,10 +753,7 @@
     <DataTemplate DataType="{x:Type canvasElements:Mediator}">
 
         <Border
-         Style="{StaticResource MediatorCanvasItemStyle}"
-         behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
-         RelativeSource={RelativeSource AncestorType=Window}}"
-         behaviors:CommandBehavior.CommandParameter="{Binding}">
+         Style="{StaticResource MediatorCanvasItemStyle}">
 
             <Grid>
 
@@ -774,9 +771,12 @@
                 <!-- ================================================= -->
 
                 <Border
-             Grid.Row="0"
-             Background="{DynamicResource MediatorHeader}"
-             Padding="12,0">
+                Grid.Row="0"
+                Background="{DynamicResource MediatorHeader}"
+                Padding="12,0"
+                behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+                behaviors:CommandBehavior.CommandParameter="{Binding}">
 
                     <StackPanel
                   Orientation="Horizontal"
@@ -807,6 +807,26 @@
                     </StackPanel>
 
                 </Border>
+                
+                <ItemsControl Grid.Row="1"
+                              ItemsSource="{Binding Children}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                            <Setter Property="Width" Value="{Binding Width}"/>
+                            <Setter Property="Height" Value="{Binding Height}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+
+                </ItemsControl>
 
             </Grid>
 
@@ -820,64 +840,90 @@
 
     <DataTemplate DataType="{x:Type canvasElements:Proxy}">
 
-        <Border
-      Style="{StaticResource ProxyCanvasItemStyle}"
-      behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
-      RelativeSource={RelativeSource AncestorType=Window}}"
-      behaviors:CommandBehavior.CommandParameter="{Binding}">
+        <Border Style="{StaticResource ProxyCanvasItemStyle}">
 
             <Grid>
-
                 <Grid.RowDefinitions>
-
                     <RowDefinition Height="43"/>
-
                     <RowDefinition Height="*"/>
-
                 </Grid.RowDefinitions>
 
-
-                <!-- ================================================= -->
-                <!-- PROXY HEADER                                      -->
-                <!-- ================================================= -->
+                <!-- PROXY HEADER -->
 
                 <Border
-                    Grid.Row="0"
-                    Background="{DynamicResource ProxyHeader}"
-                    Padding="12,0">   
+                Grid.Row="0"
+                Background="{DynamicResource ProxyHeader}"
+                Padding="12,0"
+                behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                behaviors:CommandBehavior.CommandParameter="{Binding}">
 
                     <StackPanel
-               Orientation="Horizontal"
-               VerticalAlignment="Center">
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center">
 
                         <TextBlock
-                   Text="◆"
-                   Foreground="{DynamicResource ProxyBorder}"
-                   FontSize="15"
-                   Margin="0,0,8,0"
-                   VerticalAlignment="Center"/>
+                        Text="◆"
+                        Foreground="{DynamicResource ProxyBorder}"
+                        FontSize="15"
+                        Margin="0,0,8,0"
+                        VerticalAlignment="Center"/>
 
                         <TextBlock
-                   Text="PROXY"
-                   Foreground="{DynamicResource ProxyHeaderText}"
-                   FontSize="11"
-                   FontWeight="Bold"
-                   VerticalAlignment="Center"/>
+                        Text="PROXY"
+                        Foreground="{DynamicResource ProxyHeaderText}"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        VerticalAlignment="Center"/>
 
                         <TextBlock
-                   Text="{Binding Name}"
-                   Foreground="{DynamicResource ProxyNameText}"
-                   FontSize="13"
-                   FontWeight="SemiBold"
-                   Margin="12,0,0,0"
-                   VerticalAlignment="Center"/>
+                        Text="{Binding Name}"
+                        Foreground="{DynamicResource ProxyNameText}"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"/>
 
                     </StackPanel>
-
                 </Border>
 
-            </Grid>
+                <!-- PROXY CONTENT: FIELDS AND TYPE -->
 
+                <ItemsControl
+                Grid.Row="1"
+                ItemsSource="{Binding Children}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+
+                            <Setter
+                            Property="Canvas.Left"
+                            Value="{Binding X}"/>
+
+                            <Setter
+                            Property="Canvas.Top"
+                            Value="{Binding Y}"/>
+
+                            <Setter
+                            Property="Width"
+                            Value="{Binding Width}"/>
+
+                            <Setter
+                            Property="Height"
+                            Value="{Binding Height}"/>
+
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+
+                </ItemsControl>
+
+            </Grid>
         </Border>
 
     </DataTemplate>
@@ -1842,5 +1888,164 @@
         </Border>
     </DataTemplate>
 
+    <!-- ========================================================= -->
+    <!-- TYPE PAIRS TEMPLATE                                       -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:TypePairs}">
+
+        <Border Style="{StaticResource TypePairsCanvasItemStyle}">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="43"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                    Background="{DynamicResource TypePairsHeader}"
+                    CornerRadius="4,4,0,0"
+                    Padding="10,0"
+                    behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                    behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+                    <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+
+                        <TextBlock Text="⇄"
+                               Foreground="{DynamicResource TypePairsBorder}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0,0,8,0"
+                               VerticalAlignment="Center"/>
+
+                        <TextBlock Text="TYPE PAIRS"
+                               Foreground="{DynamicResource TypePairsHeaderText}"
+                               FontSize="11"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"/>
+
+                        <TextBlock Text="{Binding Name}"
+                               Foreground="{DynamicResource TypePairsNameText}"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center"/>
+
+                    </StackPanel>
+                </Border>
+
+                <ItemsControl Grid.Row="1"
+                          ItemsSource="{Binding Children}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left" Value="{Binding X}"/>
+                            <Setter Property="Canvas.Top" Value="{Binding Y}"/>
+                            <Setter Property="Width" Value="{Binding Width}"/>
+                            <Setter Property="Height" Value="{Binding Height}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+
+                </ItemsControl>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- TYPE PAIR TEMPLATE                                        -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:TypePair}">
+
+        <Border Style="{StaticResource TypePairCanvasItemStyle}"
+            behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+                RelativeSource={RelativeSource AncestorType=Window}}"
+            behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                       Text="{Binding Type1DisplayName}"
+                       Foreground="{DynamicResource TypePairText}"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+
+                <TextBlock Grid.Column="1"
+                       Text=" ↔ "
+                       Foreground="{DynamicResource TypePairBorder}"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Column="2"
+                       Text="{Binding Type2DisplayName}"
+                       Foreground="{DynamicResource TypePairText}"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- TYPE TEMPLATE                                             -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Type}">
+
+        <Border
+        Style="{StaticResource TypeElementCanvasItemStyle}"
+        behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+            RelativeSource={RelativeSource AncestorType=Window}}"
+        behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+            <StackPanel
+            Orientation="Horizontal"
+            VerticalAlignment="Center">
+
+                <TextBlock
+                Text="τ"
+                Foreground="{DynamicResource TypeElementBorder}"
+                FontSize="17"
+                FontWeight="Bold"
+                Margin="0,0,8,0"
+                VerticalAlignment="Center"/>
+
+                <TextBlock
+                Text="TYPE"
+                Foreground="{DynamicResource TypeElementBorder}"
+                FontSize="10"
+                FontWeight="Bold"
+                Margin="0,0,8,0"
+                VerticalAlignment="Center"/>
+
+                <TextBlock
+                Text="{Binding Name}"
+                Foreground="{DynamicResource TypeElementText}"
+                FontSize="12"
+                FontWeight="SemiBold"
+                VerticalAlignment="Center"
+                TextTrimming="CharacterEllipsis"/>
+
+            </StackPanel>
+        </Border>
+
+    </DataTemplate>
 
 </ResourceDictionary>

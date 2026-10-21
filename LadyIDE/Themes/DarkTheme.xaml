@@ -503,6 +503,31 @@
     <SolidColorBrush x:Key="ActionReferenceSelectedBorder" Color="#C8BFFF"/>
     <SolidColorBrush x:Key="ActionReferenceNameText" Color="#E6E1FF"/>
 
+    <!-- ================================================= -->
+    <!-- TYPE PAIRS                                        -->
+    <!-- ================================================= -->
+
+    <SolidColorBrush x:Key="TypePairsBorder" Color="#22D3EE"/>
+    <SolidColorBrush x:Key="TypePairsHeader" Color="#123B45"/>
+    <SolidColorBrush x:Key="TypePairsBackground" Color="#102A32"/>
+    <SolidColorBrush x:Key="TypePairsHeaderText" Color="#A5F3FC"/>
+    <SolidColorBrush x:Key="TypePairsNameText" Color="#D9FBFF"/>
+
+    <!-- ================================================= -->
+    <!-- TYPE PAIR                                         -->
+    <!-- ================================================= -->
+
+    <SolidColorBrush x:Key="TypePairBorder" Color="#4ADE80"/>
+    <SolidColorBrush x:Key="TypePairBackground" Color="#122A1F"/>
+    <SolidColorBrush x:Key="TypePairText" Color="#C1F8D5"/>
+
+    <!-- ================================================= -->
+    <!-- TYPE ELEMENT                                      -->
+    <!-- ================================================= -->
+
+    <SolidColorBrush x:Key="TypeElementBorder" Color="#38BDF8"/>
+    <SolidColorBrush x:Key="TypeElementBackground" Color="#102B3A"/>
+    <SolidColorBrush x:Key="TypeElementText" Color="#C2F0FF"/>
 
     <!-- ================================================= -->
     <!-- PROPERTY COMBOBOX HOVER                           -->
