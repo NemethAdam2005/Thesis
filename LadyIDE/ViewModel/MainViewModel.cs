@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Data.Common;
 using System.IO;
 using System.Reflection.Metadata;
 using System.Text;
@@ -12,9 +13,12 @@ using System.Windows;
 
 namespace LadyIDE.WPF.ViewModel
 {
-    public class MainViewModel : ViewModelBase
+    public partial class MainViewModel : ViewModelBase
     {
+        #region Fields and Properties
         private readonly ApplicationModel _model;
+        private readonly LogicEditorDialogService _logicEditorDialogService = new();
+        private readonly LogicEditorViewModel _logicEditorViewModel;
 
         private string _code = string.Empty;
         public string Code 
@@ -230,17 +234,22 @@ namespace LadyIDE.WPF.ViewModel
 
         public ObservableCollection<CanvasItemBase> CanvasItems { get; }
         public ObservableCollection<CanvasItemBase> SelectedItems { get; }
+        #endregion
 
+        #region Constructor
         public MainViewModel(ApplicationModel model)
         {
             CanvasItems = new ObservableCollection<CanvasItemBase>();
             SelectedItems = new ObservableCollection<CanvasItemBase>();
+
+            _logicEditorViewModel = new LogicEditorViewModel();
 
             _model = model;
             _model.CodeChanged += new EventHandler<string>(Model_CodeChanged);
             _model.FileLoaded += new EventHandler<(string,string)>(Model_FileLoaded);
             _model.FileSaved += new EventHandler<string>(Model_FileSaved);
 
+            EditLogicCommand = new DelegateCommand(param => OnEditLogic(param as Logic));
             LoadFileCommand = new DelegateCommand(param => OnLoadFile());
             SaveAsFileCommand = new DelegateCommand(param => OnSaveAsFile());
             SaveFileCommand = new DelegateCommand(param => OnSaveFile());
@@ -283,8 +292,10 @@ namespace LadyIDE.WPF.ViewModel
             AddLogicToActionCommand = new DelegateCommand(param => IsAddLogicToActionButtonEnabled(param as LadyIDE.WPF.CanvasElements.Action),param => OnAddLogicToAction(param as LadyIDE.WPF.CanvasElements.Action));
             AddActionReferenceToCommandCommand = new DelegateCommand(param => IsAddActionReferenceToCommandButtonEnabled(param as Command),param => OnAddActionReferenceToCommand(param as Command));
         }
+        #endregion
 
-        //Commands
+        #region Commands
+        public DelegateCommand EditLogicCommand { get; private set; }
         public DelegateCommand LoadFileCommand { get; private set; }
         public DelegateCommand SaveAsFileCommand { get; private set; }
         public DelegateCommand SaveFileCommand { get; private set; }
@@ -330,16 +341,16 @@ namespace LadyIDE.WPF.ViewModel
         public DelegateCommand AddOutputToActionCommand { get; private set; }
         public DelegateCommand AddParameterToOutputCommand { get; private set; }
         public DelegateCommand AddLogicToActionCommand { get; private set; }
+        #endregion
 
-
-
-        //Events
+        #region Events
         public event EventHandler? LoadFile;
         public event EventHandler? SaveAsFile;
         public event EventHandler? SaveFile;
         public event EventHandler<string>? CodeChanged;
+        #endregion
 
-        //Model event handlers
+        #region Model evenet handlers
         private void Model_CodeChanged(Object? sender, String e)
         {
             Code = e;
@@ -356,8 +367,21 @@ namespace LadyIDE.WPF.ViewModel
         { 
             ConsoleText += $"[{DateTime.Now:HH:mm:ss}] File saved successfully to {e}.\n";
         }
+        #endregion
 
-        //Save and Load methods
+        #region Logic editor
+
+        private void OnEditLogic(Logic? logic)
+        {
+            if (logic is not Logic) return;
+
+            _logicEditorViewModel.LoadLogic(logic);
+            _logicEditorDialogService.ShowDialog(_logicEditorViewModel);
+        }
+
+        #endregion
+
+        #region Save and Load methods
         private void OnLoadFile()
         {
             LoadFile?.Invoke(this, EventArgs.Empty);
@@ -379,9 +403,9 @@ namespace LadyIDE.WPF.ViewModel
         {
             SaveAsFile?.Invoke(this, EventArgs.Empty);
         }
+        #endregion
 
-        //Log
-
+        #region Log methods
         private void LogAction(string message)
         {
             ConsoleText += $"[{DateTime.Now:HH:mm:ss}] {message}\n";
@@ -410,8 +434,11 @@ namespace LadyIDE.WPF.ViewModel
 
             LogAction($"{itemDescription} added to {location}.");
         }
+        #endregion
 
-        //UI event handlers
+        #region UI event handlers
+
+        #region Menu button click handlers
         private void OnColorThemeButtonClicked()
         {
             IsLightMode = !IsLightMode;
@@ -433,7 +460,9 @@ namespace LadyIDE.WPF.ViewModel
         {
             CaretPositionText = $"  Ln: {line}, Col: {column}";
         }
+        #endregion
 
+        #region Delete methods
         private void OnDeleteItem(CanvasItemBase? item)
         {
             if (item == null)
@@ -539,7 +568,6 @@ namespace LadyIDE.WPF.ViewModel
             }));
         }
 
-
         private void RemoveEntityReferences(Entity entity)
         {
             foreach (Parts parts in GetAllCanvasItems(CanvasItems).OfType<Parts>())
@@ -616,6 +644,9 @@ namespace LadyIDE.WPF.ViewModel
             return allItems;
         }
 
+        #endregion
+
+        #region Selection methods
         private void ClearHighlights(IEnumerable<CanvasItemBase> items)
         {
             foreach (CanvasItemBase item in items)
@@ -667,30 +698,34 @@ namespace LadyIDE.WPF.ViewModel
                 item.IsHighlighted = true;
             }
         }
+        #endregion
 
+        #region Element addition methods
+        //Basic addition function
         private void AddElementToCanvas(CanvasItemBase item)
         {
-            const double spacing = 20;
-            double newX = item.X;
-            double newY = item.Y;
-            while (CanvasItems.Any(existingItem =>
-                newX < existingItem.X + existingItem.Width + spacing &&
-                newX + item.Width + spacing > existingItem.X &&
-                newY < existingItem.Y + existingItem.Height + spacing &&
-                newY + item.Height + spacing > existingItem.Y))
-            {
-                newX += item.Width + spacing;
-                if (newX + item.Width > 1200)
-                {
-                    newX = 20;
-                    newY += item.Height + spacing;
-                }
-            }
-            item.X = newX;
-            item.Y = newY;
+            //const double spacing = 20;
+            //double newX = item.X;
+            //double newY = item.Y;
+            //while (CanvasItems.Any(existingItem =>
+            //    newX < existingItem.X + existingItem.Width + spacing &&
+            //    newX + item.Width + spacing > existingItem.X &&
+            //    newY < existingItem.Y + existingItem.Height + spacing &&
+            //    newY + item.Height + spacing > existingItem.Y))
+            //{
+            //    newX += item.Width + spacing;
+            //    if (newX + item.Width > 1200)
+            //    {
+            //        newX = 20;
+            //        newY += item.Height + spacing;
+            //    }
+            //}
+            //item.X = newX;
+            //item.Y = newY;
             CanvasItems.Add(item);
         }
 
+        //Application
         private void OnApplicationButtonClicked()
         {
             ConsoleApplication application = new ConsoleApplication
@@ -703,6 +738,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(application, null);
         }
 
+        //Command
         private void OnCommandButtonClicked()
         {
             Command command = new Command
@@ -715,6 +751,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(command, null);
         }
 
+        //ActionReference to Command
         private bool IsAddActionReferenceToCommandButtonEnabled(Command? command)
         {
             return command != null && !command.Children.OfType<ActionReference>().Any();
@@ -746,6 +783,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(actionReference, command);
         }
 
+        //Command to Application
         private void OnAddCommandToApplication(ConsoleApplication? application)
         {
             if (application == null)
@@ -774,6 +812,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(command, application);
         }
 
+        //Input to Command
         private void OnAddInputToCommand(Command? command)
         {
             if (command == null)
@@ -795,6 +834,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(input, command);
         }
 
+        //Parameter to Input
         private void OnAddParameterToInput(Input? input)
         {
             if (input == null || input.Parent == null)
@@ -826,6 +866,7 @@ namespace LadyIDE.WPF.ViewModel
             return !command.Children.OfType<Input>().Any();
         }
 
+        //Component
         private void OnComponentButtonClicked()
         {
             Component component = new Component
@@ -838,7 +879,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(component, null);
         }
 
-
+        //Record to Component
         private bool IsAddRecordButtonEnabled(Component? component)
         {
             if (component == null) return false;
@@ -864,7 +905,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(record, component);
         }
 
-
+        //Action to Component
         private bool IsAddActionButtonEnabled(Component? component)
         {
             if (component == null) return false;
@@ -901,7 +942,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(action, component);
         }
 
-
+        //Mediator to Component
         private bool IsAddMediatorButtonEnabled(Component? component)
         {
             if (component == null) return false;
@@ -927,7 +968,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(mediator, component);
         }
 
-
+        //Record
         private void OnRecordButtonClicked()
         {
             Record record = new Record
@@ -941,6 +982,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(record, null);
         }
 
+        //Field to Record
         private void OnAddFieldToRecord(Record? record)
         {
             if (record == null) return;
@@ -968,18 +1010,12 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(field, record);
         }
 
+        //BaseList to Record
         private bool IsAddBaseListButtonEnabled(Record? record)
         {
             if (record == null) return false;
 
             return !record.Children.OfType<BaseList>().Any();
-        }
-
-        private bool IsAddBaseListButtonEnabled(Entity? entity)
-        {
-            if (entity == null) return false;
-
-            return !entity.Children.OfType<BaseList>().Any();
         }
 
         private void OnAddBaseListToRecord(Record? record)
@@ -1003,7 +1039,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(baseList, record);
         }
 
-
+        //Base to BaseList
         private void OnAddBaseToBaseList(BaseList? baseList)
         {
             if (baseList == null) return;
@@ -1025,6 +1061,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(baseItem, baseList);
         }
 
+        //Entity
         private void OnEntityButtonClicked()
         {
             Entity entity = new Entity
@@ -1039,6 +1076,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(entity, null);
         }
 
+        //Field to Entity
         private void OnAddFieldToEntity(Entity? entity)
         {
             if (entity == null) return;
@@ -1069,6 +1107,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(field, entity);
         }
 
+        //Lazy to Field
         private void OnFieldLazyChanged(CanvasItemBase? item)
         {
             if (item is not Field field || field.IsLazy) return;
@@ -1076,6 +1115,14 @@ namespace LadyIDE.WPF.ViewModel
             Logic? logic = field.Children.OfType<Logic>().FirstOrDefault();
 
             if (logic != null) OnDeleteItem(logic);
+        }
+
+        //BaseList to Entity
+        private bool IsAddBaseListButtonEnabled(Entity? entity)
+        {
+            if (entity == null) return false;
+
+            return !entity.Children.OfType<BaseList>().Any();
         }
 
         private void OnAddBaseListToEntity(Entity? entity)
@@ -1099,6 +1146,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(baseList, entity);
         }
 
+        //Logic to Field
         private bool IsAddLogicButtonEnabled(Field? field)
         {
             if (field == null) return false;
@@ -1114,6 +1162,7 @@ namespace LadyIDE.WPF.ViewModel
 
             Logic logic = new Logic
             {
+                Text = "text", 
             };
 
 
@@ -1131,6 +1180,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(logic, field);
         }
 
+        //Enum
         private void OnEnumButtonClicked()
         {
             EnumElement enumElement = new EnumElement
@@ -1144,6 +1194,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(enumElement, null);
         }
 
+        //Base to Enum
         private bool IsAddBaseToEnumElementButtonEnabled(EnumElement? enumElement)
         {
             if (enumElement == null) return false;
@@ -1172,6 +1223,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(baseItem, enumElement);
         }
 
+        //EnumField to Enum
         private void OnAddEnumFieldToEnumElement(EnumElement? enumElement)
         {
             if (enumElement == null) return;
@@ -1193,6 +1245,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(field, enumElement);
         }
 
+        //Composite
         private void OnCompositeButtonClicked()
         {
             Composite composite = new Composite
@@ -1219,6 +1272,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(composite, null);
         }
 
+        //Parts to Composite
         private bool IsAddPartsButtonEnabled(Composite? composite)
         {
             if (composite == null) return false;
@@ -1250,7 +1304,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(parts, composite);
         }
 
-
+        //Part to Parts
         private void OnAddPartToParts(Parts? parts)
         {
             if (parts == null || parts.SelectedEntity == null) return;
@@ -1279,6 +1333,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(part, parts);
         }
 
+        //Mediator
         private void OnMediatorButtonClicked()
         {
             Mediator mediator = new Mediator
@@ -1292,6 +1347,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(mediator, null);
         }
 
+        //Proxy
         private void OnProxyButtonClicked()
         {
             Proxy proxy = new Proxy
@@ -1305,6 +1361,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(proxy, null);
         }
 
+        //Input to Action
         private bool IsAddInputToActionButtonEnabled(CanvasElements.Action? action)
         {
             if (action == null) return false;
@@ -1332,6 +1389,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(input, action);
         }
 
+        //Output to Action
         private bool IsAddOutputToActionButtonEnabled(CanvasElements.Action? action)
         {
             if (action == null) return false;
@@ -1372,6 +1430,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(result, output);
         }
 
+        //Parameter to Output
         private void OnAddParameterToOutput(Output? output)
         {
             if (output == null || output.Parent == null)
@@ -1394,6 +1453,7 @@ namespace LadyIDE.WPF.ViewModel
             LogAddition(parameter, output);
         }
 
+        //Logic to Action
         private bool IsAddLogicToActionButtonEnabled(CanvasElements.Action? action)
         {
             if (action == null) return false;
@@ -1407,7 +1467,7 @@ namespace LadyIDE.WPF.ViewModel
 
             Logic logic = new Logic
             {
-                Parent = action
+                Text = "text",
             };
 
             Point position = action.FindFreeChildPosition(logic.Width, logic.Height);
@@ -1420,7 +1480,9 @@ namespace LadyIDE.WPF.ViewModel
             AddLogicToActionCommand.RaiseCanExecuteChanged();
             LogAddition(logic, action);
         }
+        #endregion
 
+        #endregion
 
     }
 }

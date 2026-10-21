@@ -1,4 +1,5 @@
-﻿namespace LadyIDE.WPF.CanvasElements
+﻿
+namespace LadyIDE.WPF.CanvasElements
 {
     public class Parameter : CanvasItemBase
     {
@@ -17,21 +18,13 @@
             }
         }
 
-        public Parameter() : base(250,43)
+        public Parameter() : base(200, 43)
         {
         }
 
-        protected override double GetHeaderWidth()
+        protected override double GetRequiredOwnWidth()
         {
-            const double averageCharacterWidth = 7;
-            const double extraWidth = 20;
-
-            return Math.Max(DefaultWidth, extraWidth + (Name.Length + Type.Length) * averageCharacterWidth);
-        }
-
-        protected override double GetHeaderHeight()
-        {
-            return 43;
+            return base.GetRequiredOwnWidth() + Type.Length * 7;
         }
     }
 }

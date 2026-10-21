@@ -1822,7 +1822,7 @@
 
                 <!-- Elemtípus -->
                 <TextBlock
-                Text="ACTION REF"
+                Text="ACTION REFERENCE"
                 Foreground="{DynamicResource ActionReferenceBorder}"
                 FontSize="10"
                 FontWeight="Bold"

@@ -1,4 +1,7 @@
-﻿namespace LadyIDE.WPF.CanvasElements
+﻿
+using System;
+
+namespace LadyIDE.WPF.CanvasElements
 {
     public class Field : CanvasItemBase
     {
@@ -18,6 +21,7 @@
 
                 _type = value;
                 OnPropertyChanged();
+                UpdateLayoutAndSize();
             }
         }
 
@@ -39,13 +43,14 @@
         {
         }
 
-        protected override double GetHeaderWidth()
+        protected override double GetRequiredOwnWidth()
         {
-            if (IsLazy)
-            {
-                return base.GetHeaderWidth() + 10;
-            }
-            return base.GetHeaderWidth();
+            string headerText = $"{Name} - {Type}";
+            double indicatorWidth = ShowLazyIndicator ? 12 : 0;
+
+            return CanvasLayout.GetRequiredTextWidth(
+                headerText,
+                CanvasLayout.HeaderChromeWidth + indicatorWidth);
         }
     }
 }

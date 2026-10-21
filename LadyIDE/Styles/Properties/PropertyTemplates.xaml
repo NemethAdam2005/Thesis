@@ -2834,22 +2834,50 @@
                 <!-- TEXT -->
 
                 <TextBlock
-                Text="Text"
-                Foreground="{DynamicResource PropertiesSectionHeader}"
-                FontSize="12"
-                Margin="0,0,0,5"/>
+                    Text="Text"
+                    Foreground="{DynamicResource PropertiesSectionHeader}"
+                    FontSize="12"
+                    Margin="0,0,0,5"/>
 
-                <TextBox
-                Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                Background="{DynamicResource InputBackground}"
-                BorderBrush="{DynamicResource InputBorder}"
-                Foreground="{DynamicResource InputForeground}"
-                Padding="8,6"
-                AcceptsReturn="True"
-                TextWrapping="Wrap"
-                MinHeight="100"
-                VerticalScrollBarVisibility="Auto"
-                Margin="0,0,0,15"/>
+                <Border
+                    Background="{DynamicResource InputBackground}"
+                    BorderBrush="{DynamicResource InputBorder}"
+                    BorderThickness="1"
+                    CornerRadius="4"
+                    Padding="8"
+                    MinHeight="80"
+                    Margin="0,0,0,12">
+
+                    <TextBlock
+                        Text="{Binding Text}"
+                        Foreground="{DynamicResource InputForeground}"
+                        TextWrapping="Wrap"
+                        VerticalAlignment="Top"/>
+                </Border>
+
+                <Button
+                    Style="{DynamicResource AddButtonStyle}"
+                    Command="{Binding DataContext.EditLogicCommand,
+                        RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"
+                    Margin="0,0,0,15">
+
+                    <StackPanel
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+
+                        <TextBlock
+                            Text="✎"
+                            FontSize="15"
+                            Margin="0,0,7,0"
+                            VerticalAlignment="Center"/>
+
+                        <TextBlock
+                            Text="Edit logic"
+                            VerticalAlignment="Center"/>    
+
+                    </StackPanel>
+                </Button>
 
                 <!-- DELETE LOGIC -->
 

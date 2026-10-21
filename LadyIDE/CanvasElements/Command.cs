@@ -7,6 +7,8 @@ namespace LadyIDE.WPF.CanvasElements
     public class Command : CanvasItemBase
     {
         private Action? _selectedAction;
+        private Input? _input;
+        private ActionReference? _actionReference;
 
         public Action? SelectedAction
         {
@@ -20,8 +22,6 @@ namespace LadyIDE.WPF.CanvasElements
             }
         }
 
-        private Input? _input;
-
         public Input? Input
         {
             get => _input;
@@ -33,8 +33,6 @@ namespace LadyIDE.WPF.CanvasElements
                 OnPropertyChanged();
             }
         }
-
-        private ActionReference? _actionReference;
 
         public ActionReference? ActionReference
         {
@@ -67,18 +65,7 @@ namespace LadyIDE.WPF.CanvasElements
 
         protected override void ArrangeChildren()
         {
-            const double padding = 8;
-            const double spacing = 6;
-
-            double y = padding;
-
-            foreach (var child in Children)
-            {
-                child.X = padding;
-                child.Y = y;
-
-                y += child.Height + spacing;
-            }
+            CanvasLayout.ArrangeVertically(Children);
         }
     }
 }

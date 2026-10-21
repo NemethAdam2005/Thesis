@@ -1,15 +1,10 @@
-﻿using System;
+﻿
 using System.Linq;
 
 namespace LadyIDE.WPF.CanvasElements
 {
     public class Component : CanvasItemBase
     {
-        private const double Padding = 15;
-        private const double Spacing = 15;
-        private const double MinimumWidth = 150;
-        private const double MinimumHeight = 100;
-
         private Record? _record;
         private Action? _action;
         private Mediator? _mediator;
@@ -52,12 +47,7 @@ namespace LadyIDE.WPF.CanvasElements
 
         public Component() : base()
         {
-            Children.CollectionChanged += (_, _) =>
-            {
-                RefreshChildren();
-                UpdateLayoutAndSize();
-            };
-
+            Children.CollectionChanged += (_, _) => RefreshChildren();
             RefreshChildren();
         }
 
@@ -70,32 +60,7 @@ namespace LadyIDE.WPF.CanvasElements
 
         protected override void ArrangeChildren()
         {
-            double x = Padding;
-
-            foreach (CanvasItemBase child in Children)
-            {
-                child.X = x;
-                child.Y = Padding;
-
-                x += child.Width + Spacing;
-            }
-        }
-
-        protected override double GetHeaderWidth()
-        {
-            double childrenWidth = Padding * 2;
-
-            for (int i = 0; i < Children.Count; i++)
-            {
-                childrenWidth += Children[i].Width;
-
-                if (i < Children.Count - 1)
-                    childrenWidth += Spacing;
-            }
-
-            double nameWidth = Name.Length * 8 + 100;
-
-            return Math.Max(Math.Max(childrenWidth, nameWidth), MinimumWidth);
+            CanvasLayout.ArrangeHorizontally(Children);
         }
     }
 }

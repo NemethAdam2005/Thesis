@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace LadyIDE.WPF.CanvasElements
@@ -48,17 +49,7 @@ namespace LadyIDE.WPF.CanvasElements
 
         protected override void ArrangeChildren()
         {
-            const double padding = 8;
-            const double spacing = 6;
-
-            double y = padding;
-
-            foreach (Part part in Children)
-            {
-                part.X = padding;
-                part.Y = y;
-                y += part.Height + spacing;
-            }
+            CanvasLayout.ArrangeVertically(Children);
         }
     }
 }

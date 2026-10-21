@@ -1,7 +1,5 @@
 ﻿
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace LadyIDE.WPF.CanvasElements
@@ -26,12 +24,14 @@ namespace LadyIDE.WPF.CanvasElements
             get => _baseList;
             private set
             {
+                if (_baseList == value) return;
+
                 _baseList = value;
                 OnPropertyChanged(nameof(BaseList));
             }
         }
 
-        public Record() : base(250, 150)
+        public Record() : base()
         {
             Children.CollectionChanged += (_, _) => RefreshChildren();
             RefreshChildren();
@@ -44,51 +44,9 @@ namespace LadyIDE.WPF.CanvasElements
             UpdateLayoutAndSize();
         }
 
-
         protected override void ArrangeChildren()
         {
-            const double padding = 8;
-            const double spacing = 6;
-
-            double y = padding;
-            double fieldColumnWidth = 0;
-
-            foreach (Field field in Fields)
-                fieldColumnWidth = Math.Max(fieldColumnWidth, field.Width);
-
-            foreach (Field field in Fields)
-            {
-                field.X = padding;
-                field.Y = y;
-                y += field.Height + spacing;
-            }
-
-            if (BaseList == null) return;
-
-            BaseList.X = Fields.Any() ? padding + fieldColumnWidth + spacing : padding;
-            BaseList.Y = padding;
+            CanvasLayout.ArrangePrimaryColumnWithSideItem(Fields, BaseList);
         }
-
-        protected override double GetHeaderWidth()
-        {
-            const double padding = 8;
-            const double spacing = 6;
-
-            double fieldColumnWidth = 0;
-
-            foreach (Field field in Fields)
-                fieldColumnWidth = Math.Max(fieldColumnWidth, field.Width);
-
-            double requiredWidth = padding * 2;
-
-            if (Fields.Any())
-                requiredWidth += fieldColumnWidth;
-
-            if (BaseList != null)
-                requiredWidth += (Fields.Any() ? spacing : 0) + BaseList.Width;
-
-            return Math.Max(requiredWidth, Name.Length * 8 + 100);
-        }
-
     }
 }

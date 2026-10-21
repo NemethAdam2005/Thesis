@@ -36,8 +36,7 @@ namespace LadyIDE.WPF
 
             _view = new MainWindow();
             _view.DataContext = _mainViewModel;
-            _view.Height = 700;
-            _view.Width = 700;
+            _view.WindowState = WindowState.Maximized;
             _view.CodeEditor.TextChanged += CodeEditor_TextChanged;
             _view.CodeEditor.TextArea.Caret.PositionChanged += ViewModel_UpdateCaretPosition;
             _view.Show();

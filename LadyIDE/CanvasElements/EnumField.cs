@@ -1,4 +1,5 @@
-﻿namespace LadyIDE.WPF.CanvasElements
+﻿
+namespace LadyIDE.WPF.CanvasElements
 {
     public class EnumField : CanvasItemBase
     {
@@ -6,11 +7,9 @@
         {
         }
 
-        protected override double GetHeaderWidth()
+        protected override double GetRequiredOwnWidth()
         {
-            const double padding = 30;
-
-            return Math.Max(150, Name.Length * 8 + padding);
+            return CanvasLayout.GetRequiredTextWidth(Name, 30);
         }
     }
 }
