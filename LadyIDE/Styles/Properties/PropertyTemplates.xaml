@@ -743,11 +743,9 @@
 
 				<ComboBox
 					Style="{DynamicResource PropertyComboBoxStyle}"
-					ItemsSource="{Binding DataContext.InputTypes,
-                                      RelativeSource={RelativeSource AncestorType=Window}}"
-					SelectedItem="{Binding Type,
-                                       Mode=TwoWay,
-                                       UpdateSourceTrigger=PropertyChanged}"
+					ItemsSource="{Binding AvailableTypes}"
+                    SelectedItem="{Binding SelectedTypeOption, Mode=TwoWay}"
+                    DisplayMemberPath="Name"
 					Height="32"
 					Margin="0,0,0,15"/>
 

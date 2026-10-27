@@ -1074,7 +1074,7 @@
                 FontSize="11"/>
 
                 <TextBlock
-                Text="{Binding Type}"
+                Text="{Binding SelectedTypeOption.Name}"
                 Foreground="{DynamicResource ParameterHeaderText}"
                 FontSize="11"/>
 

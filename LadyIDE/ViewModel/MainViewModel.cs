@@ -532,6 +532,7 @@ namespace LadyIDE.WPF.ViewModel
                 RefreshPartsAvailableEntities();
                 RefreshAvailableActions();
                 RefreshAvailableTypesToTypePairs();
+                RefreshAllTypeOptions();
                 return;
             }
             else if (CanvasItems.Contains(item))
@@ -551,6 +552,7 @@ namespace LadyIDE.WPF.ViewModel
                 RefreshPartsAvailableEntities();
                 RefreshAvailableActions();
                 RefreshAvailableTypesToTypePairs();
+                RefreshAllTypeOptions();
             }
         }
 
@@ -582,6 +584,7 @@ namespace LadyIDE.WPF.ViewModel
                 RefreshPartsAvailableEntities();
                 RefreshAvailableActions();
                 RefreshAvailableTypesToTypePairs();
+                RefreshAllTypeOptions();
             }));
         }
 
@@ -625,6 +628,14 @@ namespace LadyIDE.WPF.ViewModel
                 if (command.SelectedAction == action)
                     command.SelectedAction = null;
             }
+        }
+
+        private void RefreshAllTypeOptions()
+        {
+            List<CanvasElements.Parameter> parameters = GetAllCanvasItems(CanvasItems).OfType<CanvasElements.Parameter>().ToList();
+
+            foreach (CanvasElements.Parameter parameter in parameters)
+                parameter.RefreshTypeOptions(GetAllCanvasItems(CanvasItems));
         }
 
         private void RefreshPartsAvailableEntities()
@@ -867,21 +878,21 @@ namespace LadyIDE.WPF.ViewModel
         }
 
         //Parameter to Input
+
         private void OnAddParameterToInput(Input? input)
         {
-            if (input == null || input.Parent == null)
-                return;
+            if (input == null || input.Parent == null) return;
 
             int parameterNumber = input.Children.OfType<CanvasElements.Parameter>().Count() + 1;
 
-            CanvasElements.Parameter parameter = new CanvasElements.Parameter
+            CanvasElements.Parameter parameter = new()
             {
                 Name = $"{input.Parent.Name}-parameter{parameterNumber}",
-                Type = "String"
             };
 
-            Point position = input.FindFreeChildPosition(parameter.Width, parameter.Height);
+            parameter.RefreshTypeOptions(GetAllCanvasItems(CanvasItems));
 
+            Point position = input.FindFreeChildPosition(parameter.Width, parameter.Height);
             parameter.X = position.X;
             parameter.Y = position.Y;
 
@@ -889,6 +900,7 @@ namespace LadyIDE.WPF.ViewModel
             input.UpdateLayoutAndSize();
             LogAddition(parameter, input);
         }
+
 
         private bool IsAddInputButtonEnabled(Command? command)
         {
@@ -934,6 +946,7 @@ namespace LadyIDE.WPF.ViewModel
 
             AddRecordToComponentCommand.RaiseCanExecuteChanged();
             RefreshAvailableTypesToTypePairs();
+            RefreshAllTypeOptions();
 
             LogAddition(record, component);
         }
@@ -972,6 +985,7 @@ namespace LadyIDE.WPF.ViewModel
             AddActionToComponentCommand.RaiseCanExecuteChanged();
             RefreshAvailableActions();
 
+            RefreshAllTypeOptions();
             LogAddition(action, component);
         }
 
@@ -1067,6 +1081,7 @@ namespace LadyIDE.WPF.ViewModel
             AddElementToCanvas(record);
             LogAddition(record, null);
             RefreshAvailableTypesToTypePairs();
+            RefreshAllTypeOptions();
         }
 
         //Field to Record
@@ -1161,6 +1176,7 @@ namespace LadyIDE.WPF.ViewModel
             AddElementToCanvas(entity);
             RefreshAvailableTypesToTypePairs();
             RefreshPartsAvailableEntities();
+            RefreshAllTypeOptions();
             LogAddition(entity, null);
         }
 
@@ -1279,6 +1295,7 @@ namespace LadyIDE.WPF.ViewModel
             };
 
             AddElementToCanvas(enumElement);
+            RefreshAllTypeOptions();
             LogAddition(enumElement, null);
         }
 
@@ -1569,8 +1586,7 @@ namespace LadyIDE.WPF.ViewModel
 
             CanvasElements.Parameter result = new CanvasElements.Parameter
             {
-                Name = $"result",
-                Type = "String"
+                Name = $"result"
             };
             Point resultPosition = output.FindFreeChildPosition(result.Width, result.Height);
 
@@ -1591,8 +1607,7 @@ namespace LadyIDE.WPF.ViewModel
 
             CanvasElements.Parameter parameter = new CanvasElements.Parameter
             {
-                Name = $"{output.Parent.Name}-parameter{parameterNumber}",
-                Type = "String"
+                Name = $"{output.Parent.Name}-parameter{parameterNumber}"
             };
 
             Point position = output.FindFreeChildPosition(parameter.Width, parameter.Height);
