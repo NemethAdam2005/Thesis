@@ -800,4 +800,35 @@
 
     </Style>
 
+    <!-- ========================================================= -->
+    <!-- FACTORY BORDER STYLE                                      -->
+    <!-- ========================================================= -->
+
+    <Style x:Key="FactoryCanvasItemStyle"
+       TargetType="Border">
+
+        <Setter Property="BorderBrush"
+            Value="{DynamicResource FactoryBorder}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+        <Setter Property="Background"
+            Value="{DynamicResource FactoryBackground}"/>
+
+        <Setter Property="CornerRadius"
+            Value="5"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsHighlighted}"
+                     Value="True">
+
+                <Setter Property="BorderThickness"
+                    Value="5"/>
+
+            </DataTrigger>
+        </Style.Triggers>
+
+    </Style>
+
 </ResourceDictionary>

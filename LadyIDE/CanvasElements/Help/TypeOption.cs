@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace LadyIDE.WPF.CanvasElements
+namespace LadyIDE.WPF.CanvasElements.Help
 {
     public class TypeOption : INotifyPropertyChanged
     {
@@ -11,11 +11,10 @@ namespace LadyIDE.WPF.CanvasElements
 
         public string Name => Item switch
         {
-            Entity entity => entity.Name,
-            Record record => record.Name,
-            EnumElement enumElement => enumElement.Name,
-            Proxy proxy => proxy.Name,
-            _ => Item?.Name ?? _primitiveName ?? string.Empty
+            Entity entity => entity.Name ?? "Not selected",
+            Record record => record.Name ?? "Not selected",
+            EnumElement enumElement => enumElement.Name ?? "Not selected",
+            _ => Item?.Name ?? _primitiveName ?? "Not selected"
         };
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -36,15 +35,10 @@ namespace LadyIDE.WPF.CanvasElements
 
         private void Item_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.PropertyName) ||
-                e.PropertyName == nameof(CanvasItemBase.Name))
+            if (string.IsNullOrEmpty(e.PropertyName) || e.PropertyName == nameof(CanvasItemBase.Name))
             {
-                PropertyChanged?.Invoke(
-                    this,
-                    new PropertyChangedEventArgs(nameof(Name)));
+                PropertyChanged?.Invoke(this,new PropertyChangedEventArgs(nameof(Name)));
             }
         }
-
-        public override string ToString() => Name;
     }
 }

@@ -530,6 +530,25 @@
     <SolidColorBrush x:Key="TypeElementBackground" Color="#E0F2FE"/>
     <SolidColorBrush x:Key="TypeElementText" Color="#075985"/>
 
+    <!-- ================================================= -->
+    <!-- FACTORY                                           -->
+    <!-- ================================================= -->
+
+    <SolidColorBrush x:Key="FactoryBorder"
+                 Color="#A93F36"/>
+
+    <SolidColorBrush x:Key="FactoryHeader"
+                 Color="#F6D5CE"/>
+
+    <SolidColorBrush x:Key="FactoryBackground"
+                 Color="#FFF4F1"/>
+
+    <SolidColorBrush x:Key="FactoryHeaderText"
+                 Color="#8C2F27"/>
+
+    <SolidColorBrush x:Key="FactoryNameText"
+                 Color="#57251F"/>
+
 
     <!-- ================================================= -->
     <!-- PROPERTY COMBOBOX HOVER                           -->

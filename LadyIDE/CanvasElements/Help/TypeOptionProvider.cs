@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace LadyIDE.WPF.CanvasElements
+namespace LadyIDE.WPF.CanvasElements.Help
 {
     public static class TypeOptionProvider
     {
@@ -22,6 +22,7 @@ namespace LadyIDE.WPF.CanvasElements
             bool entity = false,
             bool enumElement = false,
             bool proxy = false,
+            bool action = false,
             CanvasItemBase? exclude = null)
         {
             List<TypeOption> result = new();
@@ -48,6 +49,14 @@ namespace LadyIDE.WPF.CanvasElements
             if (proxy)
                 foreach (Proxy item in items.OfType<Proxy>())
                     result.Add(new TypeOption(item));
+
+            if (action)
+            {
+                foreach (Action actionItem in allItems.OfType<Action>())
+                {
+                    result.Add(new TypeOption(actionItem));
+                }
+            }
 
             return result;
         }

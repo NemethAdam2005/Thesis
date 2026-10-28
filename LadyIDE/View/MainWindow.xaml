@@ -521,6 +521,39 @@
 
                             </Button>
 
+                            <!-- ================================================= -->
+                            <!-- FACTORY                                           -->
+                            <!-- ================================================= -->
+
+                            <Button Style="{StaticResource PaletteButton}"
+                                    Command="{Binding FactoryButtonClicked}">
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <Border
+                                        Width="27"
+                                        Height="27"
+                                        Background="{DynamicResource FactoryBorder}"
+                                        CornerRadius="4"
+                                        Margin="0,0,10,0">
+
+                                        <TextBlock
+                                            Text="⚙"
+                                            Foreground="White"
+                                            FontSize="15"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"/>        
+
+                                    </Border>
+
+                                    <TextBlock
+                                        Text="Factory"
+                                        VerticalAlignment="Center"/>        
+
+                                </StackPanel>
+
+                            </Button>
+
                         </StackPanel>
 
                     </ScrollViewer>

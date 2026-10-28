@@ -1045,8 +1045,6 @@
         <Border
         Style="{StaticResource ParameterCanvasItemStyle}"
         Padding="8,5"
-        HorizontalAlignment="Stretch"
-        VerticalAlignment="Stretch"
         behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
         RelativeSource={RelativeSource AncestorType=Window}}"
         behaviors:CommandBehavior.CommandParameter="{Binding}">
@@ -1140,7 +1138,7 @@
                         VerticalAlignment="Center"/>
 
                         <TextBlock
-                        Text="{Binding Type}"
+                        Text="{Binding SelectedTypeOption.Name}"
                         Foreground="{DynamicResource FieldHeaderText}"
                         FontSize="13"
                         VerticalAlignment="Center"/>
@@ -1329,7 +1327,7 @@
                 Margin="0,0,7,0"/>
 
                 <TextBlock
-                Text="{Binding Name}"
+                Text="{Binding SelectedTypeOption.Name}"
                 Foreground="{DynamicResource BaseNameText}"
                 FontSize="11"
                 FontWeight="SemiBold"/>
@@ -1397,16 +1395,15 @@
                 <!-- LOGIC TEXT CONTENT -->
 
                 <Border
-                Grid.Row="1"
-                Background="{DynamicResource LogicBackground}"
-                Padding="8">
+                    Grid.Row="1"
+                    Background="{DynamicResource LogicBackground}"
+                    Padding="8,2">
 
                     <TextBlock
-                    Text="{Binding Text}"
-                    Foreground="{DynamicResource LogicNameText}"
-                    FontSize="12"
-                    TextWrapping="Wrap"
-                    VerticalAlignment="Top"/>
+                        Style="{StaticResource LogicPreviewTextBlockStyle}"
+                        Text="{Binding Text}"
+                        Foreground="{DynamicResource LogicNameText}"
+                        FontSize="12"/>
 
                 </Border>
 
@@ -1542,7 +1539,7 @@
                 VerticalAlignment="Center"/>
 
                 <TextBlock
-                Text="{Binding Entity.Name}"
+                Text="{Binding SelectedTypeOption.Name}"
                 Foreground="{DynamicResource PartNameText}"
                 FontSize="11"
                 VerticalAlignment="Center"/>
@@ -1978,7 +1975,7 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Grid.Column="0"
-                       Text="{Binding Type1DisplayName}"
+                       Text="{Binding SelectedType1Option.Name, TargetNullValue='Not selected', FallbackValue='Not selected'}"
                        Foreground="{DynamicResource TypePairText}"
                        FontSize="11"
                        FontWeight="SemiBold"
@@ -1993,7 +1990,7 @@
                        VerticalAlignment="Center"/>
 
                 <TextBlock Grid.Column="2"
-                       Text="{Binding Type2DisplayName}"
+                       Text="{Binding SelectedType2Option.Name, TargetNullValue='Not selected', FallbackValue='Not selected'}"
                        Foreground="{DynamicResource TypePairText}"
                        FontSize="11"
                        FontWeight="SemiBold"
@@ -2044,6 +2041,95 @@
                 TextTrimming="CharacterEllipsis"/>
 
             </StackPanel>
+        </Border>
+
+    </DataTemplate>
+
+    <!-- ========================================================= -->
+    <!-- FACTORY TEMPLATE                                          -->
+    <!-- ========================================================= -->
+
+    <DataTemplate DataType="{x:Type canvasElements:Factory}">
+
+        <Border Style="{StaticResource FactoryCanvasItemStyle}">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="43"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- FACTORY HEADER -->
+
+                <Border
+                Grid.Row="0"
+                Background="{DynamicResource FactoryHeader}"
+                Padding="12,0"
+                behaviors:CommandBehavior.Command="{Binding DataContext.SelectItemCommand,
+                    RelativeSource={RelativeSource AncestorType=Window}}"
+                behaviors:CommandBehavior.CommandParameter="{Binding}">
+
+                    <StackPanel
+                    Orientation="Horizontal"
+                    VerticalAlignment="Center">
+
+                        <TextBlock
+                        Text="⚙"
+                        Foreground="{DynamicResource FactoryBorder}"
+                        FontSize="15"
+                        Margin="0,0,8,0"
+                        VerticalAlignment="Center"/>
+
+                        <TextBlock
+                        Text="FACTORY"
+                        Foreground="{DynamicResource FactoryHeaderText}"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        VerticalAlignment="Center"/>
+
+                        <TextBlock
+                        Text="{Binding Name}"
+                        Foreground="{DynamicResource FactoryNameText}"
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Margin="12,0,0,0"
+                        VerticalAlignment="Center"/>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- FACTORY CONTENT: RECORDS, ACTIONS AND TYPE -->
+
+                <ItemsControl
+                Grid.Row="1"
+                ItemsSource="{Binding Children}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Left"
+                                Value="{Binding X}"/>
+
+                            <Setter Property="Canvas.Top"
+                                Value="{Binding Y}"/>
+
+                            <Setter Property="Width"
+                                Value="{Binding Width}"/>
+
+                            <Setter Property="Height"
+                                Value="{Binding Height}"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+
+                </ItemsControl>
+
+            </Grid>
+
         </Border>
 
     </DataTemplate>

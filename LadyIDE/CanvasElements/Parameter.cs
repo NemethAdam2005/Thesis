@@ -1,4 +1,5 @@
 ﻿
+using LadyIDE.WPF.CanvasElements.Help;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -48,7 +49,7 @@ namespace LadyIDE.WPF.CanvasElements
             UpdateLayoutAndSize();
         }
 
-        public void RefreshTypeOptions(IEnumerable<CanvasItemBase> allItems)
+        public void RefreshAvailableTypes(IEnumerable<CanvasItemBase> allItems)
         {
             List<TypeOption> types = TypeOptionProvider.RequiredTypes(
                 allItems,

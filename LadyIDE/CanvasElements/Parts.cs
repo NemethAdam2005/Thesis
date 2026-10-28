@@ -1,55 +1,61 @@
-﻿
-using System.Collections.ObjectModel;
+﻿using LadyIDE.WPF.CanvasElements.Help;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace LadyIDE.WPF.CanvasElements
 {
     public class Parts : CanvasItemBase
     {
-        private Entity? _selectedEntity;
-
-        public ObservableCollection<Entity> AvailableEntities { get; } = new();
-
-        public Entity? SelectedEntity
-        {
-            get => _selectedEntity;
-            set
-            {
-                if (_selectedEntity == value) return;
-
-                _selectedEntity = value;
-                OnPropertyChanged();
-            }
-        }
+        private List<CanvasItemBase> _allItems = new();
 
         public Parts() : base(220, 100)
         {
+            Children.CollectionChanged += Children_CollectionChanged;
         }
 
-        public void RefreshAvailableEntities(IEnumerable<Entity> allEntities)
+        private void Children_CollectionChanged(
+            object? sender,
+            NotifyCollectionChangedEventArgs e)
         {
-            Entity[] usedEntities = Children
-                .OfType<Part>()
-                .Where(part => part.Entity != null)
-                .Select(part => part.Entity!)
-                .ToArray();
+            foreach (Part part in Children.OfType<Part>())
+                part.RefreshAvailableTypes(_allItems);
 
-            Entity[] availableEntities = allEntities
-                .Where(entity => !usedEntities.Contains(entity))
-                .ToArray();
+            UpdateAvailableParts();
+            UpdateLayoutAndSize();
+        }
 
-            AvailableEntities.Clear();
+        public void RefreshAvailableTypes(IEnumerable<CanvasItemBase> allItems)
+        {
+            _allItems = allItems.ToList();
 
-            foreach (Entity entity in availableEntities)
-                AvailableEntities.Add(entity);
+            foreach (Part part in Children.OfType<Part>())
+                part.RefreshAvailableTypes(_allItems);
 
-            if (SelectedEntity != null && !AvailableEntities.Contains(SelectedEntity))
-                SelectedEntity = null;
+            UpdateAvailableParts();
+        }
+
+        public void UpdateAvailableParts()
+        {
+            List<Part> parts = Children.OfType<Part>().ToList();
+
+            foreach (Part part in parts)
+            {
+                List<CanvasItemBase> usedItems = parts
+                    .Where(other => !ReferenceEquals(other, part))
+                    .Select(other => other.SelectedTypeOption?.Item)
+                    .OfType<CanvasItemBase>()
+                    .ToList();
+
+                part.UpdateAvailableTypes(usedItems);
+            }
+
+            UpdateLayoutAndSize();
         }
 
         protected override void ArrangeChildren()
         {
-            CanvasLayout.ArrangeVertically(Children);
+            CanvasLayout.ArrangeVertically(Children.OfType<Part>());
         }
     }
 }

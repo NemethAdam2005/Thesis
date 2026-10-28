@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using LadyIDE.WPF.CanvasElements.Help;
+using System.Linq;
 
 namespace LadyIDE.WPF.CanvasElements
 {

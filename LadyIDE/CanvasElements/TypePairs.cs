@@ -1,4 +1,6 @@
-﻿namespace LadyIDE.WPF.CanvasElements
+﻿using LadyIDE.WPF.CanvasElements.Help;
+
+namespace LadyIDE.WPF.CanvasElements
 {
     public class TypePairs : CanvasItemBase
     {

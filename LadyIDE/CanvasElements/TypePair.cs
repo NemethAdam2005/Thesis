@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿
+using LadyIDE.WPF.CanvasElements.Help;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -7,112 +10,117 @@ namespace LadyIDE.WPF.CanvasElements
 {
     public class TypePair : CanvasItemBase
     {
-        private CanvasItemBase? _type1;
-        private CanvasItemBase? _type2;
+        private TypeOption? _selectedType1Option;
+        private TypeOption? _selectedType2Option;
 
-        public ObservableCollection<CanvasItemBase> AvailableTypes { get; } = new();
+        public ObservableCollection<TypeOption> AvailableTypes { get; } = new();
 
-        public CanvasItemBase? Type1
+        public TypeOption? SelectedType1Option
         {
-            get => _type1;
-            set => SetType(ref _type1, value, nameof(Type1));
+            get => _selectedType1Option;
+            set
+            {
+                if (ReferenceEquals(_selectedType1Option, value)) return;
+
+                if (_selectedType1Option != null)
+                    _selectedType1Option.PropertyChanged -= SelectedTypeOption_PropertyChanged;
+
+                _selectedType1Option = value;
+
+                if (_selectedType1Option != null)
+                    _selectedType1Option.PropertyChanged += SelectedTypeOption_PropertyChanged;
+
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Name));
+                UpdateLayoutAndSize();
+            }
         }
 
-        public CanvasItemBase? Type2
+        public TypeOption? SelectedType2Option
         {
-            get => _type2;
-            set => SetType(ref _type2, value, nameof(Type2));
-        }
+            get => _selectedType2Option;
+            set
+            {
+                if (ReferenceEquals(_selectedType2Option, value)) return;
 
-        public string Type1DisplayName => GetTypeDisplayName(Type1);
+                if (_selectedType2Option != null)
+                    _selectedType2Option.PropertyChanged -= SelectedTypeOption_PropertyChanged;
 
-        public string Type2DisplayName => GetTypeDisplayName(Type2);
+                _selectedType2Option = value;
 
-        public override string Name
-        {
-            get => $"({Type1DisplayName}, {Type2DisplayName})";
-            set { }
+                if (_selectedType2Option != null)
+                    _selectedType2Option.PropertyChanged += SelectedTypeOption_PropertyChanged;
+
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Name));
+                UpdateLayoutAndSize();
+            }
         }
 
         public TypePair() : base(230, 43)
         {
         }
 
-        public void RefreshAvailableTypes(IEnumerable<CanvasItemBase> availableTypes)
+        public void RefreshAvailableTypes(IEnumerable<CanvasItemBase> allItems)
         {
-            CanvasItemBase[] supportedTypes = availableTypes
-                .Where(IsSupportedType)
-                .Distinct()
-                .ToArray();
+            List<TypeOption> types = TypeOptionProvider.RequiredTypes(
+                allItems,
+                record: true);
 
-            foreach (CanvasItemBase item in AvailableTypes.ToList())
-                if (!supportedTypes.Contains(item))
-                    AvailableTypes.Remove(item);
-
-            foreach (CanvasItemBase item in supportedTypes)
-                if (!AvailableTypes.Contains(item))
-                    AvailableTypes.Add(item);
-
-            if (Type1 != null && !supportedTypes.Contains(Type1)) Type1 = null;
-            if (Type2 != null && !supportedTypes.Contains(Type2)) Type2 = null;
-        }
-
-        private void SetType(ref CanvasItemBase? field, CanvasItemBase? value, string propertyName)
-        {
-            if (value != null && !IsSupportedType(value)) return;
-            if (field == value) return;
-
-            if (field != null) field.PropertyChanged -= ReferencedType_PropertyChanged;
-
-            field = value;
-
-            if (field != null) field.PropertyChanged += ReferencedType_PropertyChanged;
-
-            OnPropertyChanged(propertyName);
-            OnPropertyChanged(nameof(Type1DisplayName));
-            OnPropertyChanged(nameof(Type2DisplayName));
-            OnPropertyChanged(nameof(Name));
-
-            UpdateLayoutAndSize();
-        }
-
-        private static bool IsSupportedType(CanvasItemBase item)
-        {
-            return item is Entity or Record or Proxy;
-        }
-
-        private static string GetTypeDisplayName(CanvasItemBase? item)
-        {
-            return item switch
+            foreach (TypeOption type in types)
             {
-                Entity entity => $"Entity: {entity.Name}",
-                Record record => $"Record: {record.Name}",
-                Proxy proxy => $"Proxy: {proxy.Name}",
-                _ => "Not selected"
-            };
+                if (!ContainsTypeOption(type, AvailableTypes))
+                    AvailableTypes.Add(type);
+            }
+
+            foreach (TypeOption type in AvailableTypes.ToList())
+            {
+                if (ContainsTypeOption(type, types)) continue;
+
+                bool isSelectedType1 = ReferenceEquals(SelectedType1Option, type);
+                bool isSelectedType2 = ReferenceEquals(SelectedType2Option, type);
+
+                AvailableTypes.Remove(type);
+
+                if (isSelectedType1)
+                    SelectedType1Option = null;
+
+                if (isSelectedType2)
+                    SelectedType2Option = null;
+            }
         }
 
-        private void ReferencedType_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private static bool ContainsTypeOption(
+            TypeOption type,
+            IEnumerable<TypeOption> container)
+        {
+            return container.Any(availableType =>
+                ReferenceEquals(availableType.Item, type.Item));
+        }
+
+        private void SelectedTypeOption_PropertyChanged(
+            object? sender,
+            PropertyChangedEventArgs e)
         {
             if (!string.IsNullOrEmpty(e.PropertyName) &&
-                e.PropertyName != nameof(CanvasItemBase.Name)) return;
+                e.PropertyName != nameof(TypeOption.Name)) return;
 
-            OnPropertyChanged(nameof(Type1DisplayName));
-            OnPropertyChanged(nameof(Type2DisplayName));
             OnPropertyChanged(nameof(Name));
-
             UpdateLayoutAndSize();
+        }
+
+        public override string Name
+        {
+            get => $"{SelectedType1Option?.Name ?? "Not selected"}, {SelectedType2Option?.Name ?? "Not selected"}";
+            set { }
         }
 
         protected override double GetRequiredOwnWidth()
         {
-            double type1Width = Type1DisplayName.Length * CanvasLayout.CharacterWidth;
-            double type2Width = Type2DisplayName.Length * CanvasLayout.CharacterWidth;
+            double type1Width = (SelectedType1Option?.Name.Length ?? 0) * CanvasLayout.CharacterWidth;
+            double type2Width = (SelectedType2Option?.Name.Length ?? 0) * CanvasLayout.CharacterWidth;
 
-            return Math.Max(
-                MinimumWidth - 10,
-                type1Width + type2Width + 55);
+            return Math.Max(MinimumWidth - 10, type1Width + type2Width + 55);
         }
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿
+using LadyIDE.WPF.CanvasElements.Help;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -7,25 +9,25 @@ namespace LadyIDE.WPF.CanvasElements
 {
     public class Type : CanvasItemBase
     {
-        private CanvasItemBase? _selectedType;
+        private TypeOption? _selectedTypeOption;
 
-        public ObservableCollection<CanvasItemBase> AvailableTypes { get; } = new();
+        public ObservableCollection<TypeOption> AvailableTypes { get; } = new();
 
-        public CanvasItemBase? SelectedType
+        public TypeOption? SelectedTypeOption
         {
-            get => _selectedType;
+            get => _selectedTypeOption;
             set
             {
-                if (value != null && !IsSupportedType(value) || ReferenceEquals(value, Parent)) return;
-                if (_selectedType == value) return;
+                if (ReferenceEquals(_selectedTypeOption, value)) return;
+                if (value != null && value.Item is not Record) return;
 
-                if (_selectedType != null)
-                    _selectedType.PropertyChanged -= SelectedType_PropertyChanged;
+                if (_selectedTypeOption != null)
+                    _selectedTypeOption.PropertyChanged -= SelectedTypeOption_PropertyChanged;
 
-                _selectedType = value;
+                _selectedTypeOption = value;
 
-                if (_selectedType != null)
-                    _selectedType.PropertyChanged += SelectedType_PropertyChanged;
+                if (_selectedTypeOption != null)
+                    _selectedTypeOption.PropertyChanged += SelectedTypeOption_PropertyChanged;
 
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Name));
@@ -35,13 +37,7 @@ namespace LadyIDE.WPF.CanvasElements
 
         public override string Name
         {
-            get => SelectedType switch
-            {
-                Entity entity => $"Entity: {entity.Name}",
-                Record record => $"Record: {record.Name}",
-                Proxy proxy => $"Proxy: {proxy.Name}",
-                _ => "Not selected"
-            };
+            get => SelectedTypeOption?.Name ?? "Not selected";
             set { }
         }
 
@@ -49,34 +45,58 @@ namespace LadyIDE.WPF.CanvasElements
         {
         }
 
-        public void RefreshAvailableTypes(IEnumerable<CanvasItemBase> availableTypes)
+        public void RefreshAvailableTypes(IEnumerable<CanvasItemBase> allItems)
         {
-            CanvasItemBase[] supportedTypes = availableTypes
-                .Where(item => IsSupportedType(item) && !ReferenceEquals(item, Parent))
-                .Distinct()
-                .ToArray();
+            List<TypeOption> types = TypeOptionProvider.RequiredTypes(
+                allItems,
+                record: true);
 
-            foreach (CanvasItemBase item in AvailableTypes.ToList())
-                if (!supportedTypes.Contains(item))
-                    AvailableTypes.Remove(item);
+            foreach (TypeOption type in types)
+            {
+                if (!ContainsTypeOption(type, AvailableTypes))
+                    AvailableTypes.Add(type);
+            }
 
-            foreach (CanvasItemBase item in supportedTypes)
-                if (!AvailableTypes.Contains(item))
-                    AvailableTypes.Add(item);
+            foreach (TypeOption type in AvailableTypes.ToList())
+            {
+                if (ContainsTypeOption(type, types)) continue;
 
-            if (SelectedType != null && !supportedTypes.Contains(SelectedType))
-                SelectedType = null;
+                if (ReferenceEquals(SelectedTypeOption, type))
+                    SelectedTypeOption = null;
+
+                AvailableTypes.Remove(type);
+            }
         }
 
-        private static bool IsSupportedType(CanvasItemBase item)
+        private static bool ContainsTypeOption(
+            TypeOption type,
+            IEnumerable<TypeOption> container)
         {
-            return item is Entity or Record or Proxy;
+            foreach (TypeOption availableType in container)
+            {
+                if (type.Item != null || availableType.Item != null)
+                {
+                    if (type.Item != null &&
+                        ReferenceEquals(type.Item, availableType.Item))
+                        return true;
+
+                    continue;
+                }
+
+                if (type.IsPrimitive == availableType.IsPrimitive &&
+                    type.Name == availableType.Name)
+                    return true;
+            }
+
+            return false;
         }
 
-        private void SelectedType_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void SelectedTypeOption_PropertyChanged(
+            object? sender,
+            PropertyChangedEventArgs e)
         {
             if (!string.IsNullOrEmpty(e.PropertyName) &&
-                e.PropertyName != nameof(CanvasItemBase.Name)) return;
+                e.PropertyName != nameof(TypeOption.Name)) return;
 
             OnPropertyChanged(nameof(Name));
             UpdateLayoutAndSize();
