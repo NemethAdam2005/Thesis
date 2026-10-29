@@ -187,6 +187,48 @@ namespace LadyIDE.WPF.ViewModel
             }
         }
 
+        private Size _canvasViewportSize = Size.Empty;
+
+        public Size CanvasViewportSize
+        {
+            get => _canvasViewportSize;
+            set
+            {
+                if (_canvasViewportSize == value) return;
+
+                _canvasViewportSize = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Point _canvasTranslateOffset;
+
+        public Point CanvasTranslateOffset
+        {
+            get => _canvasTranslateOffset;
+            set
+            {
+                if (_canvasTranslateOffset == value) return;
+
+                _canvasTranslateOffset = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _canvasScale = 1;
+
+        public double CanvasScale
+        {
+            get => _canvasScale;
+            set
+            {
+                if (_canvasScale == value) return;
+
+                _canvasScale = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string CodeTabHeader
         {
             get
@@ -661,8 +703,29 @@ namespace LadyIDE.WPF.ViewModel
         private void AddElementToCanvas(CanvasItemBase item)
         {
             const double spacing = 20;
-            double newX = item.X;
-            double newY = item.Y;
+
+            double scale = CanvasScale > 0 ? CanvasScale : 1;
+            double viewportWidth = CanvasViewportSize.Width > 0
+                ? CanvasViewportSize.Width
+                : 1200;
+            double viewportHeight = CanvasViewportSize.Height > 0
+                ? CanvasViewportSize.Height
+                : 800;
+
+            double visibleWidth = viewportWidth / scale;
+            double visibleHeight = viewportHeight / scale;
+
+            Point center = new(
+                (viewportWidth / 2 - CanvasTranslateOffset.X) / scale,
+                (viewportHeight / 2 - CanvasTranslateOffset.Y) / scale);
+
+            double visibleLeft = center.X - visibleWidth / 2;
+            double visibleTop = center.Y - visibleHeight / 2;
+            double visibleRight = center.X + visibleWidth / 2;
+
+            double newX = center.X - item.Width / 2;
+            double newY = center.Y - item.Height / 2;
+
             while (CanvasItems.Any(existingItem =>
                 newX < existingItem.X + existingItem.Width + spacing &&
                 newX + item.Width + spacing > existingItem.X &&
@@ -670,14 +733,17 @@ namespace LadyIDE.WPF.ViewModel
                 newY + item.Height + spacing > existingItem.Y))
             {
                 newX += item.Width + spacing;
-                if (newX + item.Width > 1200)
+
+                if (newX + item.Width > visibleRight)
                 {
-                    newX = 20;
+                    newX = visibleLeft;
                     newY += item.Height + spacing;
                 }
             }
+
             item.X = newX;
             item.Y = newY;
+
             CanvasItems.Add(item);
         }
 
@@ -686,9 +752,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             ConsoleApplication application = new ConsoleApplication
             {
-                Name = $"Application{CanvasItems.OfType<ConsoleApplication>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Application{CanvasItems.OfType<ConsoleApplication>().Count() + 1}"
             };
             AddElementToCanvas(application);
             LogAddition(application, null);
@@ -699,9 +763,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Command command = new Command
             {
-                Name = $"Command{CanvasItems.OfType<Command>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Command{CanvasItems.OfType<Command>().Count() + 1}"
             };
             AddElementToCanvas(command);
             LogAddition(command, null);
@@ -830,9 +892,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Component component = new Component
             {
-                Name = $"Component{CanvasItems.OfType<Component>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Component{CanvasItems.OfType<Component>().Count() + 1}"
             };
             AddElementToCanvas(component);
             LogAddition(component, null);
@@ -943,11 +1003,12 @@ namespace LadyIDE.WPF.ViewModel
         //Record
         private void OnRecordButtonClicked()
         {
+            int recordNumber = GetAllCanvasItems(CanvasItems)
+                .OfType<Record>()
+                .Count() + 1;
             Record record = new Record
             {
-                Name = $"Record{CanvasItems.OfType<Record>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Record{recordNumber}"
             };
 
             AddElementToCanvas(record);
@@ -1042,9 +1103,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Entity entity = new Entity
             {
-                Name = $"Entity{CanvasItems.OfType<Entity>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Entity{CanvasItems.OfType<Entity>().Count() + 1}"
             };
 
             AddElementToCanvas(entity);
@@ -1151,9 +1210,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             EnumElement enumElement = new EnumElement
             {
-                Name = $"Enum{CanvasItems.OfType<EnumElement>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Enum{CanvasItems.OfType<EnumElement>().Count() + 1}"
             };
 
             AddElementToCanvas(enumElement);
@@ -1218,9 +1275,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Composite composite = new Composite
             {
-                Name = $"Composite{CanvasItems.OfType<Composite>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Composite{CanvasItems.OfType<Composite>().Count() + 1}"
             };
 
             CompositeTypeElement type = new CompositeTypeElement
@@ -1303,9 +1358,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Mediator mediator = new Mediator
             {
-                Name = $"Mediator{CanvasItems.OfType<Mediator>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Mediator{CanvasItems.OfType<Mediator>().Count() + 1}"
             };
 
             AddElementToCanvas(mediator);
@@ -1317,9 +1370,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Proxy proxy = new Proxy
             {
-                Name = $"Proxy{CanvasItems.OfType<Proxy>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Proxy{CanvasItems.OfType<Proxy>().Count() + 1}"
             };
 
             AddElementToCanvas(proxy);
@@ -1451,6 +1502,8 @@ namespace LadyIDE.WPF.ViewModel
             };
             Point resultPosition = output.FindFreeChildPosition(result.Width, result.Height);
 
+            result.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
             result.X = resultPosition.X;
             result.Y = resultPosition.Y;
 
@@ -1470,6 +1523,8 @@ namespace LadyIDE.WPF.ViewModel
             {
                 Name = $"{output.Parent.Name}-parameter{parameterNumber}"
             };
+
+            parameter.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
 
             Point position = output.FindFreeChildPosition(parameter.Width, parameter.Height);
 
@@ -1513,9 +1568,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Factory factory = new Factory
             {
-                Name = $"Factory{CanvasItems.OfType<Factory>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Factory{CanvasItems.OfType<Factory>().Count() + 1}"
             };
 
             AddElementToCanvas(factory);

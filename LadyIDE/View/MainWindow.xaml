@@ -599,7 +599,11 @@
                         SelectedItems="{Binding SelectedItems}"
                         Background="{DynamicResource CanvasBackground}"
                         behaviors:CommandBehavior.Command="{Binding SelectItemCommand}"
-                        behaviors:CommandBehavior.CommandParameter="{x:Null}">
+                        behaviors:CommandBehavior.CommandParameter="{x:Null}"
+                        TranslateOffset="{Binding CanvasTranslateOffset, Mode=OneWayToSource}"
+                        Scale="{Binding CanvasScale, Mode=OneWayToSource}"
+                        behaviors:RichCanvasViewportTracker.IsEnabled="True"
+                        behaviors:RichCanvasViewportTracker.ViewportSize="{Binding CanvasViewportSize, Mode=OneWayToSource}">
 
                         <richCanvas:RichItemsControl.Resources>
 
@@ -622,10 +626,10 @@
                             <Style TargetType="richCanvas:RichItemContainer">
 
                                 <Setter Property="Top"
-                                        Value="{Binding Y}"/>
+                                        Value="{Binding Y, Mode=TwoWay}"/>
 
                                 <Setter Property="Left"
-                                        Value="{Binding X}"/>
+                                        Value="{Binding X, Mode=TwoWay}"/>
 
                                 <Setter Property="Width"
                                         Value="{Binding Width}"/>
