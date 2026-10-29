@@ -1,4 +1,6 @@
 ﻿
+using LadyIDE.WPF.CanvasElements.Help;
+
 namespace LadyIDE.WPF.CanvasElements
 {
     public class Input : CanvasItemBase

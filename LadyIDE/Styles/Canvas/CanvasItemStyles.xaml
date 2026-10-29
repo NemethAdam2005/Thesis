@@ -715,6 +715,120 @@
 
     </Style>
 
+    <!-- ========================================================= -->
+    <!-- TYPE PAIRS CANVAS ITEM STYLE                              -->
+    <!-- ========================================================= -->
 
+    <Style x:Key="TypePairsCanvasItemStyle"
+       TargetType="Border">
+
+        <Setter Property="BorderBrush"
+            Value="{DynamicResource TypePairsBorder}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+        <Setter Property="Background"
+            Value="{DynamicResource TypePairsBackground}"/>
+
+        <Setter Property="CornerRadius"
+            Value="5"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                <Setter Property="BorderThickness" Value="5"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ========================================================= -->
+    <!-- TYPE PAIR CANVAS ITEM STYLE                               -->
+    <!-- ========================================================= -->
+
+    <Style x:Key="TypePairCanvasItemStyle"
+       TargetType="Border">
+
+        <Setter Property="BorderBrush"
+            Value="{DynamicResource TypePairBorder}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+        <Setter Property="Background"
+            Value="{DynamicResource TypePairBackground}"/>
+
+        <Setter Property="CornerRadius"
+            Value="5"/>
+
+        <Setter Property="Padding"
+            Value="10,6"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                <Setter Property="BorderThickness" Value="5"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- ========================================================= -->
+    <!-- TYPE ELEMENT STYLE                                        -->
+    <!-- ========================================================= -->
+
+    <Style x:Key="TypeElementCanvasItemStyle"
+       TargetType="Border">
+
+        <Setter Property="BorderBrush"
+            Value="{DynamicResource TypeElementBorder}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+        <Setter Property="Background"
+            Value="{DynamicResource TypeElementBackground}"/>
+
+        <Setter Property="CornerRadius"
+            Value="5"/>
+
+        <Setter Property="Padding"
+            Value="9,6"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                <Setter Property="BorderThickness" Value="5"/>
+            </DataTrigger>
+        </Style.Triggers>
+
+    </Style>
+
+    <!-- ========================================================= -->
+    <!-- FACTORY BORDER STYLE                                      -->
+    <!-- ========================================================= -->
+
+    <Style x:Key="FactoryCanvasItemStyle"
+       TargetType="Border">
+
+        <Setter Property="BorderBrush"
+            Value="{DynamicResource FactoryBorder}"/>
+
+        <Setter Property="BorderThickness"
+            Value="2"/>
+
+        <Setter Property="Background"
+            Value="{DynamicResource FactoryBackground}"/>
+
+        <Setter Property="CornerRadius"
+            Value="5"/>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsHighlighted}"
+                     Value="True">
+
+                <Setter Property="BorderThickness"
+                    Value="5"/>
+
+            </DataTrigger>
+        </Style.Triggers>
+
+    </Style>
 
 </ResourceDictionary>

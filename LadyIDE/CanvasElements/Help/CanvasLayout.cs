@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LadyIDE.WPF.CanvasElements
+namespace LadyIDE.WPF.CanvasElements.Help
 {
     public static class CanvasLayout
     {

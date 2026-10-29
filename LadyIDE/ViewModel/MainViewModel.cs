@@ -187,6 +187,48 @@ namespace LadyIDE.WPF.ViewModel
             }
         }
 
+        private Size _canvasViewportSize = Size.Empty;
+
+        public Size CanvasViewportSize
+        {
+            get => _canvasViewportSize;
+            set
+            {
+                if (_canvasViewportSize == value) return;
+
+                _canvasViewportSize = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Point _canvasTranslateOffset;
+
+        public Point CanvasTranslateOffset
+        {
+            get => _canvasTranslateOffset;
+            set
+            {
+                if (_canvasTranslateOffset == value) return;
+
+                _canvasTranslateOffset = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _canvasScale = 1;
+
+        public double CanvasScale
+        {
+            get => _canvasScale;
+            set
+            {
+                if (_canvasScale == value) return;
+
+                _canvasScale = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string CodeTabHeader
         {
             get
@@ -213,16 +255,6 @@ namespace LadyIDE.WPF.ViewModel
                 OnPropertyChanged();
             }
         }
-
-        public ObservableCollection<string> InputTypes { get; } = new()
-        {
-            "String",
-            "Int",
-            "Double",
-            "Bool",
-            "Char",
-            "Object"
-        };
 
         public ObservableCollection<string> CompositeTypes { get; } = new()
         {
@@ -264,15 +296,18 @@ namespace LadyIDE.WPF.ViewModel
             DeleteItemCommand = new DelegateCommand(param => OnDeleteItem(param as CanvasItemBase));
             DeleteSelectedItemsCommand = new DelegateCommand(param => OnDeleteSelectedItems());
             ComponentButtonClicked = new DelegateCommand(param => OnComponentButtonClicked());
-            AddRecordToComponentCommand = new DelegateCommand(param => IsAddRecordButtonEnabled(param as Component), param => OnAddRecordToComponent(param as Component));
-            AddActionToComponentCommand = new DelegateCommand(param => IsAddActionButtonEnabled(param as Component), param => OnAddActionToComponent(param as Component));
-            AddMediatorToComponentCommand = new DelegateCommand(param => IsAddMediatorButtonEnabled(param as Component), param => OnAddMediatorToComponent(param as Component));
+            AddRecordToComponentCommand = new DelegateCommand(param => OnAddRecordToComponent(param as Component));
+            AddActionToComponentCommand = new DelegateCommand(param => OnAddActionToComponent(param as Component));
+            AddTypePairsToMediatorCommand = new DelegateCommand(param => IsAddTypePairsButtonEnabled(param as Mediator),param => OnAddTypePairsToMediator(param as Mediator));
+            AddTypePairToTypePairsCommand = new DelegateCommand(param => OnAddTypePairToTypePairs(param as TypePairs));
             RecordButtonClicked = new DelegateCommand(param => OnRecordButtonClicked());
             EntityButtonClicked = new DelegateCommand(param => OnEntityButtonClicked());
             EnumButtonClicked = new DelegateCommand(param => OnEnumButtonClicked());
             CompositeButtonClicked = new DelegateCommand(param => OnCompositeButtonClicked());
             MediatorButtonClicked = new DelegateCommand(param => OnMediatorButtonClicked());
             ProxyButtonClicked = new DelegateCommand(param => OnProxyButtonClicked());
+            AddFieldToProxyCommand = new DelegateCommand(param => OnAddFieldToProxy(param as Proxy));
+            AddTypeToProxyCommand = new DelegateCommand(param => IsAddTypeToProxyButtonEnabled(param as Proxy),param => OnAddTypeToProxy(param as Proxy));
             AddInputToCommandCommand = new DelegateCommand(param => IsAddInputButtonEnabled(param as Command),param => OnAddInputToCommand(param as Command));
             AddParameterToInputCommand = new DelegateCommand(param => OnAddParameterToInput(param as Input));
             AddFieldToRecordCommand = new DelegateCommand(param => OnAddFieldToRecord(param as Record));
@@ -280,8 +315,7 @@ namespace LadyIDE.WPF.ViewModel
             AddBaseToBaseListCommand = new DelegateCommand(param => OnAddBaseToBaseList(param as BaseList));
             AddFieldToEntityCommand = new DelegateCommand(param => OnAddFieldToEntity(param as Entity));
             AddBaseListToEntityCommand = new DelegateCommand(param => IsAddBaseListButtonEnabled(param as Entity), param => OnAddBaseListToEntity(param as Entity));
-            AddLogicToFieldCommand = new DelegateCommand(param => IsAddLogicButtonEnabled(param as Field),param => OnAddLogicToField(param as Field));
-            FieldLazyChangedCommand = new DelegateCommand(param => OnFieldLazyChanged(param as CanvasItemBase));
+            AddLogicToFieldCommand = new DelegateCommand(param => IsAddLogicButtonEnabled(param as Field), param => OnAddLogicToField(param as Field));
             AddBaseToEnumElementCommand = new DelegateCommand(param => IsAddBaseToEnumElementButtonEnabled(param as EnumElement),param => OnAddBaseToEnumElement(param as EnumElement));
             AddEnumFieldToEnumElementCommand = new DelegateCommand(param => OnAddEnumFieldToEnumElement(param as EnumElement));
             AddPartsToCompositeCommand = new DelegateCommand(param => IsAddPartsButtonEnabled(param as Composite),param => OnAddPartsToComposite(param as Composite));
@@ -291,6 +325,10 @@ namespace LadyIDE.WPF.ViewModel
             AddParameterToOutputCommand = new DelegateCommand(param => OnAddParameterToOutput(param as Output));
             AddLogicToActionCommand = new DelegateCommand(param => IsAddLogicToActionButtonEnabled(param as LadyIDE.WPF.CanvasElements.Action),param => OnAddLogicToAction(param as LadyIDE.WPF.CanvasElements.Action));
             AddActionReferenceToCommandCommand = new DelegateCommand(param => IsAddActionReferenceToCommandButtonEnabled(param as Command),param => OnAddActionReferenceToCommand(param as Command));
+            FactoryButtonClicked = new DelegateCommand(param => OnFactoryButtonClicked());
+            AddRecordToFactoryCommand = new DelegateCommand(param => OnAddRecordToFactory(param as Factory));
+            AddActionToFactoryCommand = new DelegateCommand(param => OnAddActionToFactory(param as Factory));
+            AddTypeToFactoryCommand = new DelegateCommand(param => IsAddTypeToFactoryButtonEnabled(param as Factory),param => OnAddTypeToFactory(param as Factory));
         }
         #endregion
 
@@ -315,7 +353,8 @@ namespace LadyIDE.WPF.ViewModel
 
         public DelegateCommand AddRecordToComponentCommand { get; }
         public DelegateCommand AddActionToComponentCommand { get; }
-        public DelegateCommand AddMediatorToComponentCommand { get; }
+        public DelegateCommand AddTypePairsToMediatorCommand { get; private set; }
+        public DelegateCommand AddTypePairToTypePairsCommand { get; private set; }
 
         public DelegateCommand RecordButtonClicked { get; private set; }
         public DelegateCommand AddFieldToRecordCommand { get; private set; }
@@ -327,7 +366,6 @@ namespace LadyIDE.WPF.ViewModel
         public DelegateCommand AddFieldToEntityCommand { get; private set; }
         public DelegateCommand AddBaseListToEntityCommand { get; private set; }
         public DelegateCommand AddLogicToFieldCommand { get; private set; }
-        public DelegateCommand FieldLazyChangedCommand { get; private set; }
         public DelegateCommand EnumButtonClicked { get; private set; }
         public DelegateCommand AddBaseToEnumElementCommand { get; private set; }
         public DelegateCommand AddEnumFieldToEnumElementCommand { get; private set; }
@@ -336,11 +374,20 @@ namespace LadyIDE.WPF.ViewModel
         public DelegateCommand AddPartToPartsCommand { get; private set; }
         public DelegateCommand MediatorButtonClicked { get; private set; }
         public DelegateCommand ProxyButtonClicked { get; private set; }
+        public DelegateCommand AddFieldToProxyCommand { get; private set; }
+        public DelegateCommand AddTypeToProxyCommand { get; private set; }
 
         public DelegateCommand AddInputToActionCommand { get; private set; }
         public DelegateCommand AddOutputToActionCommand { get; private set; }
         public DelegateCommand AddParameterToOutputCommand { get; private set; }
         public DelegateCommand AddLogicToActionCommand { get; private set; }
+        public DelegateCommand FactoryButtonClicked { get; private set; }
+
+        public DelegateCommand AddRecordToFactoryCommand { get; private set; }
+
+        public DelegateCommand AddActionToFactoryCommand { get; private set; }
+
+        public DelegateCommand AddTypeToFactoryCommand { get; private set; }
         #endregion
 
         #region Events
@@ -473,11 +520,6 @@ namespace LadyIDE.WPF.ViewModel
             {
                 CanvasItemBase parent = item.Parent;
 
-                if (item is Entity entity)
-                    RemoveEntityReferences(entity);
-                if (item is CanvasElements.Action action)
-                    RemoveActionReferences(action);
-
                 parent.Children.Remove(item);
                 LogDeletion(item, parent);
 
@@ -500,31 +542,30 @@ namespace LadyIDE.WPF.ViewModel
                 if (parent is Composite)
                     AddPartsToCompositeCommand.RaiseCanExecuteChanged();
 
-                if (parent is Component)
-                    AddActionToComponentCommand.RaiseCanExecuteChanged();
-                    AddRecordToComponentCommand.RaiseCanExecuteChanged();
-                    AddMediatorToComponentCommand.RaiseCanExecuteChanged();
-
                 if (parent is CanvasElements.Action)
                     AddInputToActionCommand.RaiseCanExecuteChanged();
                     AddOutputToActionCommand.RaiseCanExecuteChanged();
                     AddLogicToActionCommand.RaiseCanExecuteChanged();
+
+                if (parent is Mediator)
+                    AddTypePairsToMediatorCommand.RaiseCanExecuteChanged();
+
+                if (parent is Proxy)
+                    AddTypeToProxyCommand.RaiseCanExecuteChanged();
+
+                if(parent is Factory)
+                    AddTypeToFactoryCommand.RaiseCanExecuteChanged();
 
                 item.Parent = null;
                 item.IsHighlighted = false;
                 SelectedItem = parent;
                 parent.IsHighlighted = true;
 
-                RefreshPartsAvailableEntities();
-                RefreshAvailableActions();
+                RefreshAllTypeOptions();
                 return;
             }
             else if (CanvasItems.Contains(item))
             {
-                if (item is Entity entity)
-                    RemoveEntityReferences(entity);
-                if (item is Component component && component.Action != null)
-                    RemoveActionReferences(component.Action);
 
                 CanvasItems.Remove(item);
                 SelectedItems.Remove(item);
@@ -532,12 +573,9 @@ namespace LadyIDE.WPF.ViewModel
 
                 // Nincs már kijelölt elem
                 SelectedItem = null;
-
-                RefreshPartsAvailableEntities();
-                RefreshAvailableActions();
+                RefreshAllTypeOptions();
             }
         }
-
 
         private void OnDeleteSelectedItems()
         {
@@ -549,87 +587,47 @@ namespace LadyIDE.WPF.ViewModel
             {
                 foreach (CanvasItemBase item in itemsToDelete)
                 {
-                    if (item is Entity entity)
-                        RemoveEntityReferences(entity);
-                    if(item is Component component && component.Action != null)
-                        RemoveActionReferences(component.Action);
-                    if (item is CanvasElements.Action action)
-                        RemoveActionReferences(action);
-
-                    CanvasItems.Remove(item);
-                    LogDeletion(item, null);
+                    if (item.Parent == null && CanvasItems.Remove(item))
+                    {
+                        LogDeletion(item,null);
+                    }
                 }
 
                 SelectedItem = null;
                 SelectedItems.Clear();
 
-                RefreshPartsAvailableEntities();
-                RefreshAvailableActions();
+                RefreshAllTypeOptions();
             }));
         }
 
-        private void RemoveEntityReferences(Entity entity)
+        private void RefreshAllTypeOptions()
         {
-            foreach (Parts parts in GetAllCanvasItems(CanvasItems).OfType<Parts>())
-            {
-                foreach (Part part in parts.Children.OfType<Part>().Where(p => p.Entity == entity).ToList())
-                {
-                    parts.Children.Remove(part);
-                }
-            }
-            RefreshPartsAvailableEntities();
+            List<CanvasItemBase> allItems = GetAllCanvasItems(CanvasItems).ToList();
+
+            foreach (CanvasElements.Parameter parameter in allItems.OfType<CanvasElements.Parameter>())
+                parameter.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            foreach (TypePair typePair in allItems.OfType<TypePair>())
+                typePair.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            foreach (CanvasElements.Type type in allItems.OfType<CanvasElements.Type>())
+                type.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            foreach (Field field in allItems.OfType<Field>())
+                field.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            foreach (BaseList baseList in allItems.OfType<BaseList>())
+                baseList.RefreshAvailableTypes(allItems);
+
+            foreach (Parts parts in allItems.OfType<Parts>())
+                parts.RefreshAvailableTypes(allItems);
+
+            foreach (ActionReference actionReference in allItems.OfType<ActionReference>())
+                actionReference.RefreshAvailableTypes(allItems);
+
+            foreach (EnumElement enumElement in allItems.OfType<EnumElement>())
+                enumElement.RefreshAvailableTypes(allItems);
         }
-
-        private void RemoveActionReferences(CanvasElements.Action action)
-        {
-            List<Command> commands = GetAllCanvasItems(CanvasItems)
-                .OfType<Command>()
-                .ToList();
-
-            foreach (Command command in commands)
-            {
-                List<ActionReference> references = command.Children
-                    .OfType<ActionReference>()
-                    .Where(reference => reference.Action == action)
-                    .ToList();
-
-                foreach (ActionReference reference in references)
-                {
-                    command.Children.Remove(reference);
-                    LogDeletion(reference, command);
-
-                    reference.Parent = null;
-                    reference.IsHighlighted = false;
-
-                    command.UpdateLayoutAndSize();
-                    AddActionReferenceToCommandCommand.RaiseCanExecuteChanged();
-                }
-
-                if (command.SelectedAction == action)
-                    command.SelectedAction = null;
-            }
-        }
-
-        private void RefreshPartsAvailableEntities()
-        {
-            List<Entity> entities = CanvasItems.OfType<Entity>().ToList();
-
-            foreach (Parts parts in GetAllCanvasItems(CanvasItems).OfType<Parts>())
-                parts.RefreshAvailableEntities(entities);
-        }
-
-        private void RefreshAvailableActions()
-        {
-            List<CanvasElements.Action> actions = GetAllCanvasItems(CanvasItems)
-                .OfType<CanvasElements.Action>()
-                .ToList();
-
-            AvailableActions.Clear();
-
-            foreach (CanvasElements.Action action in actions)
-                AvailableActions.Add(action);
-        }
-
 
         private IEnumerable<CanvasItemBase> GetAllCanvasItems(IEnumerable<CanvasItemBase> items)
         {
@@ -704,24 +702,48 @@ namespace LadyIDE.WPF.ViewModel
         //Basic addition function
         private void AddElementToCanvas(CanvasItemBase item)
         {
-            //const double spacing = 20;
-            //double newX = item.X;
-            //double newY = item.Y;
-            //while (CanvasItems.Any(existingItem =>
-            //    newX < existingItem.X + existingItem.Width + spacing &&
-            //    newX + item.Width + spacing > existingItem.X &&
-            //    newY < existingItem.Y + existingItem.Height + spacing &&
-            //    newY + item.Height + spacing > existingItem.Y))
-            //{
-            //    newX += item.Width + spacing;
-            //    if (newX + item.Width > 1200)
-            //    {
-            //        newX = 20;
-            //        newY += item.Height + spacing;
-            //    }
-            //}
-            //item.X = newX;
-            //item.Y = newY;
+            const double spacing = 20;
+
+            double scale = CanvasScale > 0 ? CanvasScale : 1;
+            double viewportWidth = CanvasViewportSize.Width > 0
+                ? CanvasViewportSize.Width
+                : 1200;
+            double viewportHeight = CanvasViewportSize.Height > 0
+                ? CanvasViewportSize.Height
+                : 800;
+
+            double visibleWidth = viewportWidth / scale;
+            double visibleHeight = viewportHeight / scale;
+
+            Point center = new(
+                (viewportWidth / 2 - CanvasTranslateOffset.X) / scale,
+                (viewportHeight / 2 - CanvasTranslateOffset.Y) / scale);
+
+            double visibleLeft = center.X - visibleWidth / 2;
+            double visibleTop = center.Y - visibleHeight / 2;
+            double visibleRight = center.X + visibleWidth / 2;
+
+            double newX = center.X - item.Width / 2;
+            double newY = center.Y - item.Height / 2;
+
+            while (CanvasItems.Any(existingItem =>
+                newX < existingItem.X + existingItem.Width + spacing &&
+                newX + item.Width + spacing > existingItem.X &&
+                newY < existingItem.Y + existingItem.Height + spacing &&
+                newY + item.Height + spacing > existingItem.Y))
+            {
+                newX += item.Width + spacing;
+
+                if (newX + item.Width > visibleRight)
+                {
+                    newX = visibleLeft;
+                    newY += item.Height + spacing;
+                }
+            }
+
+            item.X = newX;
+            item.Y = newY;
+
             CanvasItems.Add(item);
         }
 
@@ -730,9 +752,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             ConsoleApplication application = new ConsoleApplication
             {
-                Name = $"Application{CanvasItems.OfType<ConsoleApplication>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Application{CanvasItems.OfType<ConsoleApplication>().Count() + 1}"
             };
             AddElementToCanvas(application);
             LogAddition(application, null);
@@ -743,9 +763,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Command command = new Command
             {
-                Name = $"Command{CanvasItems.OfType<Command>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Command{CanvasItems.OfType<Command>().Count() + 1}"
             };
             AddElementToCanvas(command);
             LogAddition(command, null);
@@ -759,26 +777,28 @@ namespace LadyIDE.WPF.ViewModel
 
         private void OnAddActionReferenceToCommand(Command? command)
         {
-            if (command == null || command.SelectedAction == null || command.Children.OfType<ActionReference>().Any()) return;
+            if (command == null || command.Children.OfType<ActionReference>().Any()) return;
 
-            CanvasElements.Action selectedAction = command.SelectedAction;
-
-            ActionReference actionReference = new ActionReference
+            ActionReference actionReference = new()
             {
-                Action = selectedAction,
                 Parent = command
             };
 
-            Point position = command.FindFreeChildPosition(actionReference.Width, actionReference.Height);
+            Point position = command.FindFreeChildPosition(
+                actionReference.Width,
+                actionReference.Height);
 
             actionReference.X = position.X;
             actionReference.Y = position.Y;
 
             command.Children.Add(actionReference);
-            command.SelectedAction = null;
+
+            actionReference.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
 
             command.UpdateLayoutAndSize();
             AddActionReferenceToCommandCommand.RaiseCanExecuteChanged();
+
+            OnSelectItem(actionReference);
 
             LogAddition(actionReference, command);
         }
@@ -835,21 +855,21 @@ namespace LadyIDE.WPF.ViewModel
         }
 
         //Parameter to Input
+
         private void OnAddParameterToInput(Input? input)
         {
-            if (input == null || input.Parent == null)
-                return;
+            if (input == null || input.Parent == null) return;
 
             int parameterNumber = input.Children.OfType<CanvasElements.Parameter>().Count() + 1;
 
-            CanvasElements.Parameter parameter = new CanvasElements.Parameter
+            CanvasElements.Parameter parameter = new()
             {
                 Name = $"{input.Parent.Name}-parameter{parameterNumber}",
-                Type = "String"
             };
 
-            Point position = input.FindFreeChildPosition(parameter.Width, parameter.Height);
+            parameter.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
 
+            Point position = input.FindFreeChildPosition(parameter.Width, parameter.Height);
             parameter.X = position.X;
             parameter.Y = position.Y;
 
@@ -857,6 +877,7 @@ namespace LadyIDE.WPF.ViewModel
             input.UpdateLayoutAndSize();
             LogAddition(parameter, input);
         }
+
 
         private bool IsAddInputButtonEnabled(Command? command)
         {
@@ -871,29 +892,25 @@ namespace LadyIDE.WPF.ViewModel
         {
             Component component = new Component
             {
-                Name = $"Component{CanvasItems.OfType<Component>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Component{CanvasItems.OfType<Component>().Count() + 1}"
             };
             AddElementToCanvas(component);
             LogAddition(component, null);
         }
 
         //Record to Component
-        private bool IsAddRecordButtonEnabled(Component? component)
-        {
-            if (component == null) return false;
-
-            return !component.Children.OfType<Record>().Any();
-        }
 
         private void OnAddRecordToComponent(Component? component)
         {
-            if (component == null || component.Children.OfType<Record>().Any()) return;
+            if (component == null) return;
+
+            int recordCount = GetAllCanvasItems(CanvasItems)
+                .OfType<Record>()
+                .Count();
 
             Record record = new Record
             {
-                Name = $"Record{CanvasItems.OfType<Record>().Count() + 1}",
+                Name = $"Record{recordCount + 1}",
                 Parent = component
             };
 
@@ -901,31 +918,19 @@ namespace LadyIDE.WPF.ViewModel
             component.UpdateLayoutAndSize();
 
             AddRecordToComponentCommand.RaiseCanExecuteChanged();
+            RefreshAllTypeOptions();
 
             LogAddition(record, component);
         }
 
         //Action to Component
-        private bool IsAddActionButtonEnabled(Component? component)
-        {
-            if (component == null) return false;
-
-            return !component.Children.OfType<CanvasElements.Action>().Any();
-        }
-
         private void OnAddActionToComponent(Component? component)
         {
-            if (component == null || component.Children.OfType<CanvasElements.Action>().Any()) return;
+            if (component == null) return;
 
-            int actionCount = 0;
-
-            foreach (Component comp in CanvasItems.OfType<Component>().ToList())
-            {
-                if (comp.Action is not null)
-                {
-                    actionCount += 1;
-                }
-            }
+            int actionCount = GetAllCanvasItems(CanvasItems)
+                .OfType<CanvasElements.Action>()
+                .Count();
 
             CanvasElements.Action action = new CanvasElements.Action
             {
@@ -937,49 +942,78 @@ namespace LadyIDE.WPF.ViewModel
             component.UpdateLayoutAndSize();
 
             AddActionToComponentCommand.RaiseCanExecuteChanged();
-            RefreshAvailableActions();
+            RefreshAllTypeOptions();
 
             LogAddition(action, component);
         }
 
-        //Mediator to Component
-        private bool IsAddMediatorButtonEnabled(Component? component)
+        // TypePairs to Mediator
+        private bool IsAddTypePairsButtonEnabled(Mediator? mediator)
         {
-            if (component == null) return false;
+            if (mediator == null) return false;
 
-            return !component.Children.OfType<Mediator>().Any();
+            return !mediator.Children.OfType<TypePairs>().Any();
         }
 
-        private void OnAddMediatorToComponent(Component? component)
+        private void OnAddTypePairsToMediator(Mediator? mediator)
         {
-            if (component == null || component.Children.OfType<Mediator>().Any()) return;
+            if (mediator == null || mediator.Children.OfType<TypePairs>().Any()) return;
 
-            Mediator mediator = new Mediator
+            TypePairs typePairs = new TypePairs
             {
-                Name = $"Mediator{CanvasItems.OfType<Mediator>().Count() + 1}",
-                Parent = component
+                Parent = mediator
             };
 
-            component.Children.Add(mediator);
-            component.UpdateLayoutAndSize();
+            Point position = mediator.FindFreeChildPosition(typePairs.Width, typePairs.Height);
 
-            AddMediatorToComponentCommand.RaiseCanExecuteChanged();
+            typePairs.X = position.X;
+            typePairs.Y = position.Y;
 
-            LogAddition(mediator, component);
+            mediator.Children.Add(typePairs);
+            mediator.UpdateLayoutAndSize();
+
+            AddTypePairsToMediatorCommand.RaiseCanExecuteChanged();
+
+            LogAddition(typePairs, mediator);
+        }
+
+        // TypePair to TypePairs
+        private void OnAddTypePairToTypePairs(TypePairs? typePairs)
+        {
+            if (typePairs == null) return;
+
+            TypePair typePair = new TypePair
+            {
+                Parent = typePairs
+            };
+
+            typePair.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            Point position = typePairs.FindFreeChildPosition(typePair.Width, typePair.Height);
+
+            typePair.X = position.X;
+            typePair.Y = position.Y;
+
+            typePairs.Children.Add(typePair);
+            typePairs.UpdateLayoutAndSize();
+
+            LogAddition(typePair, typePairs);
         }
 
         //Record
         private void OnRecordButtonClicked()
         {
+            int recordNumber = GetAllCanvasItems(CanvasItems)
+                .OfType<Record>()
+                .Count() + 1;
             Record record = new Record
             {
-                Name = $"Record{CanvasItems.OfType<Record>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Record{recordNumber}"
             };
 
             AddElementToCanvas(record);
             LogAddition(record, null);
+            RefreshAllTypeOptions();
         }
 
         //Field to Record
@@ -995,6 +1029,8 @@ namespace LadyIDE.WPF.ViewModel
             {
                 Name = $"Field{fieldNumber}"
             };
+
+            field.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
 
             Point position = record.FindFreeChildPosition(
                 field.Width,
@@ -1048,9 +1084,10 @@ namespace LadyIDE.WPF.ViewModel
 
             Base baseItem = new Base
             {
-                Name = $"Base{baseNumber}",
                 Parent = baseList
             };
+
+            baseItem.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
 
             Point position = baseList.FindFreeChildPosition(baseItem.Width, baseItem.Height);
             baseItem.X = position.X;
@@ -1066,13 +1103,11 @@ namespace LadyIDE.WPF.ViewModel
         {
             Entity entity = new Entity
             {
-                Name = $"Entity{CanvasItems.OfType<Entity>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Entity{CanvasItems.OfType<Entity>().Count() + 1}"
             };
 
             AddElementToCanvas(entity);
-            RefreshPartsAvailableEntities();
+            RefreshAllTypeOptions();
             LogAddition(entity, null);
         }
 
@@ -1090,6 +1125,8 @@ namespace LadyIDE.WPF.ViewModel
                 Name = $"Field{fieldNumber}"
             };
 
+            field.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
             field.PropertyChanged += (sender, e) =>
             {
                 if (e.PropertyName == nameof(Field.IsLazy))
@@ -1105,16 +1142,6 @@ namespace LadyIDE.WPF.ViewModel
 
             entity.UpdateLayoutAndSize();
             LogAddition(field, entity);
-        }
-
-        //Lazy to Field
-        private void OnFieldLazyChanged(CanvasItemBase? item)
-        {
-            if (item is not Field field || field.IsLazy) return;
-
-            Logic? logic = field.Children.OfType<Logic>().FirstOrDefault();
-
-            if (logic != null) OnDeleteItem(logic);
         }
 
         //BaseList to Entity
@@ -1151,9 +1178,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             if (field == null) return false;
 
-            return field.Parent is Entity &&
-                   field.IsLazy &&
-                   !field.Children.OfType<Logic>().Any();
+            return !field.Children.OfType<Logic>().Any();
         }
 
         private void OnAddLogicToField(Field? field)
@@ -1185,12 +1210,11 @@ namespace LadyIDE.WPF.ViewModel
         {
             EnumElement enumElement = new EnumElement
             {
-                Name = $"Enum{CanvasItems.OfType<EnumElement>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Enum{CanvasItems.OfType<EnumElement>().Count() + 1}"
             };
 
             AddElementToCanvas(enumElement);
+            RefreshAllTypeOptions();
             LogAddition(enumElement, null);
         }
 
@@ -1217,6 +1241,7 @@ namespace LadyIDE.WPF.ViewModel
             baseItem.Y = position.Y;
 
             enumElement.Children.Add(baseItem);
+            enumElement.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
             enumElement.UpdateLayoutAndSize();
 
             AddBaseToEnumElementCommand.RaiseCanExecuteChanged();
@@ -1250,9 +1275,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Composite composite = new Composite
             {
-                Name = $"Composite{CanvasItems.OfType<Composite>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Composite{CanvasItems.OfType<Composite>().Count() + 1}"
             };
 
             CompositeTypeElement type = new CompositeTypeElement
@@ -1267,6 +1290,10 @@ namespace LadyIDE.WPF.ViewModel
             composite.Children.Add(type);
 
             composite.UpdateLayoutAndSize();
+
+            OnAddPartsToComposite(composite);
+            OnAddPartToParts(composite.Children.OfType<Parts>().FirstOrDefault());
+            OnAddPartToParts(composite.Children.OfType<Parts>().FirstOrDefault());
 
             AddElementToCanvas(composite);
             LogAddition(composite, null);
@@ -1299,7 +1326,6 @@ namespace LadyIDE.WPF.ViewModel
             composite.UpdateLayoutAndSize();
 
             AddPartsToCompositeCommand.RaiseCanExecuteChanged();
-            RefreshPartsAvailableEntities();
 
             LogAddition(parts, composite);
         }
@@ -1307,28 +1333,22 @@ namespace LadyIDE.WPF.ViewModel
         //Part to Parts
         private void OnAddPartToParts(Parts? parts)
         {
-            if (parts == null || parts.SelectedEntity == null) return;
-
-            Entity entity = parts.SelectedEntity;
-
-            if (parts.Children.OfType<Part>().Any(part => part.Entity == entity)) return;
+            if (parts == null) return;
 
             Part part = new Part
             {
-                Entity = entity
+                Parent = parts
             };
 
             Point position = parts.FindFreeChildPosition(part.Width, part.Height);
 
             part.X = position.X;
             part.Y = position.Y;
-            part.Parent = parts;
 
             parts.Children.Add(part);
-            parts.SelectedEntity = null;
 
+            parts.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
             parts.UpdateLayoutAndSize();
-            RefreshPartsAvailableEntities();
 
             LogAddition(part, parts);
         }
@@ -1338,9 +1358,7 @@ namespace LadyIDE.WPF.ViewModel
         {
             Mediator mediator = new Mediator
             {
-                Name = $"Mediator{CanvasItems.OfType<Mediator>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Mediator{CanvasItems.OfType<Mediator>().Count() + 1}"
             };
 
             AddElementToCanvas(mediator);
@@ -1352,13 +1370,75 @@ namespace LadyIDE.WPF.ViewModel
         {
             Proxy proxy = new Proxy
             {
-                Name = $"Proxy{CanvasItems.OfType<Proxy>().Count() + 1}",
-                X = 0,
-                Y = 0
+                Name = $"Proxy{CanvasItems.OfType<Proxy>().Count() + 1}"
             };
 
             AddElementToCanvas(proxy);
             LogAddition(proxy, null);
+        }
+
+        // Field to Proxy
+        private void OnAddFieldToProxy(Proxy? proxy)
+        {
+            if (proxy == null) return;
+
+            int fieldNumber = proxy.Children.OfType<Field>().Count() + 1;
+
+            Field field = new Field
+            {
+                Name = $"Field{fieldNumber}",
+                Parent = proxy
+            };
+
+            field.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            field.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(Field.IsLazy))
+                    AddLogicToFieldCommand.RaiseCanExecuteChanged();
+            };
+
+            Point position = proxy.FindFreeChildPosition(field.Width, field.Height);
+
+            field.X = position.X;
+            field.Y = position.Y;
+
+            proxy.Children.Add(field);
+            proxy.UpdateLayoutAndSize();
+
+            LogAddition(field, proxy);
+        }
+
+        // Type to Proxy
+        private bool IsAddTypeToProxyButtonEnabled(Proxy? proxy)
+        {
+            if (proxy == null) return false;
+
+            return !proxy.Children.OfType<CanvasElements.Type>().Any();
+        }
+
+        private void OnAddTypeToProxy(Proxy? proxy)
+        {
+            if (proxy == null || proxy.Children.OfType<CanvasElements.Type>().Any()) return;
+
+            CanvasElements.Type type = new CanvasElements.Type
+            {
+                Parent = proxy
+            };
+
+            type.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            Point position = proxy.FindFreeChildPosition(type.Width, type.Height);
+
+            type.X = position.X;
+            type.Y = position.Y;
+
+            proxy.Children.Add(type);
+            proxy.UpdateLayoutAndSize();
+
+            AddTypeToProxyCommand.RaiseCanExecuteChanged();
+
+            LogAddition(type, proxy);
         }
 
         //Input to Action
@@ -1418,10 +1498,11 @@ namespace LadyIDE.WPF.ViewModel
 
             CanvasElements.Parameter result = new CanvasElements.Parameter
             {
-                Name = $"result",
-                Type = "String"
+                Name = $"result"
             };
             Point resultPosition = output.FindFreeChildPosition(result.Width, result.Height);
+
+            result.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
 
             result.X = resultPosition.X;
             result.Y = resultPosition.Y;
@@ -1440,9 +1521,10 @@ namespace LadyIDE.WPF.ViewModel
 
             CanvasElements.Parameter parameter = new CanvasElements.Parameter
             {
-                Name = $"{output.Parent.Name}-parameter{parameterNumber}",
-                Type = "String"
+                Name = $"{output.Parent.Name}-parameter{parameterNumber}"
             };
+
+            parameter.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
 
             Point position = output.FindFreeChildPosition(parameter.Width, parameter.Height);
 
@@ -1479,6 +1561,89 @@ namespace LadyIDE.WPF.ViewModel
 
             AddLogicToActionCommand.RaiseCanExecuteChanged();
             LogAddition(logic, action);
+        }
+
+        //Factroy to canvas
+        private void OnFactoryButtonClicked()
+        {
+            Factory factory = new Factory
+            {
+                Name = $"Factory{CanvasItems.OfType<Factory>().Count() + 1}"
+            };
+
+            AddElementToCanvas(factory);
+            LogAddition(factory, null);
+        }
+
+        // Record to Factory
+        private void OnAddRecordToFactory(Factory? factory)
+        {
+            if (factory == null) return;
+
+            int recordNumber = GetAllCanvasItems(CanvasItems)
+                .OfType<Record>()
+                .Count() + 1;
+
+            Record record = new Record
+            {
+                Name = $"Record{recordNumber}",
+                Parent = factory
+            };
+
+            factory.Children.Add(record);
+            factory.UpdateLayoutAndSize();
+
+            RefreshAllTypeOptions();
+
+            LogAddition(record, factory);
+        }
+
+        // Action to Factory
+        private void OnAddActionToFactory(Factory? factory)
+        {
+            if (factory == null) return;
+
+            int actionNumber = GetAllCanvasItems(CanvasItems)
+                .OfType<CanvasElements.Action>()
+                .Count() + 1;
+
+            CanvasElements.Action action = new CanvasElements.Action
+            {
+                Name = $"Action{actionNumber}",
+                Parent = factory
+            };
+
+            factory.Children.Add(action);
+            factory.UpdateLayoutAndSize();
+
+            RefreshAllTypeOptions();
+
+            LogAddition(action, factory);
+        }
+
+        // Type to Factory
+        private bool IsAddTypeToFactoryButtonEnabled(Factory? factory)
+        {
+            return factory != null && factory.Type == null;
+        }
+
+        private void OnAddTypeToFactory(Factory? factory)
+        {
+            if (factory == null || factory.Type != null) return;
+
+            CanvasElements.Type type = new CanvasElements.Type
+            {
+                Parent = factory
+            };
+
+            type.RefreshAvailableTypes(GetAllCanvasItems(CanvasItems));
+
+            factory.Children.Add(type);
+            factory.UpdateLayoutAndSize();
+
+            AddTypeToFactoryCommand.RaiseCanExecuteChanged();
+
+            LogAddition(type, factory);
         }
         #endregion
 

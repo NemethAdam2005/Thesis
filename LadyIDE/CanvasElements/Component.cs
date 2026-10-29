@@ -1,66 +1,47 @@
-﻿
+﻿using LadyIDE.WPF.CanvasElements.Help;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 
 namespace LadyIDE.WPF.CanvasElements
 {
     public class Component : CanvasItemBase
     {
-        private Record? _record;
-        private Action? _action;
-        private Mediator? _mediator;
-
-        public Record? Record
-        {
-            get => _record;
-            private set
-            {
-                if (_record == value) return;
-
-                _record = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Action? Action
-        {
-            get => _action;
-            private set
-            {
-                if (_action == value) return;
-
-                _action = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Mediator? Mediator
-        {
-            get => _mediator;
-            private set
-            {
-                if (_mediator == value) return;
-
-                _mediator = value;
-                OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<Record> Records { get; } = new();
+        public ObservableCollection<Action> Actions { get; } = new();
 
         public Component() : base()
         {
-            Children.CollectionChanged += (_, _) => RefreshChildren();
+            Children.CollectionChanged += Children_CollectionChanged;
             RefreshChildren();
+        }
+
+        private void Children_CollectionChanged(
+            object? sender,
+            NotifyCollectionChangedEventArgs e)
+        {
+            RefreshChildren();
+            UpdateLayoutAndSize();
         }
 
         private void RefreshChildren()
         {
-            Record = Children.OfType<Record>().FirstOrDefault();
-            Action = Children.OfType<Action>().FirstOrDefault();
-            Mediator = Children.OfType<Mediator>().FirstOrDefault();
+            Records.Clear();
+
+            foreach (Record record in Children.OfType<Record>())
+                Records.Add(record);
+
+            Actions.Clear();
+
+            foreach (Action action in Children.OfType<Action>())
+                Actions.Add(action);
         }
 
         protected override void ArrangeChildren()
         {
-            CanvasLayout.ArrangeHorizontally(Children);
+            CanvasLayout.ArrangeInTwoColumns(
+                Records.Cast<CanvasItemBase>()
+                    .Concat(Actions));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿
+using LadyIDE.WPF.CanvasElements.Help;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,6 +36,12 @@ namespace LadyIDE.WPF.CanvasElements
         {
             Children.CollectionChanged += (_, _) => RefreshChildren();
             RefreshChildren();
+        }
+
+        public void RefreshAvailableTypes(IEnumerable<CanvasItemBase> allItems)
+        {
+            BaseItem?.RefreshAvailableTypes(allItems);
+            BaseItem?.UpdateAvailableTypes(Enumerable.Empty<CanvasItemBase>());
         }
 
         private void RefreshChildren()
