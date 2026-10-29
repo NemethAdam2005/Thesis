@@ -426,3 +426,8 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Exceptions for direct packages
+!packages/Lady.Language.Core.dll
+!packages/LadyLanguageServer.1.0.0.nupkg
+!packages/nuget.config
