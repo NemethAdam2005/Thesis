@@ -6,6 +6,12 @@
     <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  
+  <ItemGroup>
+	  <Reference Include="LadyLanguageCore">
+		  <HintPath>..\packages\Lady.Language.Core.dll</HintPath>
+	  </Reference>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Persistence\LadyIDE.Persistence.csproj" />
